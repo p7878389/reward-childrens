@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Add Reward</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  
+  <!-- Configuration -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class", 
+      theme: {
+        extend: {
+          colors: {
+            primary: "#FAC638", 
+            "primary-dark": "#e5b020", 
+            "background-light": "#FFFCF5", 
+            "background-dark": "#231e0f", 
+            "text-main": "#4a3b2a", 
+            "text-sub": "#8c805f", 
+            "card-bg": "#FFFEF9", 
+            "card-warm": "#FFFCF5", 
+            "input-bg": "#FAF8F1",
+            success: "#88c458", 
+            danger: "#ff8fa3"
+          }, 
+          fontFamily: {
+            display: "Plus Jakarta Sans"
+          }, 
+          borderRadius: {
+            DEFAULT: "0.5rem", 
+            lg: "1rem", 
+            xl: "1.5rem", 
+            "2xl": "2rem",
+            full: "9999px"
+          }, 
+          boxShadow: {
+            soft: "0 8px 30px -4px rgba(250, 198, 56, 0.15)", 
+            card: "0 4px 14px rgba(74, 59, 42, 0.03)",
+          }
+        }
+      }
+    };
+  </script>
+  
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .icon-selected { background-color: #FAC638 !important; color: white !important; transform: scale(1.1); box-shadow: 0 4px 12px rgba(250, 198, 56, 0.3); }
+    .tag-selected { background-color: #4a3b2a !important; color: white !important; }
+  </style>
+
+  <!-- Components -->
+  <script src="components/translations.js"></script>
+  <script src="components/i18n.js"></script>
+  <script src="components/app-header.js"></script>
+  <script src="components/confirm-modal.js"></script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display antialiased text-text-main overflow-x-hidden selection:bg-primary/30">
+
+  <!-- Mobile Container -->
+  <div class="relative flex h-full min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-2xl overflow-hidden border-x border-black/5">
+    
+    <!-- Header -->
+    <app-header type="back" title="Add Item" data-i18n-title="goods.add_title" back-url="rewards-manage.html" hide-more></app-header>
+
+    <main class="flex-1 px-6 pb-32 overflow-y-auto no-scrollbar">
+      
+      <!-- Form -->
+      <div class="mt-6 flex flex-col gap-6">
+         
+         <!-- Name Input -->
+         <div>
+            <label class="px-1 text-xs font-bold text-text-sub uppercase tracking-wider mb-2 block" data-i18n="goods.name_label">Item Name</label>
+            <div class="bg-card-bg p-2 rounded-2xl ring-1 ring-black/5 focus-within:ring-2 focus-within:ring-primary/50 transition-all shadow-card flex items-center gap-3">
+               <div class="size-10 rounded-xl bg-input-bg flex items-center justify-center text-text-sub shrink-0">
+                  <span class="material-symbols-rounded text-xl">edit</span>
+               </div>
+               <input type="text" id="name-input" placeholder="e.g. New Toy Car" class="flex-1 bg-transparent border-none p-2 text-lg font-bold text-text-main placeholder-text-sub/30 focus:ring-0">
+            </div>
+         </div>
+
+         <!-- Cost Input -->
+         <div>
+            <label class="px-1 text-xs font-bold text-text-sub uppercase tracking-wider mb-2 block" data-i18n="goods.cost_label">Cost (Stars)</label>
+            <div class="flex items-center gap-3">
+               <div class="bg-card-bg p-2 rounded-2xl ring-1 ring-black/5 focus-within:ring-2 focus-within:ring-primary/50 transition-all shadow-card flex-1 flex items-center gap-3">
+                  <div class="size-10 rounded-xl bg-input-bg flex items-center justify-center text-text-sub shrink-0">
+                     <span class="material-symbols-rounded text-xl">star</span>
+                  </div>
+                  <input type="number" id="cost-input" value="50" class="flex-1 bg-transparent border-none p-2 text-xl font-extrabold text-text-main placeholder-text-sub/30 focus:ring-0">
+               </div>
+               
+               <!-- Quick Select -->
+               <div class="flex gap-2">
+                  <button onclick="document.getElementById('cost-input').value = 30" class="size-12 rounded-xl bg-card-bg shadow-sm ring-1 ring-black/5 font-bold text-text-sub hover:bg-primary/10 hover:text-primary transition-all">30</button>
+                  <button onclick="document.getElementById('cost-input').value = 50" class="size-12 rounded-xl bg-card-bg shadow-sm ring-1 ring-black/5 font-bold text-text-sub hover:bg-primary/10 hover:text-primary transition-all">50</button>
+                  <button onclick="document.getElementById('cost-input').value = 100" class="size-12 rounded-xl bg-card-bg shadow-sm ring-1 ring-black/5 font-bold text-text-sub hover:bg-primary/10 hover:text-primary transition-all">100</button>
+               </div>
+            </div>
+         </div>
+
+         <!-- Category Tags -->
+         <div>
+            <label class="px-1 text-xs font-bold text-text-sub uppercase tracking-wider mb-2 block" data-i18n="goods.category_label">Category</label>
+            <div class="flex gap-2">
+               <button onclick="selectTag(this, 'Privilege')" class="tag-btn px-4 py-2 rounded-xl bg-card-bg text-text-sub font-bold text-xs ring-1 ring-black/5 shadow-sm tag-selected transition-all" data-i18n="cat.privilege">Privilege</button>
+               <button onclick="selectTag(this, 'Toy')" class="tag-btn px-4 py-2 rounded-xl bg-card-bg text-text-sub font-bold text-xs ring-1 ring-black/5 shadow-sm transition-all" data-i18n="cat.toy">Toy</button>
+               <button onclick="selectTag(this, 'Snack')" class="tag-btn px-4 py-2 rounded-xl bg-card-bg text-text-sub font-bold text-xs ring-1 ring-black/5 shadow-sm transition-all" data-i18n="cat.snack">Snack</button>
+            </div>
+         </div>
+
+         <!-- Icon/Image Selector -->
+         <div>
+            <label class="px-1 text-xs font-bold text-text-sub uppercase tracking-wider mb-2 block" data-i18n="goods.image_label">Image</label>
+            <div class="bg-card-bg p-4 rounded-2xl ring-1 ring-black/5 shadow-inner">
+               
+               <!-- Custom Upload Area -->
+               <div class="flex flex-col items-center mb-6">
+                  <input type="file" id="image-upload" class="hidden" accept="image/*" onchange="handleImageUpload(event)">
+                  <button onclick="document.getElementById('image-upload').click()" class="size-24 rounded-2xl bg-input-bg border-2 border-dashed border-text-sub/20 flex flex-col items-center justify-center text-text-sub/50 hover:border-primary hover:text-primary transition-all overflow-hidden relative group">
+                     <img id="custom-preview" class="w-full h-full object-cover hidden">
+                     <div id="upload-placeholder" class="flex flex-col items-center">
+                        <span class="material-symbols-rounded text-3xl mb-1">add_photo_alternate</span>
+                        <span class="text-[10px] font-bold uppercase" data-i18n="child.tap_upload">Upload</span>
+                     </div>
+                  </button>
+               </div>
+
+               <!-- Preset Icons -->
+               <p class="text-[10px] font-bold text-text-sub uppercase tracking-wider mb-3 text-center opacity-60" data-i18n="label.or_icon">Or choose icon</p>
+               <div class="grid grid-cols-5 gap-3">
+                  <button onclick="selectIcon(this, 'tv')" class="icon-btn size-10 rounded-lg bg-input-bg text-text-sub flex items-center justify-center hover:bg-white hover:shadow-sm transition-all icon-selected">
+                     <span class="material-symbols-rounded">tv</span>
+                  </button>
+                  <button onclick="selectIcon(this, 'smart_toy')" class="icon-btn size-10 rounded-lg bg-input-bg text-text-sub flex items-center justify-center hover:bg-white hover:shadow-sm transition-all">
+                     <span class="material-symbols-rounded">smart_toy</span>
+                  </button>
+                  <button onclick="selectIcon(this, 'icecream')" class="icon-btn size-10 rounded-lg bg-input-bg text-text-sub flex items-center justify-center hover:bg-white hover:shadow-sm transition-all">
+                     <span class="material-symbols-rounded">icecream</span>
+                  </button>
+                  <button onclick="selectIcon(this, 'sports_esports')" class="icon-btn size-10 rounded-lg bg-input-bg text-text-sub flex items-center justify-center hover:bg-white hover:shadow-sm transition-all">
+                     <span class="material-symbols-rounded">sports_esports</span>
+                  </button>
+                  <button onclick="selectIcon(this, 'bedtime')" class="icon-btn size-10 rounded-lg bg-input-bg text-text-sub flex items-center justify-center hover:bg-white hover:shadow-sm transition-all">
+                     <span class="material-symbols-rounded">bedtime</span>
+                  </button>
+                  
+                  <button onclick="selectIcon(this, 'local_pizza')" class="icon-btn size-10 rounded-lg bg-input-bg text-text-sub flex items-center justify-center hover:bg-white hover:shadow-sm transition-all">
+                     <span class="material-symbols-rounded">local_pizza</span>
+                  </button>
+                  <button onclick="selectIcon(this, 'park')" class="icon-btn size-10 rounded-lg bg-input-bg text-text-sub flex items-center justify-center hover:bg-white hover:shadow-sm transition-all">
+                     <span class="material-symbols-rounded">park</span>
+                  </button>
+                  <button onclick="selectIcon(this, 'movie')" class="icon-btn size-10 rounded-lg bg-input-bg text-text-sub flex items-center justify-center hover:bg-white hover:shadow-sm transition-all">
+                     <span class="material-symbols-rounded">movie</span>
+                  </button>
+                  <button onclick="selectIcon(this, 'palette')" class="icon-btn size-10 rounded-lg bg-input-bg text-text-sub flex items-center justify-center hover:bg-white hover:shadow-sm transition-all">
+                     <span class="material-symbols-rounded">palette</span>
+                  </button>
+                  <button onclick="selectIcon(this, 'star')" class="icon-btn size-10 rounded-lg bg-input-bg text-text-sub flex items-center justify-center hover:bg-white hover:shadow-sm transition-all">
+                     <span class="material-symbols-rounded">star</span>
+                  </button>
+               </div>
+            </div>
+         </div>
+
+      </div>
+
+    </main>
+    
+    <!-- Save Button -->
+    <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background-light via-background-light to-transparent pt-12">
+        <button onclick="document.querySelector('app-confirm-modal').show({ title: 'Create Item?', message: 'Add this item to the store?', confirmText: 'Create', onConfirm: () => window.location.href='rewards-manage.html' })" class="w-full bg-primary hover:bg-primary-dark text-white font-bold text-lg py-4 rounded-2xl shadow-soft flex items-center justify-center gap-2 transition-transform active:scale-95 ring-1 ring-black/5">
+            <span class="material-symbols-rounded text-2xl">check</span>
+            <span data-i18n="btn.create_item">Create Item</span>
+        </button>
+    </div>
+
+    <app-confirm-modal></app-confirm-modal>
+
+  </div>
+
+  <script>
+    function selectIcon(btn, iconName) {
+      // Clear image upload
+      const img = document.getElementById('custom-preview');
+      img.src = '';
+      img.classList.add('hidden');
+      document.getElementById('upload-placeholder').classList.remove('hidden');
+
+      // Highlight Icon
+      document.querySelectorAll('.icon-btn').forEach(b => b.classList.remove('icon-selected'));
+      btn.classList.add('icon-selected');
+    }
+
+    function selectTag(btn, tag) {
+      document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('tag-selected', 'bg-text-main', 'text-white'));
+      btn.classList.add('tag-selected');
+    }
+
+    function handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          // Show Image
+          const img = document.getElementById('custom-preview');
+          img.src = e.target.result;
+          img.classList.remove('hidden');
+          document.getElementById('upload-placeholder').classList.add('hidden');
+          
+          // Deselect Icons
+          document.querySelectorAll('.icon-btn').forEach(b => b.classList.remove('icon-selected'));
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  </script>
+</body>
+</html>

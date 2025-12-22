@@ -1,0 +1,60 @@
+name: children_rewards
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.6
+  drift: ^2.21.0
+  sqlite3_flutter_libs: ^0.5.41  # 需要 SDK 35，但 SDK 34 也可编译（有警告）
+  path_provider: ^2.1.5
+  path: ^1.9.0
+  flutter_riverpod: ^2.6.1
+  google_fonts: ^6.3.0
+  intl: any  # Allow flutter_localizations to dictate version
+  image_picker: ^1.1.2
+  flutter_svg: ^2.1.0
+  flutter_slidable: ^3.1.1
+  flutter_markdown: ^0.7.4+3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  drift_dev: ^2.21.2
+  build_runner: ^2.4.11
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.4.1
+  change_app_package_name: ^1.5.0
+
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/app_icon.png"
+  remove_alpha_ios: true
+  adaptive_icon_background: "#FFD54F"
+  adaptive_icon_foreground: "assets/app_icon.png"
+
+flutter_native_splash:
+  color: "#FAC638"
+  image: "assets/app_icon.png"
+  android_12:
+    image: "assets/app_icon.png"
+    color: "#FAC638"
+  fullscreen: true
+
+flutter:
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/
+    - assets/sql/

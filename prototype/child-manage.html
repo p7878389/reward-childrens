@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Manage Child</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  
+  <!-- Configuration -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class", 
+      theme: {
+        extend: {
+          colors: {
+            primary: "#FAC638", 
+            "primary-dark": "#e5b020", 
+            "background-light": "#FFFCF5", 
+            "background-dark": "#231e0f", 
+            "text-main": "#4a3b2a", 
+            "text-sub": "#8c805f", 
+            "card-bg": "#FFFEF9", 
+            "card-warm": "#FFFCF5", 
+            success: "#88c458", 
+            danger: "#ff8fa3"
+          }, 
+          fontFamily: {
+            display: "Plus Jakarta Sans"
+          }, 
+          borderRadius: {
+            DEFAULT: "0.5rem", 
+            lg: "1rem", 
+            xl: "1.5rem", 
+            "2xl": "2rem",
+            full: "9999px"
+          }, 
+          boxShadow: {
+            soft: "0 8px 30px -4px rgba(250, 198, 56, 0.15)", 
+            card: "0 4px 14px rgba(74, 59, 42, 0.03)",
+          }
+        }
+      }
+    };
+  </script>
+  
+  <style>
+    body { min-height: 100dvh; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+  </style>
+
+  <!-- Components -->
+  <script src="components/translations.js"></script>
+  <script src="components/i18n.js"></script>
+  <script src="components/app-header.js"></script>
+  <script src="components/confirm-modal.js"></script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display antialiased text-text-main overflow-x-hidden selection:bg-primary/30">
+
+  <!-- Mobile Container -->
+  <div class="relative flex h-full min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-2xl overflow-hidden border-x border-black/5">
+    
+    <!-- Header -->
+    <app-header type="back" title="Manage Child" data-i18n-title="manage.title" back-url="index.html" right-icon="edit" on-right-click="window.location.href='edit-child.html'"></app-header>
+
+    <main class="flex-1 px-6 pb-24 overflow-y-auto no-scrollbar">
+      
+      <!-- Prominent Profile Header -->
+      <div class="flex flex-col items-center mt-6 mb-10">
+        <!-- Large Avatar -->
+        <div class="relative group mb-6">
+          <div class="size-32 rounded-full ring-4 ring-white shadow-soft bg-blue-50 overflow-hidden relative">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lucas&backgroundColor=b6e3f4" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <!-- Child Info Details -->
+        <div class="text-center">
+          <h2 class="text-3xl font-extrabold text-text-main leading-tight">Lucas</h2>
+          
+          <div class="flex items-center justify-center gap-2 mt-2">
+            <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-[11px] font-bold uppercase tracking-wider ring-1 ring-blue-100 flex items-center gap-1">
+              <span class="material-symbols-rounded text-sm">male</span> <span data-i18n="gender.boy">Boy</span>
+            </span>
+            <span class="px-3 py-1 rounded-full bg-card-bg text-text-sub text-[11px] font-bold uppercase tracking-wider ring-1 ring-black/5 flex items-center gap-1">
+              <span class="material-symbols-rounded text-sm">cake</span> 6 <span data-i18n="label.years">Years</span>
+            </span>
+          </div>
+
+          <!-- Current Points Badge -->
+          <div class="mt-5 inline-flex items-center gap-2 px-6 py-2 bg-primary rounded-2xl shadow-soft">
+            <span class="material-symbols-rounded text-white text-xl fill-1">star</span>
+            <span class="text-white font-extrabold text-xl">150</span>
+            <span class="text-white/80 text-[10px] font-bold uppercase tracking-widest ml-1" data-i18n="label.stars">Stars</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Management Menu -->
+      <div class="flex flex-col gap-4">
+        <h3 class="text-xs font-bold text-text-sub uppercase tracking-widest px-1" data-i18n="manage.data_rules">Data & Rules</h3>
+        
+        <!-- Points History -->
+        <a href="points-history.html" class="group flex items-center gap-4 bg-card-bg p-4 rounded-2xl shadow-card ring-1 ring-black/5 hover:ring-primary/30 transition-all active:scale-[0.98]">
+           <div class="size-12 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-colors">
+              <span class="material-symbols-rounded text-2xl">history</span>
+           </div>
+           <div class="flex-1 text-left">
+              <h4 class="font-bold text-text-main text-lg" data-i18n="manage.points_history">Points History</h4>
+              <p class="text-xs text-text-sub font-medium" data-i18n="manage.points_history_desc">View full timeline of earnings</p>
+           </div>
+           <span class="material-symbols-rounded text-text-sub/30 group-hover:translate-x-1 transition-transform">chevron_right</span>
+        </a>
+
+        <!-- Custom Rules -->
+        <a href="rules-manage.html" class="group flex items-center gap-4 bg-card-bg p-4 rounded-2xl shadow-card ring-1 ring-black/5 hover:ring-primary/30 transition-all active:scale-[0.98]">
+           <div class="size-12 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center group-hover:bg-purple-500 group-hover:text-white transition-colors">
+              <span class="material-symbols-rounded text-2xl">tune</span>
+           </div>
+           <div class="flex-1 text-left">
+              <h4 class="font-bold text-text-main text-lg" data-i18n="manage.custom_rules">Custom Rules</h4>
+              <p class="text-xs text-text-sub font-medium" data-i18n="manage.custom_rules_desc">Manage rewards & punishments</p>
+           </div>
+           <span class="material-symbols-rounded text-text-sub/30 group-hover:translate-x-1 transition-transform">chevron_right</span>
+        </a>
+
+        <!-- Reward History -->
+        <a href="exchange-history.html" class="group flex items-center gap-4 bg-card-bg p-4 rounded-2xl shadow-card ring-1 ring-black/5 hover:ring-primary/30 transition-all active:scale-[0.98]">
+           <div class="size-12 rounded-xl bg-teal-50 text-teal-500 flex items-center justify-center group-hover:bg-teal-500 group-hover:text-white transition-colors">
+              <span class="material-symbols-rounded text-2xl">redeem</span>
+           </div>
+           <div class="flex-1 text-left">
+              <h4 class="font-bold text-text-main text-lg" data-i18n="manage.reward_history">Reward History</h4>
+              <p class="text-xs text-text-sub font-medium" data-i18n="manage.reward_history_desc">Items redeemed by Lucas</p>
+           </div>
+           <span class="material-symbols-rounded text-text-sub/30 group-hover:translate-x-1 transition-transform">chevron_right</span>
+        </a>
+      </div>
+
+      <!-- Danger Zone -->
+      <div class="mt-8 pt-6 border-t border-black/5">
+        <button onclick="document.querySelector('app-confirm-modal').show({ title: 'Delete Profile?', message: 'This will remove all data for Lucas. Are you sure?', type: 'danger', confirmText: 'Yes, Delete', onConfirm: () => window.location.href='index.html' })" class="w-full py-4 rounded-2xl border-2 border-red-100 text-red-500 font-bold hover:bg-red-50 transition-colors flex items-center justify-center gap-2">
+           <span class="material-symbols-rounded">delete</span>
+           <span data-i18n="manage.delete_profile">Delete Child Profile</span>
+        </button>
+      </div>
+
+    </main>
+
+    <app-confirm-modal></app-confirm-modal>
+
+  </div>
+</body>
+</html>

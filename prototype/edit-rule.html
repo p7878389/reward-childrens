@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Edit Rule</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class", 
+      theme: {
+        extend: {
+          colors: {
+            primary: "#FAC638", 
+            "primary-dark": "#e5b020", 
+            "background-light": "#FFFCF5", 
+            "background-dark": "#231e0f", 
+            "text-main": "#4a3b2a", 
+            "text-sub": "#8c805f", 
+            "card-bg": "#FFFEF9", 
+            "card-warm": "#FFFCF5", 
+            "input-bg": "#FAF8F1",
+            success: "#88c458", 
+            danger: "#ff8fa3"
+          }, 
+          fontFamily: { display: "Plus Jakarta Sans" }, 
+          borderRadius: { DEFAULT: "0.5rem", lg: "1rem", xl: "1.5rem", "2xl": "2rem", full: "9999px" }, 
+          boxShadow: { soft: "0 8px 30px -4px rgba(250, 198, 56, 0.15)", card: "0 4px 14px rgba(74, 59, 42, 0.03)" }
+        }
+      }
+    };
+  </script>
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .mode-active { transform: scale(1.02); box-shadow: 0 4px 12px rgba(0,0,0,0.05); font-weight: 800; }
+    .icon-selected { background-color: #FAC638 !important; color: white !important; transform: scale(1.1); box-shadow: 0 4px 12px rgba(250, 198, 56, 0.3); }
+  </style>
+  <script src="components/app-header.js"></script>
+  <script src="components/confirm-modal.js"></script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased text-text-main overflow-x-hidden selection:bg-primary/30">
+  <div class="relative flex h-full min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-2xl overflow-hidden border-x border-black/5">
+    <app-header type="back" title="EDIT RULE" back-url="rules-manage.html" hide-more></app-header>
+    <main class="flex-1 px-6 pb-32 overflow-y-auto no-scrollbar">
+      <div class="mt-4 mb-8 flex justify-center">
+         <div class="bg-card-bg p-4 rounded-2xl shadow-card ring-1 ring-black/5 flex items-center gap-4 w-full max-w-xs transform scale-105">
+            <div id="preview-icon-bg" class="size-12 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center shrink-0 shadow-sm transition-colors">
+               <span id="preview-icon" class="material-symbols-rounded text-2xl">menu_book</span>
+            </div>
+            <div class="flex-1">
+               <h4 id="preview-name" class="font-bold text-text-main text-sm">Homework</h4>
+               <span id="preview-points" class="text-xs font-extrabold text-success bg-green-50 px-2 py-0.5 rounded-md mt-1 inline-block transition-colors">+15</span>
+            </div>
+         </div>
+      </div>
+      <div class="flex flex-col gap-6">
+         <div class="bg-[#F2EFE5] p-1.5 rounded-2xl ring-1 ring-black/5 flex">
+            <button onclick="switchMode('reward')" id="btn-reward" class="mode-active flex-1 py-3 rounded-xl bg-white text-success shadow-sm text-sm transition-all flex items-center justify-center gap-2">
+               <span class="material-symbols-rounded">add_circle</span> Reward
+            </button>
+            <button onclick="switchMode('punish')" id="btn-punish" class="flex-1 py-3 rounded-xl text-text-sub/60 hover:text-text-main text-sm font-bold transition-all flex items-center justify-center gap-2">
+               <span class="material-symbols-rounded">remove_circle</span> Punish
+            </button>
+         </div>
+         <div>
+            <label class="px-1 text-xs font-bold text-text-sub uppercase tracking-wider mb-2 block">Rule Name</label>
+            <div class="bg-card-bg p-2 rounded-2xl ring-1 ring-black/5 focus-within:ring-2 focus-within:ring-primary/50 transition-all shadow-card flex items-center gap-3">
+               <div class="size-10 rounded-xl bg-input-bg flex items-center justify-center text-text-sub shrink-0">
+                  <span class="material-symbols-rounded text-xl">edit</span>
+               </div>
+               <input type="text" id="name-input" value="Homework" class="flex-1 bg-transparent border-none p-2 text-lg font-bold text-text-main placeholder-text-sub/30 focus:ring-0" oninput="updatePreview()">
+            </div>
+         </div>
+         <div>
+            <label class="px-1 text-xs font-bold text-text-sub uppercase tracking-wider mb-2 block">Default Points</label>
+            <div class="flex items-center gap-3">
+               <div class="bg-card-bg p-2 rounded-2xl ring-1 ring-black/5 focus-within:ring-2 focus-within:ring-primary/50 transition-all shadow-card flex-1 flex items-center gap-3">
+                  <div class="size-10 rounded-xl bg-input-bg flex items-center justify-center text-text-sub shrink-0">
+                     <span class="material-symbols-rounded text-xl">star</span>
+                  </div>
+                  <input type="number" id="points-input" value="15" class="flex-1 bg-transparent border-none p-2 text-xl font-extrabold text-text-main placeholder-text-sub/30 focus:ring-0" oninput="updatePreview()">
+               </div>
+               <div class="flex gap-2">
+                  <button onclick="setPoints(5)" class="size-12 rounded-xl bg-card-bg shadow-sm ring-1 ring-black/5 font-bold text-text-sub hover:bg-primary/10 hover:text-primary transition-all">5</button>
+                  <button onclick="setPoints(10)" class="size-12 rounded-xl bg-card-bg shadow-sm ring-1 ring-black/5 font-bold text-text-sub hover:bg-primary/10 hover:text-primary transition-all">10</button>
+                  <button onclick="setPoints(20)" class="size-12 rounded-xl bg-card-bg shadow-sm ring-1 ring-black/5 font-bold text-text-sub hover:bg-primary/10 hover:text-primary transition-all">20</button>
+               </div>
+            </div>
+         </div>
+         <div>
+            <label class="px-1 text-xs font-bold text-text-sub uppercase tracking-wider mb-2 block">Choose Icon</label>
+            <div class="grid grid-cols-5 gap-3 bg-card-bg p-4 rounded-2xl ring-1 ring-black/5 shadow-inner">
+               <button onclick="selectIcon(this, 'star')" class="icon-btn size-10 rounded-lg bg-input-bg text-text-sub flex items-center justify-center hover:bg-white hover:shadow-sm transition-all"><span class="material-symbols-rounded">star</span></button>
+               <button onclick="selectIcon(this, 'menu_book')" class="icon-btn size-10 rounded-lg bg-input-bg text-text-sub flex items-center justify-center hover:bg-white hover:shadow-sm transition-all icon-selected"><span class="material-symbols-rounded">menu_book</span></button>
+               <button onclick="selectIcon(this, 'cleaning_services')" class="icon-btn size-10 rounded-lg bg-input-bg text-text-sub flex items-center justify-center hover:bg-white hover:shadow-sm transition-all"><span class="material-symbols-rounded">cleaning_services</span></button>
+               <button onclick="selectIcon(this, 'fitness_center')" class="icon-btn size-10 rounded-lg bg-input-bg text-text-sub flex items-center justify-center hover:bg-white hover:shadow-sm transition-all"><span class="material-symbols-rounded">fitness_center</span></button>
+               <button onclick="selectIcon(this, 'piano')" class="icon-btn size-10 rounded-lg bg-input-bg text-text-sub flex items-center justify-center hover:bg-white hover:shadow-sm transition-all"><span class="material-symbols-rounded">piano</span></button>
+            </div>
+         </div>
+      </div>
+    </main>
+    <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background-light via-background-light to-transparent pt-12">
+        <button onclick="document.querySelector('app-confirm-modal').show({ title: 'Save Rule?', message: 'Update changes to this rule?', confirmText: 'Save', onConfirm: () => window.location.href='rules-manage.html' })" class="w-full bg-primary hover:bg-primary-dark text-white font-bold text-lg py-4 rounded-2xl shadow-soft flex items-center justify-center gap-2 transition-transform active:scale-95 ring-1 ring-black/5">
+            <span class="material-symbols-rounded text-2xl">save</span>
+            Save Changes
+        </button>
+    </div>
+    
+    <app-confirm-modal></app-confirm-modal>
+  </div>
+  <script>
+    let currentMode = 'reward';
+    let currentIcon = 'menu_book';
+    function switchMode(mode) {
+      currentMode = mode;
+      const btnReward = document.getElementById('btn-reward');
+      const btnPunish = document.getElementById('btn-punish');
+      if (mode === 'reward') {
+        btnReward.classList.add('mode-active', 'bg-white', 'text-success', 'shadow-sm');
+        btnReward.classList.remove('text-text-sub/60');
+        btnPunish.classList.remove('mode-active', 'bg-white', 'text-danger', 'shadow-sm');
+        btnPunish.classList.add('text-text-sub/60');
+      } else {
+        btnPunish.classList.add('mode-active', 'bg-white', 'text-danger', 'shadow-sm');
+        btnPunish.classList.remove('text-text-sub/60');
+        btnReward.classList.remove('mode-active', 'bg-white', 'text-success', 'shadow-sm');
+        btnReward.classList.add('text-text-sub/60');
+      }
+      updatePreview();
+    }
+    function selectIcon(btn, iconName) {
+      document.querySelectorAll('.icon-btn').forEach(b => b.classList.remove('icon-selected'));
+      btn.classList.add('icon-selected');
+      currentIcon = iconName;
+      updatePreview();
+    }
+    function setPoints(val) {
+      document.getElementById('points-input').value = val;
+      updatePreview();
+    }
+    function updatePreview() {
+      const name = document.getElementById('name-input').value || 'Rule Name';
+      const points = document.getElementById('points-input').value || 0;
+      document.getElementById('preview-name').textContent = name;
+      document.getElementById('preview-icon').textContent = currentIcon;
+      const pointsEl = document.getElementById('preview-points');
+      const iconBg = document.getElementById('preview-icon-bg');
+      if (currentMode === 'reward') {
+         pointsEl.textContent = `+${points}`;
+         pointsEl.className = 'text-xs font-extrabold text-success bg-green-50 px-2 py-0.5 rounded-md mt-1 inline-block transition-colors';
+         iconBg.className = 'size-12 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center shrink-0 shadow-sm transition-colors';
+      } else {
+         pointsEl.textContent = `-${points}`;
+         pointsEl.className = 'text-xs font-extrabold text-danger bg-red-50 px-2 py-0.5 rounded-md mt-1 inline-block transition-colors';
+         iconBg.className = 'size-12 rounded-xl bg-red-50 text-red-500 flex items-center justify-center shrink-0 shadow-sm transition-colors';
+      }
+    }
+  </script>
+</body>
+</html>

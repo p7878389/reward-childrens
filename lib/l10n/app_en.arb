@@ -1,0 +1,199 @@
+{
+  "@@locale": "en",
+  "appTitle": "Children Rewards",
+  "welcomeTitle": "Reward Journey",
+  "noChildrenYet": "Add your first child to start!",
+  "addAnotherChild": "Add Child",
+  "manageChild": "Manage Child",
+  "pointsHistory": "Points History",
+  "customRules": "Custom Rules",
+  "rewardHistory": "Reward History",
+  "deleteChildProfile": "Delete Profile",
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "noRecordsFound": "No records",
+  "totalBalance": "Balance",
+  "totalEarned": "Earned",
+  "totalDeducted": "Deducted",
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "yesDelete": "Delete",
+  "deleteConfirmMessage": "This cannot be undone.",
+  "rewardsStore": "Store",
+  "store": "Store",
+  "all": "All",
+  "privileges": "Privileges",
+  "toys": "Toys",
+  "snacks": "Snacks",
+  "earned": "Earned",
+  "spent": "Spent",
+  "stars": "Stars",
+  "totalItems": "Total Items",
+  "totalSpent": "Total Spent",
+  "years": "Years",
+  "availableStars": "Available Stars",
+  "boy": "Boy",
+  "girl": "Girl",
+  "childName": "Child's Name",
+  "gender": "Gender",
+  "birthdayOptional": "Birthday (Optional)",
+  "selectDate": "Select Date",
+  "addProfile": "Add Profile",
+  "deleteProfile": "Delete Profile?",
+  "deleteChildTitle": "Delete {name}?",
+  "deleteUndone": "This cannot be undone.",
+  "editProfile": "Edit Profile",
+  "saveChanges": "Save Changes",
+  "dataAndRules": "Data & Rules",
+  "pointsHistorySubtitle": "Full timeline of earnings",
+  "customRulesSubtitle": "Manage rules",
+  "rewardHistorySubtitle": "{name}'s rewards",
+  "tapPhoto": "Tap to upload",
+  "choosePhotoSource": "Photo Source",
+  "takePhoto": "Camera",
+  "chooseFromGallery": "Gallery",
+  "createProfile": "Create Profile",
+  "delete": "Delete",
+  "reward": "Reward",
+  "punish": "Punish",
+  "selectRule": "Select Rule",
+  "chooseRule": "Choose a rule...",
+  "points": "Points",
+  "note": "Note",
+  "optional": "(Optional)",
+  "addRecord": "Add Record",
+  "addRecordConfirmTitle": "Add Record?",
+  "addRecordConfirmMessage": "Confirm adding this record?",
+  "manageRules": "Manage Rules",
+  "deleteRuleTitle": "Delete Rule?",
+  "deleteRuleConfirm": "Delete \"{name}\"?",
+  "newRule": "New Rule",
+  "editRule": "Edit Rule",
+  "ruleName": "Rule Name",
+  "defaultPoints": "Default Points",
+  "chooseIcon": "Choose Icon",
+  "createRule": "Create Rule",
+  "saveRuleTitle": "Save Rule?",
+  "saveRuleMessage": "Save changes?",
+  "swipeToDelete": "Swipe to delete",
+  "deleteConfirm": "Delete \"{name}\"?",
+  "goodMorning": "GOOD MORNING!",
+  "goodAfternoon": "GOOD AFTERNOON!",
+  "goodEvening": "GOOD EVENING!",
+  "whoIsEarning": "Who is earning",
+  "todayQuestion": "today?",
+  "manageRewards": "Manage Rewards",
+  "rewardDetail": "Reward Detail",
+  "addReward": "Add Reward",
+  "editReward": "Edit Reward",
+  "rewardName": "Item Name",
+  "category": "Category",
+  "description": "Description",
+  "unlimitedStock": "Unlimited Stock",
+  "availableQuantity": "Quantity",
+  "confirmRedemption": "Redeem?",
+  "confirmRedeemMessage": "Spend {points} stars for {name}?",
+  "redeemSuccess": "Redeemed!",
+  "outOfStock": "Out of stock",
+  "redeemNow": "Redeem Now",
+  "needMoreStars": "Need stars",
+  "deleteRewardTitle": "Delete Reward?",
+  "deleteRewardConfirm": "Delete \"{name}\"?",
+  "settings": "Settings",
+  "language": "Language",
+  "systemDefault": "System Default",
+  "dataManagement": "Data",
+  "clearAllData": "Clear All Data",
+  "clearDataTitle": "Clear All?",
+  "clearDataMessage": "Delete all data. Permanent.",
+  "deleteEverything": "Delete All",
+  "dataClearedSuccess": "Data cleared",
+  "addSuccess": "Success",
+  "appVersion": "Version",
+  "privacyPolicy": "Privacy Policy",
+  "noteRequiredForCustomRule": "Note is required",
+  "pointsMustBePositive": "Must be > 0",
+  "pleaseSelectRule": "Select a rule",
+  "ruleCleanBedroom": "Clean Bedroom",
+  "ruleFinishHomework": "Finish Homework",
+  "ruleWashDishes": "Wash Dishes",
+  "ruleWalkTheDog": "Walk the Dog",
+  "rulePracticeInstrument": "Practice Instrument",
+  "ruleTantrum": "Tantrum",
+  "ruleFighting": "Fighting",
+  "ruleNotListening": "Not Listening",
+  "ruleCustomReward": "Custom Reward",
+  "ruleCustomPenalty": "Custom Penalty",
+  "ruleExchange": "Exchange",
+  "fieldRequired": "Required",
+  "invalidNumber": "Enter a number",
+  "numberMustBePositive": "Must be > 0",
+  "nameRequired": "Name required",
+  "priceRequired": "Price required",
+  "stockRequired": "Stock required",
+  "deleteConfirmMessageCommon": "Delete \"{name}\"?",
+  "ruleActiveStatus": "Active",
+  "rewardActiveStatus": "Active",
+  "saveSuccess": "Saved successfully",
+  "gotIt": "Got it",
+  "addDetails": "Add details...",
+  "ruleNameDuplicate": "Name exists",
+  "logs": "Logs",
+  "allLevels": "All Levels",
+  "noLogsFound": "No logs",
+  "noDescription": "No description",
+  "clearLogsTitle": "Clear Logs?",
+  "clearLogsMessage": "Delete all logs. Permanent.",
+  "@rewardHistorySubtitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@deleteChildTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@deleteRuleConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@confirmRedeemMessage": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@deleteRewardConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@deleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@deleteConfirmMessageCommon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
+}

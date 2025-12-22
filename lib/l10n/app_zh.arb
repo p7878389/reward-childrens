@@ -1,0 +1,199 @@
+{
+  "@@locale": "zh",
+  "appTitle": "儿童奖励",
+  "welcomeTitle": "开启奖励之旅",
+  "noChildrenYet": "添加第一个宝贝开始吧！",
+  "addAnotherChild": "添加宝贝",
+  "manageChild": "管理宝贝",
+  "pointsHistory": "积分历史",
+  "customRules": "自定义规则",
+  "rewardHistory": "兑换历史",
+  "deleteChildProfile": "删除档案",
+  "today": "今天",
+  "yesterday": "昨天",
+  "noRecordsFound": "暂无记录",
+  "totalBalance": "总余额",
+  "totalEarned": "总获得",
+  "totalDeducted": "总扣除",
+  "confirm": "确认",
+  "cancel": "取消",
+  "yesDelete": "删除",
+  "deleteConfirmMessage": "此操作无法撤销。",
+  "rewardsStore": "奖励商店",
+  "store": "商店",
+  "all": "全部",
+  "privileges": "特权",
+  "toys": "玩具",
+  "snacks": "零食",
+  "earned": "获得",
+  "spent": "支出",
+  "stars": "星星",
+  "totalItems": "兑换总数",
+  "totalSpent": "总消耗",
+  "years": "岁",
+  "availableStars": "可用星星",
+  "boy": "男孩",
+  "girl": "女孩",
+  "childName": "宝贝姓名",
+  "gender": "性别",
+  "birthdayOptional": "生日 (选填)",
+  "selectDate": "选择日期",
+  "addProfile": "添加档案",
+  "deleteProfile": "确认删除？",
+  "deleteChildTitle": "删除 {name}？",
+  "deleteUndone": "此操作无法撤销。",
+  "editProfile": "编辑档案",
+  "saveChanges": "保存修改",
+  "dataAndRules": "数据与规则",
+  "pointsHistorySubtitle": "查看完整积分记录",
+  "customRulesSubtitle": "管理奖惩规则",
+  "rewardHistorySubtitle": "{name}的兑换记录",
+  "tapPhoto": "点击上传照片",
+  "choosePhotoSource": "选择照片来源",
+  "takePhoto": "拍照",
+  "chooseFromGallery": "相册",
+  "createProfile": "创建档案",
+  "delete": "删除",
+  "reward": "奖励",
+  "punish": "惩罚",
+  "selectRule": "选择规则",
+  "chooseRule": "选择一个规则...",
+  "points": "积分",
+  "note": "备注",
+  "optional": "(选填)",
+  "addRecord": "添加记录",
+  "addRecordConfirmTitle": "添加记录？",
+  "addRecordConfirmMessage": "确认添加此记录？",
+  "manageRules": "规则管理",
+  "deleteRuleTitle": "删除规则？",
+  "deleteRuleConfirm": "确定要删除 \"{name}\" 吗？",
+  "newRule": "新建规则",
+  "editRule": "编辑规则",
+  "ruleName": "规则名称",
+  "defaultPoints": "默认分数",
+  "chooseIcon": "选择图标",
+  "createRule": "创建规则",
+  "saveRuleTitle": "保存规则？",
+  "saveRuleMessage": "保存修改？",
+  "swipeToDelete": "左滑删除",
+  "goodMorning": "早上好！",
+  "goodAfternoon": "下午好！",
+  "goodEvening": "晚上好！",
+  "whoIsEarning": "谁正在赢取",
+  "todayQuestion": "？",
+  "manageRewards": "奖励管理",
+  "rewardDetail": "奖励详情",
+  "addReward": "添加奖励",
+  "editReward": "编辑奖励",
+  "rewardName": "商品名称",
+  "category": "分类",
+  "description": "描述",
+  "unlimitedStock": "不限库存",
+  "availableQuantity": "可用数量",
+  "confirmRedemption": "确认兑换",
+  "confirmRedeemMessage": "确定花费 {points} 颗星星兑换 {name}？",
+  "redeemSuccess": "兑换成功！",
+  "outOfStock": "库存不足",
+  "redeemNow": "立即兑换",
+  "needMoreStars": "星星不足",
+  "deleteRewardTitle": "删除奖励？",
+  "deleteRewardConfirm": "确定要删除 \"{name}\" 吗？",
+  "settings": "设置",
+  "language": "语言",
+  "systemDefault": "系统默认",
+  "dataManagement": "数据管理",
+  "clearAllData": "清空所有数据",
+  "clearDataTitle": "清空所有数据？",
+  "clearDataMessage": "删除所有数据且无法撤销。",
+  "deleteEverything": "全部删除",
+  "dataClearedSuccess": "数据已清空",
+  "addSuccess": "添加成功",
+  "appVersion": "版本",
+  "privacyPolicy": "隐私政策",
+  "noteRequiredForCustomRule": "请填写备注",
+  "pointsMustBePositive": "积分须大于0",
+  "pleaseSelectRule": "请选择规则",
+  "ruleCleanBedroom": "整理房间",
+  "ruleFinishHomework": "完成作业",
+  "ruleWashDishes": "洗碗",
+  "ruleWalkTheDog": "遛狗",
+  "rulePracticeInstrument": "练习乐器",
+  "ruleTantrum": "发脾气",
+  "ruleFighting": "打架",
+  "ruleNotListening": "不听话",
+  "ruleCustomReward": "自定义奖励",
+  "ruleCustomPenalty": "自定义惩罚",
+  "ruleExchange": "兑换",
+  "fieldRequired": "此项必填",
+  "invalidNumber": "请输入数字",
+  "numberMustBePositive": "须大于0",
+  "nameRequired": "请填写名称",
+  "priceRequired": "请填写价格",
+  "stockRequired": "请填写库存",
+  "gotIt": "知道了",
+  "addDetails": "添加详情...",
+  "ruleNameDuplicate": "名称已存在",
+  "logs": "日志",
+  "allLevels": "全部级别",
+  "noLogsFound": "暂无日志",
+  "noDescription": "暂无描述",
+  "clearLogsTitle": "清空日志？",
+  "clearLogsMessage": "删除所有日志且无法撤销。",
+  "deleteConfirm": "删除 \"{name}\"？",
+  "deleteConfirmMessageCommon": "确定要删除 \"{name}\" 吗？",
+  "ruleActiveStatus": "上架",
+  "rewardActiveStatus": "上架",
+  "saveSuccess": "保存成功",
+  "@rewardHistorySubtitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@deleteChildTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@deleteRuleConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@confirmRedeemMessage": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@deleteRewardConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@deleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@deleteConfirmMessageCommon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
+}

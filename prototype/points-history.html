@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Points History</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  
+  <!-- Configuration -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class", 
+      theme: {
+        extend: {
+          colors: {
+            primary: "#FAC638", 
+            "primary-dark": "#e5b020", 
+            "background-light": "#FFFCF5", 
+            "background-dark": "#231e0f", 
+            "text-main": "#4a3b2a", 
+            "text-sub": "#8c805f", 
+            "card-bg": "#FFFEF9", 
+            "card-warm": "#FFFCF5", 
+            success: "#88c458", 
+            danger: "#ff8fa3"
+          }, 
+          fontFamily: {
+            display: "Plus Jakarta Sans"
+          }, 
+          borderRadius: {
+            DEFAULT: "0.5rem", 
+            lg: "1rem", 
+            xl: "1.5rem", 
+            "2xl": "2rem",
+            full: "9999px"
+          }, 
+          boxShadow: {
+            soft: "0 8px 30px -4px rgba(250, 198, 56, 0.15)", 
+            card: "0 4px 14px rgba(74, 59, 42, 0.03)",
+          }
+        }
+      }
+    };
+  </script>
+  
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .filter-active { background-color: #FFFCF5 !important; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+  </style>
+
+  <!-- Components -->
+  <script src="components/app-header.js"></script>
+  <script src="components/fab-button.js"></script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display antialiased text-text-main overflow-x-hidden selection:bg-primary/30">
+
+  <!-- Mobile Container -->
+  <div class="relative flex h-full min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-2xl overflow-hidden border-x border-black/5">
+    
+    <!-- Header -->
+    <app-header type="back" title="History" back-url="child-manage.html" hide-more></app-header>
+
+    <main class="flex-1 px-6 pb-32 overflow-y-auto no-scrollbar">
+      
+      <!-- Centered Stats Overview -->
+      <div class="mt-4 mb-8 flex flex-col items-center">
+        <!-- Main Balance Centered -->
+        <div class="w-full bg-primary rounded-3xl p-6 shadow-soft text-white relative overflow-hidden text-center mb-4 group">
+           <div class="relative z-10 flex flex-col items-center">
+             <p class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80 mb-2">Total Balance</p>
+             <div class="flex items-center gap-3">
+                <span class="material-symbols-rounded text-4xl drop-shadow-sm">star</span>
+                <span class="text-5xl font-extrabold tracking-tight drop-shadow-sm">150</span>
+             </div>
+           </div>
+           <div class="absolute -right-6 -top-12 size-32 bg-white/20 rounded-full blur-2xl"></div>
+        </div>
+
+        <!-- Colored Mini Stats -->
+        <div class="grid grid-cols-2 gap-4 w-full">
+          <div class="bg-[#EAFBF3] p-4 rounded-2xl ring-1 ring-success/20 flex flex-col items-center justify-center gap-0.5">
+            <p class="text-[10px] font-bold text-success/80 uppercase tracking-wider mb-1">Total Earned</p>
+            <p class="text-xl font-extrabold text-[#2E7D58] tracking-tight">+3,240</p>
+          </div>
+          <div class="bg-[#FFF0F0] p-4 rounded-2xl ring-1 ring-danger/20 flex flex-col items-center justify-center gap-0.5">
+            <p class="text-[10px] font-bold text-danger/80 uppercase tracking-wider mb-1">Total Deducted</p>
+            <p class="text-xl font-extrabold text-[#D6455D] tracking-tight">-850</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="flex p-1 bg-[#F2EFE5] rounded-xl ring-1 ring-black/5 mb-8 sticky top-0 z-20 backdrop-blur-md bg-opacity-90">
+        <button onclick="filterRecords('all', this)" class="filter-tab flex-1 py-2 rounded-lg text-text-main text-xs font-extrabold transition-all filter-active">All</button>
+        <button onclick="filterRecords('earned', this)" class="filter-tab flex-1 py-2 rounded-lg text-text-sub/70 hover:text-text-main text-xs font-bold transition-all">Earned</button>
+        <button onclick="filterRecords('spent', this)" class="filter-tab flex-1 py-2 rounded-lg text-text-sub/70 hover:text-text-main text-xs font-bold transition-all">Spent</button>
+      </div>
+
+      <!-- Timeline List (Left Aligned) -->
+      <div class="relative pl-4 border-l-2 border-dashed border-primary/20 space-y-10">
+        
+        <!-- Day Group: Today -->
+        <div class="relative day-group" data-day="today">
+          <span class="absolute -left-[21px] top-0 size-3 rounded-full bg-primary ring-4 ring-background-light"></span>
+          <h3 class="text-xs font-bold text-text-sub mb-5 pl-2 uppercase tracking-[0.2em] opacity-60">Today</h3>
+          
+          <div class="space-y-4">
+            <!-- Record Item (Earned) -->
+            <div class="record-item earned bg-card-bg p-4 rounded-2xl shadow-card ring-1 ring-black/5 flex items-center gap-4 group transition-all">
+              <!-- 1. Rule Icon -->
+              <div class="size-11 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center shrink-0 shadow-inner">
+                <span class="material-symbols-rounded text-2xl">menu_book</span>
+              </div>
+              
+              <!-- 2, 3, 4. Type, Time, Remark Column -->
+              <div class="flex-1 min-w-0">
+                <h4 class="font-bold text-text-main text-sm">Homework</h4>
+                <p class="text-[10px] font-bold text-text-sub/60 mt-0.5 flex items-center gap-1 uppercase">
+                   <span class="material-symbols-rounded text-[11px]">schedule</span> 10:30:15 AM
+                </p>
+                <!-- Remark -->
+                <p class="mt-1.5 text-[11px] text-text-sub leading-relaxed bg-background-light/50 px-2 py-1 rounded border border-black/[0.03] inline-block">
+                   Completed Math Chapter 5
+                </p>
+              </div>
+
+              <!-- 5. Points (Right) -->
+              <div class="px-3 py-1.5 rounded-xl bg-green-50 text-green-600 font-extrabold text-lg shadow-sm ring-1 ring-green-100/50">
+                +15
+              </div>
+            </div>
+
+            <!-- Record Item (Earned 2) -->
+            <div class="record-item earned bg-card-bg p-4 rounded-2xl shadow-card ring-1 ring-black/5 flex items-center gap-4 group transition-all">
+              <div class="size-11 rounded-xl bg-green-50 text-green-500 flex items-center justify-center shrink-0 shadow-inner">
+                <span class="material-symbols-rounded text-2xl">cleaning_services</span>
+              </div>
+              
+              <div class="flex-1 min-w-0">
+                <h4 class="font-bold text-text-main text-sm">Tidy Room</h4>
+                <p class="text-[10px] font-bold text-text-sub/60 mt-0.5 flex items-center gap-1 uppercase">
+                   <span class="material-symbols-rounded text-[11px]">schedule</span> 09:15:22 AM
+                </p>
+              </div>
+
+              <div class="px-3 py-1.5 rounded-xl bg-green-50 text-green-600 font-extrabold text-lg shadow-sm ring-1 ring-green-100/50">
+                +10
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day Group: Yesterday -->
+        <div class="relative day-group" data-day="yesterday">
+          <span class="absolute -left-[21px] top-0 size-3 rounded-full bg-primary/30 ring-4 ring-background-light"></span>
+          <h3 class="text-xs font-bold text-text-sub mb-5 pl-2 uppercase tracking-[0.2em] opacity-60">Yesterday</h3>
+          
+          <div class="space-y-4">
+             <!-- Record Item (Spent/Punish) -->
+            <div class="record-item spent bg-card-bg p-4 rounded-2xl shadow-card ring-1 ring-black/5 flex items-center gap-4 group transition-all">
+              <div class="size-11 rounded-xl bg-red-50 text-red-500 flex items-center justify-center shrink-0 shadow-inner">
+                <span class="material-symbols-rounded text-2xl">sentiment_dissatisfied</span>
+              </div>
+              
+              <div class="flex-1 min-w-0">
+                <h4 class="font-bold text-text-main text-sm">Fighting</h4>
+                <p class="text-[10px] font-bold text-text-sub/60 mt-0.5 flex items-center gap-1 uppercase">
+                   <span class="material-symbols-rounded text-[11px]">schedule</span> 16:20:10 PM
+                </p>
+                <p class="mt-1.5 text-[11px] text-text-sub leading-relaxed bg-background-light/50 px-2 py-1 rounded border border-black/[0.03] inline-block">
+                   Argument with brother
+                </p>
+              </div>
+
+              <div class="px-3 py-1.5 rounded-xl bg-red-50 text-red-600 font-extrabold text-lg shadow-sm ring-1 ring-red-100/50">
+                -20
+              </div>
+            </div>
+
+             <!-- Record Item (Spent/Redeem) -->
+            <div class="record-item spent bg-card-bg p-4 rounded-2xl shadow-card ring-1 ring-black/5 flex items-center gap-4 opacity-80 group transition-all">
+              <div class="size-11 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center shrink-0 shadow-inner">
+                <span class="material-symbols-rounded text-2xl">sports_esports</span>
+              </div>
+              
+              <div class="flex-1 min-w-0">
+                <h4 class="font-bold text-text-main text-sm">Video Games</h4>
+                <p class="text-[10px] font-bold text-text-sub/60 mt-0.5 flex items-center gap-1 uppercase">
+                   <span class="material-symbols-rounded text-[11px]">schedule</span> 14:00:05 PM
+                </p>
+              </div>
+
+              <div class="px-3 py-1.5 rounded-xl bg-gray-100 text-text-main font-extrabold text-lg shadow-sm ring-1 ring-black/5">
+                -100
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- Floating Action Button -->
+    <app-fab icon="add" href="add-record.html"></app-fab>
+
+  </div>
+
+  <script>
+    function filterRecords(type, btn) {
+      document.querySelectorAll('.filter-tab').forEach(t => {
+        t.classList.remove('filter-active', 'font-extrabold');
+        t.classList.add('text-text-sub/70', 'font-bold');
+      });
+      btn.classList.add('filter-active', 'font-extrabold');
+      btn.classList.remove('text-text-sub/70', 'font-bold');
+
+      const items = document.querySelectorAll('.record-item');
+      items.forEach(item => {
+        if (type === 'all') {
+          item.style.display = 'flex';
+        } else if (type === 'earned') {
+          item.style.display = item.classList.contains('earned') ? 'flex' : 'none';
+        } else if (type === 'spent') {
+          item.style.display = item.classList.contains('spent') ? 'flex' : 'none';
+        }
+      });
+      
+      document.querySelectorAll('.day-group').forEach(group => {
+        const visibleItems = Array.from(group.querySelectorAll('.record-item')).filter(i => i.style.display !== 'none');
+        group.style.display = visibleItems.length > 0 ? 'block' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>

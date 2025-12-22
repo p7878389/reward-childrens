@@ -1,0 +1,130 @@
+import 'package:drift/drift.dart';
+import 'package:children_rewards/core/database/app_database.dart';
+import 'package:children_rewards/features/points/domain/repositories/i_point_records_repository.dart';
+
+/// 积分记录数据仓库实现
+class PointRecordsRepository implements IPointRecordsRepository {
+  final AppDatabase _db;
+
+  PointRecordsRepository(this._db);
+
+  @override
+  Stream<List<PointRecord>> watchRecords(int childId, {String? filterType}) {
+    var query = _db.select(_db.pointRecords)
+      ..where((t) => t.childId.equals(childId));
+
+    if (filterType != null && filterType != 'all') {
+      if (filterType == 'earned') {
+        query = query..where((t) => t.type.equals('earned'));
+      } else if (filterType == 'spent') {
+        query = query..where((t) => t.type.isIn(['spent', 'deducted']));
+      }
+    }
+
+    return (query..orderBy([(t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc)]))
+        .watch();
+  }
+
+  @override
+  Future<List<PointRecord>> getRecordsPaged({
+    required int childId,
+    String? filterType,
+    required int limit,
+    required int offset,
+  }) {
+    var query = _db.select(_db.pointRecords)
+      ..where((t) => t.childId.equals(childId))
+      ..orderBy([(t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc)])
+      ..limit(limit, offset: offset);
+
+    if (filterType != null && filterType != 'all') {
+      if (filterType == 'earned') {
+        query = query..where((t) => t.type.equals('earned'));
+      } else if (filterType == 'spent') {
+        query = query..where((t) => t.type.isIn(['spent', 'deducted']));
+      }
+    }
+
+    return query.get();
+  }
+
+  @override
+  Future<int> getRecordsCount(int childId, {String? filterType}) async {
+    final query = _db.selectOnly(_db.pointRecords)
+      ..addColumns([_db.pointRecords.id.count()])
+      ..where(_db.pointRecords.childId.equals(childId));
+
+    if (filterType != null && filterType != 'all') {
+      if (filterType == 'earned') {
+        query.where(_db.pointRecords.type.equals('earned'));
+      } else if (filterType == 'spent') {
+        query.where(_db.pointRecords.type.isIn(['spent', 'deducted']));
+      }
+    }
+
+    final result = await query.getSingle();
+    return result.read(_db.pointRecords.id.count()) ?? 0;
+  }
+
+  @override
+  Future<Map<String, int>> getStats(int childId) async {
+    final earnedExp = _db.pointRecords.points.sum();
+    final spentExp = _db.pointRecords.points.sum();
+
+    final earnedQuery = _db.selectOnly(_db.pointRecords)
+      ..addColumns([earnedExp])
+      ..where(_db.pointRecords.childId.equals(childId))
+      ..where(_db.pointRecords.type.equals('earned'));
+      
+    final spentQuery = _db.selectOnly(_db.pointRecords)
+      ..addColumns([spentExp])
+      ..where(_db.pointRecords.childId.equals(childId))
+      ..where(_db.pointRecords.type.isIn(['spent', 'deducted']));
+
+    final earnedResult = await earnedQuery.map((row) => row.read(earnedExp)).getSingle();
+    final spentResult = await spentQuery.map((row) => row.read(spentExp)).getSingle();
+      
+    return {
+      'earned': earnedResult ?? 0,
+      'spent': (spentResult ?? 0).abs(),
+    };
+  }
+
+  @override
+  Future<void> addRecord({
+    required int childId,
+    required int points,
+    required String type,
+    int? ruleId,
+    String? ruleName,
+    String? note,
+  }) async {
+    return _db.transaction(() async {
+      // 1. Determine actual points delta
+      // If type is 'earned', points are positive.
+      // If type is 'spent' or 'deducted', points are stored as negative in DB.
+      final int delta = type == 'earned' ? points : -points;
+
+      // 2. Insert Record
+      await _db.into(_db.pointRecords).insert(PointRecordsCompanion.insert(
+        childId: childId,
+        ruleId: Value(ruleId),
+        ruleName: Value(ruleName),
+        points: delta,
+        type: type,
+        note: Value(note),
+        createdAt: DateTime.now(),
+      ));
+
+      // 3. Update Child's Stars
+      final child = await (_db.select(_db.children)..where((t) => t.id.equals(childId))).getSingle();
+      
+      // Ensure stars don't go below zero if that's a rule, but for now we clamp at 0
+      final newStars = (child.stars + delta) < 0 ? 0 : (child.stars + delta);
+
+      await (_db.update(_db.children)..where((t) => t.id.equals(childId))).write(
+        ChildrenCompanion(stars: Value(newStars)),
+      );
+    });
+  }
+}

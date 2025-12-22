@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Children Rewards - Home</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  
+  <!-- Configuration (Consistent with Style Guide) -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class", 
+      theme: {
+        extend: {
+          colors: {
+            primary: "#FAC638", 
+            "primary-dark": "#e5b020", 
+            "background-light": "#FFFCF5", 
+            "background-dark": "#231e0f", 
+            "text-main": "#4a3b2a", 
+            "text-sub": "#8c805f", 
+            "card-bg": "#FFFEF9", 
+            "card-warm": "#FFFCF5", 
+            success: "#88c458", 
+            danger: "#ff8fa3"
+          }, 
+          fontFamily: {
+            display: "Plus Jakarta Sans"
+          }, 
+          borderRadius: {
+            DEFAULT: "0.5rem", 
+            lg: "1rem", 
+            xl: "1.5rem", 
+            "2xl": "2rem",
+            full: "9999px"
+          }, 
+          boxShadow: {
+            soft: "0 8px 30px -4px rgba(250, 198, 56, 0.15)", 
+            card: "0 4px 14px rgba(74, 59, 42, 0.03)",
+            float: "0 12px 24px -6px rgba(74, 59, 42, 0.08)"
+          }
+        }
+      }
+    };
+  </script>
+  
+  <style>
+    body { min-height: 100dvh; }
+    /* Hide scrollbar for clean UI */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+
+  <!-- Components -->
+  <script src="components/translations.js"></script>
+  <script src="components/i18n.js"></script>
+  <script src="components/app-header.js"></script>
+  <script src="components/child-card.js"></script>
+  <script src="components/bottom-nav.js"></script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display antialiased text-text-main overflow-x-hidden selection:bg-primary/30">
+
+  <!-- Mobile Container -->
+  <div class="relative flex h-full min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-2xl overflow-hidden border-x border-black/5">
+    
+    <!-- Home Header -->
+    <app-header type="home"></app-header>
+
+    <!-- Scrollable Content -->
+    <main class="flex-1 px-6 pb-24 overflow-y-auto no-scrollbar">
+      
+      <!-- Child Cards Grid -->
+      <div class="grid grid-cols-1 gap-5">
+        
+        <!-- Child Card 1: Lucas -->
+        <app-child-card 
+          name="Lucas" 
+          score="150" 
+          avatar-seed="Lucas" 
+          bg-info="b6e3f4" 
+          gender="boy"
+          age="6"
+          href="child-manage.html">
+        </app-child-card>
+
+        <!-- Child Card 2: Mia -->
+        <app-child-card 
+          name="Mia" 
+          score="85" 
+          avatar-seed="Mia" 
+          bg-info="ffdfbf" 
+          gender="girl"
+          age="4"
+          href="child-manage.html">
+        </app-child-card>
+
+        <!-- Add Child Button (Solid Style) -->
+        <a href="add-child.html" class="w-full bg-primary hover:bg-primary-dark text-white font-bold text-lg py-5 rounded-2xl shadow-soft flex items-center justify-center gap-2 transition-transform active:scale-95 ring-1 ring-black/5 mt-2">
+          <span class="material-symbols-rounded text-2xl">add</span>
+          <span data-i18n="child.add_another">Add another child</span>
+        </a>
+
+      </div>
+    </main>
+    
+    <!-- Bottom Nav -->
+    <app-bottom-nav active="home"></app-bottom-nav>
+
+  </div>
+</body>
+</html>

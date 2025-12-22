@@ -1,0 +1,58 @@
+{
+  "color": {
+    "primary": {
+      "main": { "value": "#FAC638", "type": "color" },
+      "dark": { "value": "#E5B020", "type": "color" }
+    },
+    "background": {
+      "light": { "value": "#FFFCF5", "type": "color" },
+      "dark": { "value": "#231E0F", "type": "color" }
+    },
+    "surface": {
+      "card": { "value": "#FFFEF9", "type": "color" },
+      "input": { "value": "#FAF8F1", "type": "color" }
+    },
+    "text": {
+      "main": { "value": "#4A3B2A", "type": "color" },
+      "sub": { "value": "#8C805F", "type": "color" }
+    },
+    "status": {
+      "success": { "value": "#88C458", "type": "color" },
+      "danger": { "value": "#FF8FA3", "type": "color" }
+    }
+  },
+  "borderRadius": {
+    "default": { "value": "8px", "type": "borderRadius" },
+    "lg": { "value": "16px", "type": "borderRadius" },
+    "xl": { "value": "24px", "type": "borderRadius" },
+    "2xl": { "value": "32px", "type": "borderRadius" },
+    "full": { "value": "999px", "type": "borderRadius" }
+  },
+  "boxShadow": {
+    "soft": {
+      "value": {
+        "x": "0",
+        "y": "8",
+        "blur": "30",
+        "spread": "-4",
+        "color": "rgba(250, 198, 56, 0.15)",
+        "type": "dropShadow"
+      },
+      "type": "boxShadow"
+    },
+    "card": {
+      "value": {
+        "x": "0",
+        "y": "4",
+        "blur": "14",
+        "spread": "0",
+        "color": "rgba(74, 59, 42, 0.03)",
+        "type": "dropShadow"
+      },
+      "type": "boxShadow"
+    }
+  },
+  "fontFamilies": {
+    "display": { "value": "Plus Jakarta Sans", "type": "fontFamilies" }
+  }
+}
