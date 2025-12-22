@@ -70,93 +70,166 @@ class ChildCard extends StatelessWidget {
 
               Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Avatar
-                    Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Hero(
-                          tag: 'child_avatar_${child.id}',
-                          child: Container(
-                            width: 72,
-                            height: 72,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: AppColors.primary, // 品牌黄边框
-                                width: 3,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.primary.withOpacity(0.2),
-                                  offset: const Offset(0, 4),
-                                  blurRadius: 12,
-                                )
-                              ],
-                            ),
-                            child: _buildAvatarContent(child, size: 72),
-                          ),
-                        ),
-                        // Medal styled badge pinned to avatar bottom-right
-                        Positioned(
-                          bottom: -2,
-                          right: -6,
-                          child: StarBadge(
-                            count: child.stars,
-                            avatarSize: 72,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-
-                    // Name
-                    Text(
-                      child.name,
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textMain,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    
-                    // Info Tags Row
-                    Wrap(
-                      spacing: 8.0, // Horizontal space between tags
-                      runSpacing: 4.0, // Vertical space between lines of tags
-                      alignment: WrapAlignment.center,
-                      children: [
-                        _buildInfoTag(
-                          icon: child.gender == 'boy' ? Icons.male_rounded : Icons.female_rounded,
-                          text: child.gender == 'boy' ? l10n.boy : l10n.girl,
-                          color: child.gender == 'boy' ? Colors.blue : Colors.pink,
-                          bgColor: child.gender == 'boy' ? const Color(0xFFEFF6FF) : const Color(0xFFFFF1F2),
-                        ),
-                        if (ageText.isNotEmpty)
-                          _buildInfoTag(
-                            icon: Icons.cake_rounded,
-                            text: ageText,
-                            color: AppColors.textSecondary,
-                            bgColor: const Color(0xFFF1F5F9),
-                          ),
-                      ],
-                    ),
-                  ],
-                ),
+                child: _buildLayout(context, l10n, ageText),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLayout(BuildContext context, AppLocalizations l10n, String ageText) {
+    final locale = Localizations.localeOf(context);
+    final isEnglish = locale.languageCode == 'en';
+
+    if (isEnglish) {
+      return _buildHorizontalLayout(l10n, ageText);
+    } else {
+      return _buildVerticalLayout(l10n, ageText);
+    }
+  }
+
+  Widget _buildVerticalLayout(AppLocalizations l10n, String ageText) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        _buildAvatar(),
+        const SizedBox(height: 6),
+        _buildName(),
+        const SizedBox(height: 6),
+        _buildTags(l10n, ageText),
+      ],
+    );
+  }
+
+  Widget _buildHorizontalLayout(AppLocalizations l10n, String ageText) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Left: Avatar
+        _buildAvatar(size: 60),
+        const SizedBox(width: 14),
+        // Right: Name and Tags
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                child.name,
+                textAlign: TextAlign.left,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textMain,
+                  letterSpacing: -0.5,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 6.0,
+                runSpacing: 4.0,
+                children: [
+                  _buildInfoTag(
+                    icon: child.gender == 'boy' ? Icons.male_rounded : Icons.female_rounded,
+                    text: child.gender == 'boy' ? l10n.boy : l10n.girl,
+                    color: child.gender == 'boy' ? Colors.blue : Colors.pink,
+                    bgColor: child.gender == 'boy' ? const Color(0xFFEFF6FF) : const Color(0xFFFFF1F2),
+                  ),
+                  if (ageText.isNotEmpty)
+                    _buildInfoTag(
+                      icon: Icons.cake_rounded,
+                      text: ageText,
+                      color: AppColors.textSecondary,
+                      bgColor: const Color(0xFFF1F5F9),
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAvatar({double size = 72}) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Hero(
+          tag: 'child_avatar_${child.id}',
+          child: Container(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: AppColors.primary,
+                width: 3,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withOpacity(0.2),
+                  offset: const Offset(0, 4),
+                  blurRadius: 12,
+                )
+              ],
+            ),
+            child: _buildAvatarContent(child, size: size),
+          ),
+        ),
+        Positioned(
+          bottom: -2,
+          right: -6,
+          child: StarBadge(
+            count: child.stars,
+            avatarSize: size,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildName() {
+    return Text(
+      child.name,
+      textAlign: TextAlign.center,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: const TextStyle(
+        fontSize: 15,
+        fontWeight: FontWeight.w800,
+        color: AppColors.textMain,
+      ),
+    );
+  }
+
+  Widget _buildTags(AppLocalizations l10n, String ageText) {
+    return Wrap(
+      spacing: 8.0,
+      runSpacing: 4.0,
+      alignment: WrapAlignment.center,
+      children: [
+        _buildInfoTag(
+          icon: child.gender == 'boy' ? Icons.male_rounded : Icons.female_rounded,
+          text: child.gender == 'boy' ? l10n.boy : l10n.girl,
+          color: child.gender == 'boy' ? Colors.blue : Colors.pink,
+          bgColor: child.gender == 'boy' ? const Color(0xFFEFF6FF) : const Color(0xFFFFF1F2),
+        ),
+        if (ageText.isNotEmpty)
+          _buildInfoTag(
+            icon: Icons.cake_rounded,
+            text: ageText,
+            color: AppColors.textSecondary,
+            bgColor: const Color(0xFFF1F5F9),
+          ),
+      ],
     );
   }
 
