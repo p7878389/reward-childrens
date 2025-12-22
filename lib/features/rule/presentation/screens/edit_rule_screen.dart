@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:children_rewards/core/database/app_database.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/features/rule/providers/rules_providers.dart';
@@ -24,6 +26,7 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
   String _selectedIcon = 'star';
   bool _isActive = true;
   bool _initialized = false; // 标记是否已初始化本地化名称
+  final ImagePicker _picker = ImagePicker();
 
   final List<String> _availableIcons = [
     'star', 'menu_book', 'cleaning_services', 'fitness_center', 'piano',
@@ -35,20 +38,34 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
     'hiking', 'flight', 'beach_access', 'spa',
   ];
 
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final XFile? image = await _picker.pickImage(source: source, imageQuality: 50);
+      if (image != null) {
+        if (mounted) {
+          Navigator.pop(context, image.path);
+        }
+      }
+    } catch (e) {
+      debugPrint('Error picking image: $e');
+    }
+  }
+
   void _showIconPickerDialog() async {
     final l10n = AppLocalizations.of(context)!;
     final String? selected = await showModalBottomSheet<String>(
       context: context,
       backgroundColor: Colors.transparent,
+      isScrollControlled: true,
       builder: (BuildContext context) {
         return Container(
+          height: MediaQuery.of(context).size.height * 0.7,
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
           decoration: const BoxDecoration(
             color: AppColors.surface,
             borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                 width: 40, height: 4,
@@ -66,6 +83,14 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
                   color: AppColors.textMain,
                   letterSpacing: -0.5,
                 ),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildImagePickOption(Icons.camera_alt_rounded, l10n.takePhoto, ImageSource.camera),
+                  _buildImagePickOption(Icons.photo_library_rounded, l10n.chooseFromGallery, ImageSource.gallery),
+                ],
               ),
               const SizedBox(height: 24),
               Expanded(
@@ -108,6 +133,40 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
         _selectedIcon = selected;
       });
     }
+  }
+
+  Widget _buildImagePickOption(IconData icon, String label, ImageSource source) {
+    return GestureDetector(
+      onTap: () => _pickImage(source),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppColors.background,
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.textSecondary.withOpacity(0.1)),
+            ),
+            child: Icon(icon, color: AppColors.textMain),
+          ),
+          const SizedBox(height: 8),
+          Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.textMain)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIconOrImage(String iconDataOrPath, {double size = 24, Color? color}) {
+    if (iconDataOrPath.startsWith('/') || iconDataOrPath.contains(Platform.pathSeparator)) {
+       final file = File(iconDataOrPath);
+       if (file.existsSync()) {
+         return ClipRRect(
+           borderRadius: BorderRadius.circular(8),
+           child: Image.file(file, width: size, height: size, fit: BoxFit.cover),
+         );
+       }
+    }
+    return Icon(_getIconData(iconDataOrPath), size: size, color: color);
   }
 
   @override
@@ -199,8 +258,8 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
                               color: isReward ? const Color(0xFFEFF6FF) : const Color(0xFFFEF2F2),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Icon(
-                              _getIconData(_selectedIcon),
+                            child: _buildIconOrImage(
+                              _selectedIcon,
                               color: isReward ? Colors.blue : Colors.red,
                               size: 24,
                             ),
@@ -290,7 +349,7 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
                         ),
                         child: Row(
                           children: [
-                            Icon(_getIconData(_selectedIcon), color: AppColors.textSecondary, size: 20),
+                            _buildIconOrImage(_selectedIcon, color: AppColors.textSecondary, size: 20),
                             const Spacer(),
                             Icon(Icons.keyboard_arrow_right_rounded, color: AppColors.textSecondary.withOpacity(0.5), size: 20),
                           ],

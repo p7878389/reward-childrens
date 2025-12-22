@@ -65,6 +65,7 @@
   "addRecordConfirmTitle": "Add Record?",
   "addRecordConfirmMessage": "Confirm adding this record?",
   "manageRules": "Manage Rules",
+  "rules": "Rules",
   "deleteRuleTitle": "Delete Rule?",
   "deleteRuleConfirm": "Delete \"{name}\"?",
   "newRule": "New Rule",

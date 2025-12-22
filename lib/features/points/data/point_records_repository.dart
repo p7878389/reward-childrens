@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:children_rewards/core/database/app_database.dart';
 import 'package:children_rewards/features/points/domain/repositories/i_point_records_repository.dart';
+import 'package:children_rewards/features/points/domain/models/point_record_detail.dart';
 
 /// 积分记录数据仓库实现
 class PointRecordsRepository implements IPointRecordsRepository {
@@ -26,26 +27,34 @@ class PointRecordsRepository implements IPointRecordsRepository {
   }
 
   @override
-  Future<List<PointRecord>> getRecordsPaged({
+  Future<List<PointRecordDetail>> getRecordsPaged({
     required int childId,
     String? filterType,
     required int limit,
     required int offset,
   }) {
-    var query = _db.select(_db.pointRecords)
-      ..where((t) => t.childId.equals(childId))
-      ..orderBy([(t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc)])
-      ..limit(limit, offset: offset);
+    final query = _db.select(_db.pointRecords).join([
+      leftOuterJoin(_db.rules, _db.rules.id.equalsExp(_db.pointRecords.ruleId)),
+    ]);
+
+    query.where(_db.pointRecords.childId.equals(childId));
 
     if (filterType != null && filterType != 'all') {
       if (filterType == 'earned') {
-        query = query..where((t) => t.type.equals('earned'));
+        query.where(_db.pointRecords.type.equals('earned'));
       } else if (filterType == 'spent') {
-        query = query..where((t) => t.type.isIn(['spent', 'deducted']));
+        query.where(_db.pointRecords.type.isIn(['spent', 'deducted']));
       }
     }
 
-    return query.get();
+    query.orderBy([OrderingTerm(expression: _db.pointRecords.createdAt, mode: OrderingMode.desc)]);
+    query.limit(limit, offset: offset);
+
+    return query.map((row) {
+      final record = row.readTable(_db.pointRecords);
+      final rule = row.readTableOrNull(_db.rules);
+      return PointRecordDetail(record: record, ruleIcon: rule?.icon);
+    }).get();
   }
 
   @override

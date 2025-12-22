@@ -65,6 +65,7 @@
   "addRecordConfirmTitle": "添加记录？",
   "addRecordConfirmMessage": "确认添加此记录？",
   "manageRules": "规则管理",
+  "rules": "规则",
   "deleteRuleTitle": "删除规则？",
   "deleteRuleConfirm": "确定要删除 \"{name}\" 吗？",
   "newRule": "新建规则",

@@ -5,13 +5,17 @@ import 'package:children_rewards/core/database/app_database.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/features/rule/providers/rules_providers.dart';
 import 'package:children_rewards/features/rule/utils/rule_localization.dart';
+import 'package:children_rewards/features/rule/utils/rule_icons.dart';
 import 'package:children_rewards/shared/widgets/swipeable_card.dart';
 import 'package:children_rewards/shared/widgets/common_widgets.dart';
 import 'add_rule_screen.dart';
 import 'edit_rule_screen.dart';
 
 class RulesManageScreen extends ConsumerStatefulWidget {
-  const RulesManageScreen({super.key});
+  /// 是否显示返回按钮，作为 tab 页面时设为 false
+  final bool showBackButton;
+
+  const RulesManageScreen({super.key, this.showBackButton = true});
 
   @override
   ConsumerState<RulesManageScreen> createState() => _RulesManageScreenState();
@@ -38,10 +42,30 @@ class _RulesManageScreenState extends ConsumerState<RulesManageScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  HeaderButton(
-                      icon: Icons.arrow_back_ios_new_rounded,
-                      onTap: () => Navigator.pop(context)),
-                  const SizedBox.shrink(),
+                  if (widget.showBackButton)
+                    HeaderButton(
+                        icon: Icons.arrow_back_ios_new_rounded,
+                        onTap: () => Navigator.pop(context))
+                  else
+                    const SizedBox(width: 40),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.1), spreadRadius: 1)],
+                    ),
+                    child: Row(
+                      children: [
+                        Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF9333EA), shape: BoxShape.circle)),
+                        const SizedBox(width: 8),
+                        Text(
+                          l10n.rules.toUpperCase(),
+                          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary, letterSpacing: 1.1),
+                        ),
+                      ],
+                    ),
+                  ),
                   HeaderButton(
                       icon: Icons.add_rounded,
                       onTap: () {
@@ -193,12 +217,12 @@ class _RulesManageScreenState extends ConsumerState<RulesManageScreen> {
                         : (isReward ? const Color(0xFFEFF6FF) : const Color(0xFFFEF2F2)),
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Icon(
-                    _getIconData(rule.icon),
+                  child: RuleIcons.buildIconOrImage(
+                    rule.icon,
+                    size: 24,
                     color: !isActive
                         ? Colors.grey.withOpacity(0.5)
                         : (isReward ? Colors.blue : Colors.red),
-                    size: 24,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -271,22 +295,5 @@ class _RulesManageScreenState extends ConsumerState<RulesManageScreen> {
         ref.read(rulesRepositoryProvider).deleteRule(rule.id);
       },
     );
-  }
-
-  IconData _getIconData(String? iconName) {
-    switch (iconName) {
-      case 'menu_book':
-        return Icons.menu_book_rounded;
-      case 'cleaning_services':
-        return Icons.cleaning_services_rounded;
-      case 'sentiment_dissatisfied':
-        return Icons.sentiment_dissatisfied_rounded;
-      case 'warning':
-        return Icons.warning_rounded;
-      case 'star':
-        return Icons.star_rounded;
-      default:
-        return Icons.category_rounded;
-    }
   }
 }

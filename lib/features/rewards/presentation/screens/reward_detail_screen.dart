@@ -70,21 +70,24 @@ class RewardDetailScreen extends ConsumerWidget {
                     slivers: [
                       // Shorter, More Elegant Image Card
                       SliverToBoxAdapter(
-                        child: Container(
-                          height: 240,
-                          width: double.infinity,
-                          margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFEF3C7),
-                            borderRadius: BorderRadius.circular(28),
-                            boxShadow: [
-                              BoxShadow(color: AppColors.primary.withOpacity(0.08), spreadRadius: 1, blurRadius: 20, offset: const Offset(0, 10)),
-                            ],
-                          ),
-                          child: RepaintBoundary(
-                            child: ClipRRect(
+                        child: GestureDetector(
+                          onTap: () => _showFullScreenImage(context),
+                          child: Container(
+                            height: 240,
+                            width: double.infinity,
+                            margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFEF3C7),
                               borderRadius: BorderRadius.circular(28),
-                              child: _buildImage(),
+                              boxShadow: [
+                                BoxShadow(color: AppColors.primary.withOpacity(0.08), spreadRadius: 1, blurRadius: 20, offset: const Offset(0, 10)),
+                              ],
+                            ),
+                            child: RepaintBoundary(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(28),
+                                child: _buildImage(),
+                              ),
                             ),
                           ),
                         ),
@@ -270,10 +273,50 @@ class RewardDetailScreen extends ConsumerWidget {
     if (reward.image != null) {
       final file = File(reward.image!);
       if (file.existsSync()) {
-        return Image.file(file, fit: BoxFit.cover);
+        return Hero(
+          tag: 'reward_image_${reward.id}',
+          child: Image.file(file, fit: BoxFit.cover),
+        );
       }
     }
     return const Icon(Icons.card_giftcard_rounded, size: 100, color: Color(0xFFD97706));
+  }
+
+  void _showFullScreenImage(BuildContext context) {
+    if (reward.image == null) return;
+    final file = File(reward.image!);
+    if (!file.existsSync()) return;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          backgroundColor: Colors.black,
+          body: Stack(
+            children: [
+              Center(
+                child: InteractiveViewer(
+                  minScale: 0.5,
+                  maxScale: 4.0,
+                  child: Hero(
+                    tag: 'reward_image_${reward.id}',
+                    child: Image.file(file),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 40,
+                right: 20,
+                child: IconButton(
+                  icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   void _handleRedeem(BuildContext context, WidgetRef ref, AppLocalizations l10n, ChildrenData child, Reward reward) async {

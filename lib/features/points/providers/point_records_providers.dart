@@ -4,6 +4,7 @@ import 'package:children_rewards/shared/providers/database_provider.dart';
 import 'package:children_rewards/shared/providers/pagination_provider.dart';
 import 'package:children_rewards/features/points/data/point_records_repository.dart';
 import 'package:children_rewards/features/rule/domain/usecases/apply_rule_usecase.dart';
+import 'package:children_rewards/features/points/domain/models/point_record_detail.dart';
 
 /// 积分记录过滤器
 class PointRecordsFilter {
@@ -39,13 +40,13 @@ final pointStatsFutureProvider = FutureProvider.family<Map<String, int>, int>((r
 });
 
 /// 积分记录分页 Notifier
-class PointRecordsPaginationNotifier extends PaginationNotifier<PointRecord, PointRecordsFilter> {
+class PointRecordsPaginationNotifier extends PaginationNotifier<PointRecordDetail, PointRecordsFilter> {
   final PointRecordsRepository _repository;
 
   PointRecordsPaginationNotifier(this._repository) : super(pageSize: 20);
 
   @override
-  Future<List<PointRecord>> fetchPage(int page, int pageSize, PointRecordsFilter? filter) {
+  Future<List<PointRecordDetail>> fetchPage(int page, int pageSize, PointRecordsFilter? filter) {
     if (filter == null) return Future.value([]);
     return _repository.getRecordsPaged(
       childId: filter.childId,
@@ -58,7 +59,7 @@ class PointRecordsPaginationNotifier extends PaginationNotifier<PointRecord, Poi
 
 /// 积分记录分页 Provider
 final pointRecordsPaginationProvider = StateNotifierProvider.autoDispose<
-    PointRecordsPaginationNotifier, PaginationState<PointRecord>>((ref) {
+    PointRecordsPaginationNotifier, PaginationState<PointRecordDetail>>((ref) {
   final repository = ref.watch(pointRecordsRepositoryProvider);
   return PointRecordsPaginationNotifier(repository);
 });

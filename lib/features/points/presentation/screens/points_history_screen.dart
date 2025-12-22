@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:children_rewards/core/database/app_database.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/features/children/providers/children_providers.dart';
 import 'package:children_rewards/features/points/providers/point_records_providers.dart';
@@ -11,6 +10,8 @@ import 'package:children_rewards/features/points/presentation/screens/add_record
 import 'package:children_rewards/features/rule/utils/rule_localization.dart';
 import 'package:children_rewards/shared/widgets/common_widgets.dart';
 import 'package:children_rewards/shared/providers/pagination_provider.dart';
+import 'package:children_rewards/features/points/domain/models/point_record_detail.dart';
+import 'package:children_rewards/features/rule/utils/rule_icons.dart';
 
 class PointsHistoryScreen extends ConsumerStatefulWidget {
   final int childId;
@@ -169,7 +170,7 @@ class _PointsHistoryScreenState extends ConsumerState<PointsHistoryScreen> {
   }
 
   Widget _buildRecordsList(
-      PaginationState<PointRecord> state, AppLocalizations l10n) {
+      PaginationState<PointRecordDetail> state, AppLocalizations l10n) {
     if (state.items.isEmpty && !state.isLoading) {
       return const SliverEmptyState(icon: Icons.history_rounded);
     }
@@ -180,13 +181,13 @@ class _PointsHistoryScreenState extends ConsumerState<PointsHistoryScreen> {
     }
 
     // 按日期分组
-    final grouped = <String, List<PointRecord>>{};
-    for (var record in state.items) {
-      final dateKey = _formatDate(record.createdAt, l10n);
+    final grouped = <String, List<PointRecordDetail>>{};
+    for (var item in state.items) {
+      final dateKey = _formatDate(item.record.createdAt, l10n);
       if (!grouped.containsKey(dateKey)) {
         grouped[dateKey] = [];
       }
-      grouped[dateKey]!.add(record);
+      grouped[dateKey]!.add(item);
     }
 
     final dateKeys = grouped.keys.toList();
@@ -221,7 +222,7 @@ class _PointsHistoryScreenState extends ConsumerState<PointsHistoryScreen> {
   }
 
   Widget _buildDaySection(
-      String dateKey, List<PointRecord> records, AppLocalizations l10n) {
+      String dateKey, List<PointRecordDetail> records, AppLocalizations l10n) {
     return Stack(
       children: [
         Positioned(
@@ -265,7 +266,8 @@ class _PointsHistoryScreenState extends ConsumerState<PointsHistoryScreen> {
     );
   }
 
-  Widget _buildRecordItem(PointRecord record, AppLocalizations l10n) {
+  Widget _buildRecordItem(PointRecordDetail detail, AppLocalizations l10n) {
+    final record = detail.record;
     final isEarned = record.type == 'earned';
 
     // 获得为绿色，支出（兑换或惩罚）均为红色
@@ -274,15 +276,21 @@ class _PointsHistoryScreenState extends ConsumerState<PointsHistoryScreen> {
     final Color iconBg =
         isEarned ? const Color(0xFFDCFCE7) : const Color(0xFFFEE2E2);
 
-    final IconData icon = isEarned
-        ? Icons.check_circle_outline
-        : (record.type == 'spent'
-            ? Icons.shopping_bag_outlined
-            : Icons.warning_amber_rounded);
-
     final String sign = isEarned ? '+' : '';
     final Color amountColor =
         isEarned ? const Color(0xFF16A34A) : const Color(0xFFDC2626);
+    
+    // 优先使用规则图标，否则使用默认图标
+    IconData icon;
+    if (detail.ruleIcon != null && detail.ruleIcon!.isNotEmpty) {
+      icon = RuleIcons.getIcon(detail.ruleIcon);
+    } else {
+      icon = isEarned
+          ? Icons.check_circle_outline
+          : (record.type == 'spent'
+              ? Icons.shopping_bag_outlined
+              : Icons.warning_amber_rounded);
+    }
 
     return Container(
       margin: const EdgeInsets.only(left: 16, bottom: 16),

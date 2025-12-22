@@ -1,4 +1,5 @@
 import 'package:children_rewards/core/database/app_database.dart';
+import 'package:children_rewards/features/points/domain/models/point_record_detail.dart';
 
 /// 积分记录数据仓库接口
 ///
@@ -8,7 +9,7 @@ abstract class IPointRecordsRepository {
   Stream<List<PointRecord>> watchRecords(int childId, {String? filterType});
 
   /// 分页查询积分记录
-  Future<List<PointRecord>> getRecordsPaged({
+  Future<List<PointRecordDetail>> getRecordsPaged({
     required int childId,
     String? filterType,
     required int limit,
