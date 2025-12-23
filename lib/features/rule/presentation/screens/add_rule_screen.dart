@@ -227,14 +227,6 @@ class _AddRuleScreenState extends ConsumerState<AddRuleScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    // Preview logic
-    final isReward = _mode == 'reward';
-    final pointsColor =
-        isReward ? const Color(0xFF16A34A) : const Color(0xFFDC2626);
-    final pointsSign = isReward ? '+' : '-';
-    final pointsVal =
-        _pointsController.text.isEmpty ? '0' : _pointsController.text;
-
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -260,83 +252,33 @@ class _AddRuleScreenState extends ConsumerState<AddRuleScreen> {
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 children: [
-                  // Preview Card
-                  Center(
+                  const SizedBox(height: 16),
+                  // Icon Selector (Moved to top)
+                  _buildLabel(l10n.chooseIcon),
+                  const SizedBox(height: 8),
+                  GestureDetector(
+                    onTap: _showIconPickerDialog,
                     child: Container(
-                      width: double.infinity,
-                      constraints: const BoxConstraints(maxWidth: 320),
-                      padding: const EdgeInsets.all(16),
-                      margin: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
                       decoration: BoxDecoration(
                         color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                              color: AppColors.primary.withOpacity(0.1),
-                              spreadRadius: 1),
-                          BoxShadow(
-                              color: AppColors.textMain.withOpacity(0.03),
-                              offset: const Offset(0, 4),
-                              blurRadius: 10),
-                        ],
+                        borderRadius: BorderRadius.circular(16),
+                        border:
+                            Border.all(color: Colors.black.withOpacity(0.05)),
                       ),
                       child: Row(
                         children: [
-                          Container(
-                            width: 48,
-                            height: 48,
-                            decoration: BoxDecoration(
-                              color: isReward
-                                  ? const Color(0xFFEFF6FF)
-                                  : const Color(0xFFFEF2F2),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: _buildIconOrImage(
-                              _selectedIcon,
-                              color: isReward ? Colors.blue : Colors.red,
-                              size: 24,
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _nameController.text.isEmpty
-                                      ? l10n.ruleName
-                                      : _nameController.text,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.textMain),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 4),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 2),
-                                  decoration: BoxDecoration(
-                                    color: pointsColor.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  child: Text(
-                                    '$pointsSign$pointsVal',
-                                    style: TextStyle(
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w900,
-                                        color: pointsColor),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          _buildIconOrImage(_selectedIcon,
+                              color: AppColors.textSecondary, size: 20),
+                          const Spacer(),
+                          Icon(Icons.keyboard_arrow_right_rounded,
+                              color: AppColors.textSecondary.withOpacity(0.5),
+                              size: 20),
                         ],
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 24),
 
                   // Mode Switcher
@@ -392,34 +334,6 @@ class _AddRuleScreenState extends ConsumerState<AddRuleScreen> {
                       const SizedBox(width: 8),
                       _buildQuickPointBtn(20),
                     ],
-                  ),
-                  const SizedBox(height: 24),
-
-                  // Icon Selector (New UI)
-                  _buildLabel(l10n.chooseIcon),
-                  const SizedBox(height: 8),
-                  GestureDetector(
-                    onTap: _showIconPickerDialog,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(16),
-                        border:
-                            Border.all(color: Colors.black.withOpacity(0.05)),
-                      ),
-                      child: Row(
-                        children: [
-                          _buildIconOrImage(_selectedIcon,
-                              color: AppColors.textSecondary, size: 20),
-                          const Spacer(),
-                          Icon(Icons.keyboard_arrow_right_rounded,
-                              color: AppColors.textSecondary.withOpacity(0.5),
-                              size: 20),
-                        ],
-                      ),
-                    ),
                   ),
 
                   const SizedBox(height: 40),

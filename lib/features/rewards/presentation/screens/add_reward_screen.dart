@@ -27,7 +27,6 @@ class _AddRewardScreenState extends ConsumerState<AddRewardScreen> {
   String _category = 'other';
   String? _imagePath;
   bool _isUnlimited = true;
-  final bool _isActive = true;
 
   @override
   void initState() {
@@ -217,9 +216,7 @@ class _AddRewardScreenState extends ConsumerState<AddRewardScreen> {
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 children: [
-                  _buildPreviewCard(l10n),
-                  const SizedBox(height: 24),
-                  
+                  const SizedBox(height: 16),
                   _buildLabel(l10n.rewardImage),
                   const SizedBox(height: 8),
                   Center(
@@ -367,134 +364,6 @@ class _AddRewardScreenState extends ConsumerState<AddRewardScreen> {
         ),
       ),
     );
-  }
-
-  Widget _buildPreviewCard(AppLocalizations l10n) {
-    return Opacity(
-      opacity: _isActive ? 1.0 : 0.6,
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(color: AppColors.primary.withOpacity(0.05), spreadRadius: 1),
-            BoxShadow(color: AppColors.textMain.withOpacity(0.02), offset: const Offset(0, 4), blurRadius: 10),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 120,
-              child: Stack(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFFEF3C7),
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                    ),
-                    child: _buildRewardIcon(),
-                  ),
-                  Positioned(
-                    top: 12,
-                    right: 12,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.95),
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.star_rounded, size: 18, color: Color(0xFFD97706)),
-                          const SizedBox(width: 4),
-                          Text(
-                            _priceController.text.isEmpty ? '0' : _priceController.text,
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Color(0xFFD97706)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: AppColors.background,
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: AppColors.textSecondary.withOpacity(0.1)),
-                        ),
-                        child: Text(
-                          _getLocalizedCategory(_category, l10n).toUpperCase(),
-                          style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: AppColors.textSecondary.withOpacity(0.8)),
-                        ),
-                      ),
-                      if (!_isUnlimited)
-                        Row(
-                          children: [
-                            Icon(Icons.inventory_2_outlined, size: 12, color: AppColors.textSecondary.withOpacity(0.6)),
-                            const SizedBox(width: 2),
-                            Text(
-                              _stockController.text,
-                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.textSecondary.withOpacity(0.6)),
-                            ),
-                          ],
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    _nameController.text.isEmpty ? l10n.rewardName : _nameController.text,
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textMain, height: 1.2),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  SizedBox(
-                    height: 32,
-                    child: Text(
-                      _descController.text,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: AppColors.textSecondary.withOpacity(0.8),
-                        height: 1.4,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRewardIcon() {
-    if (_imagePath != null) {
-      final file = File(_imagePath!);
-      if (file.existsSync()) {
-        return ClipRRect(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-          child: Image.file(file, fit: BoxFit.cover, width: double.infinity,),
-        );
-      }
-    }
-    return const Icon(Icons.card_giftcard_rounded, color: Color(0xFFD97706), size: 40);
   }
 
   String _getLocalizedCategory(String category, AppLocalizations l10n) {
