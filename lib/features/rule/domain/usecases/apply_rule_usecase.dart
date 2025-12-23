@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:children_rewards/core/usecases/usecases.dart';
 import 'package:children_rewards/features/points/domain/repositories/i_point_records_repository.dart';
+import 'package:children_rewards/features/badges/domain/entities/badge_entity.dart';
+import 'package:children_rewards/features/badges/domain/usecases/check_and_award_badges_usecase.dart';
 
 /// 应用规则用例参数
 @immutable
@@ -69,20 +71,41 @@ class ApplyRuleParams {
   }
 }
 
+/// 积分操作结果
+@immutable
+class ApplyRuleResult {
+  final bool success;
+  final List<BadgeEntity> awardedBadges;
+  final int bonusPoints;
+
+  const ApplyRuleResult({
+    required this.success,
+    this.awardedBadges = const [],
+    this.bonusPoints = 0,
+  });
+
+  bool get hasBadges => awardedBadges.isNotEmpty;
+}
+
 /// 应用规则用例
 ///
 /// 处理积分的增加或扣除操作：
 /// 1. 创建积分记录
 /// 2. 更新宝贝的积分余额
+/// 3. 触发徽章检测（仅限积分增加）
 ///
 /// 所有操作在事务中执行，保证数据一致性。
-class ApplyRuleUseCase extends UseCase<ApplyRuleParams, void> {
+class ApplyRuleUseCase extends UseCase<ApplyRuleParams, ApplyRuleResult> {
   final IPointRecordsRepository _pointRecordsRepository;
+  final CheckAndAwardBadgesUseCase _checkBadgesUseCase;
 
-  ApplyRuleUseCase(this._pointRecordsRepository);
+  ApplyRuleUseCase(
+    this._pointRecordsRepository,
+    this._checkBadgesUseCase,
+  );
 
   @override
-  Future<Result<void>> execute(ApplyRuleParams params) async {
+  Future<Result<ApplyRuleResult>> execute(ApplyRuleParams params) async {
     try {
       // 验证参数
       if (params.points <= 0) {
@@ -93,6 +116,7 @@ class ApplyRuleUseCase extends UseCase<ApplyRuleParams, void> {
         return Result.failure('无效的积分类型');
       }
 
+      // 1. 添加积分记录
       await _pointRecordsRepository.addRecord(
         childId: params.childId,
         points: params.points,
@@ -102,7 +126,24 @@ class ApplyRuleUseCase extends UseCase<ApplyRuleParams, void> {
         note: params.note,
       );
 
-      return Result.success(null);
+      // 2. 触发徽章检测
+      BadgeAwardResult? badgeResult;
+      if (params.type == 'earned') {
+        final checkResult = await _checkBadgesUseCase.execute(
+          CheckAndAwardBadgesParams(
+            childId: params.childId,
+            triggerPoint: BadgeTriggerPoint.afterPointRecordCreated,
+            context: {'singlePoints': params.points},
+          ),
+        );
+        badgeResult = checkResult.dataOrNull;
+      }
+
+      return Result.success(ApplyRuleResult(
+        success: true,
+        awardedBadges: badgeResult?.awardedBadges ?? [],
+        bonusPoints: badgeResult?.totalBonusPoints ?? 0,
+      ));
     } catch (e, stackTrace) {
       return Result.failure('积分操作失败：${e.toString()}', stackTrace: stackTrace);
     }

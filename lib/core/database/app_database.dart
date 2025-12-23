@@ -5,12 +5,12 @@ import 'connection/connection.dart' as impl;
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [Children, Rules, PointRecords, Rewards, Exchanges, AppContents, AppLogs])
+@DriftDatabase(tables: [Children, Rules, PointRecords, Rewards, Exchanges, AppContents, AppLogs, Badges, BadgeAcquisitions, CheckinRecords])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(impl.connect());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration {
@@ -19,7 +19,69 @@ class AppDatabase extends _$AppDatabase {
         await m.createAll();
         await _seedSystemRules();
         await _seedAppContents();
+        await _seedSystemBadges();
       },
+      onUpgrade: (Migrator m, int from, int to) async {
+        if (from < 2) {
+          await m.createTable(badges);
+          await m.createTable(badgeAcquisitions);
+          await m.createTable(checkinRecords);
+          await _seedSystemBadges();
+        }
+      },
+    );
+  }
+
+  /// 初始化系统徽章
+  Future<void> _seedSystemBadges() async {
+    final existing = await (select(badges)..where((t) => t.isSystem.equals(true))).get();
+    if (existing.isEmpty) {
+      final now = DateTime.now();
+      final systemBadges = [
+        // 累计积分
+        _buildBadgeCompanion('初露锋芒', '累计获得 100 颗星星', 'badge_bronze_star', 1, 'total_points', 100, 10, 1, now),
+        _buildBadgeCompanion('小有成就', '累计获得 500 颗星星', 'badge_silver_star', 2, 'total_points', 500, 30, 2, now),
+        _buildBadgeCompanion('星光璀璨', '累计获得 1000 颗星星', 'badge_gold_star', 3, 'total_points', 1000, 50, 3, now),
+        _buildBadgeCompanion('满天星斗', '累计获得 5000 颗星星', 'badge_diamond_star', 4, 'total_points', 5000, 100, 4, now),
+        // 连续签到
+        _buildBadgeCompanion('坚持一周', '连续签到 7 天', 'badge_calendar_week', 1, 'consecutive_checkin', 7, 20, 5, now),
+        _buildBadgeCompanion('坚持一月', '连续签到 30 天', 'badge_calendar_month', 2, 'consecutive_checkin', 30, 50, 6, now),
+        _buildBadgeCompanion('习惯养成', '连续签到 100 天', 'badge_calendar_hundred', 3, 'consecutive_checkin', 100, 100, 7, now),
+        // 兑换次数
+        _buildBadgeCompanion('初次尝鲜', '兑换 1 次商品', 'badge_gift_first', 1, 'exchange_count', 1, 5, 8, now),
+        _buildBadgeCompanion('购物达人', '兑换 10 次商品', 'badge_gift_master', 2, 'exchange_count', 10, 30, 9, now),
+        // 单次积分
+        _buildBadgeCompanion('大有作为', '单次获得 50 颗星星', 'badge_lightning', 1, 'points_earned_single', 50, 20, 10, now),
+      ];
+
+      await batch((b) {
+        b.insertAll(badges, systemBadges);
+      });
+    }
+  }
+
+  BadgesCompanion _buildBadgeCompanion(
+    String name,
+    String description,
+    String icon,
+    int level,
+    String type,
+    int threshold,
+    int bonus,
+    int sort,
+    DateTime now,
+  ) {
+    return BadgesCompanion.insert(
+      name: name,
+      description: Value(description),
+      icon: icon,
+      level: Value(level),
+      triggerType: type,
+      triggerThreshold: threshold,
+      bonusPoints: Value(bonus),
+      sortOrder: Value(sort),
+      isSystem: const Value(true),
+      createdAt: now,
     );
   }
 

@@ -3,7 +3,6 @@ import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/shared/widgets/custom_bottom_nav.dart';
 import 'package:children_rewards/features/children/presentation/screens/home_screen.dart';
 import 'package:children_rewards/features/rewards/presentation/screens/rewards_store_screen.dart';
-import 'package:children_rewards/features/rule/presentation/screens/rules_manage_screen.dart';
 import 'package:children_rewards/features/settings/presentation/screens/settings_screen.dart';
 
 class MainWrapper extends StatefulWidget {
@@ -23,8 +22,6 @@ class _MainWrapperState extends State<MainWrapper> {
       case 1:
         return const RewardsStoreScreen();
       case 2:
-        return const RulesManageScreen(showBackButton: false);
-      case 3:
         return const SettingsScreen();
       default:
         return const HomeScreen();

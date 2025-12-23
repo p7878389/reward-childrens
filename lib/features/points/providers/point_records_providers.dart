@@ -5,6 +5,7 @@ import 'package:children_rewards/shared/providers/pagination_provider.dart';
 import 'package:children_rewards/features/points/data/point_records_repository.dart';
 import 'package:children_rewards/features/rule/domain/usecases/apply_rule_usecase.dart';
 import 'package:children_rewards/features/points/domain/models/point_record_detail.dart';
+import 'package:children_rewards/features/badges/providers/badge_providers.dart';
 
 /// 积分记录过滤器
 class PointRecordsFilter {
@@ -67,5 +68,6 @@ final pointRecordsPaginationProvider = StateNotifierProvider.autoDispose<
 /// 应用规则用例 Provider
 final applyRuleUseCaseProvider = Provider<ApplyRuleUseCase>((ref) {
   final repository = ref.watch(pointRecordsRepositoryProvider);
-  return ApplyRuleUseCase(repository);
+  final checkBadgesUseCase = ref.watch(checkAndAwardBadgesUseCaseProvider);
+  return ApplyRuleUseCase(repository, checkBadgesUseCase);
 });

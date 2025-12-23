@@ -3425,6 +3425,1690 @@ class AppLogsCompanion extends UpdateCompanion<AppLog> {
   }
 }
 
+class $BadgesTable extends Badges with TableInfo<$BadgesTable, Badge> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $BadgesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+      'description', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _iconMeta = const VerificationMeta('icon');
+  @override
+  late final GeneratedColumn<String> icon = GeneratedColumn<String>(
+      'icon', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _levelMeta = const VerificationMeta('level');
+  @override
+  late final GeneratedColumn<int> level = GeneratedColumn<int>(
+      'level', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(1));
+  static const VerificationMeta _triggerTypeMeta =
+      const VerificationMeta('triggerType');
+  @override
+  late final GeneratedColumn<String> triggerType = GeneratedColumn<String>(
+      'trigger_type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _triggerThresholdMeta =
+      const VerificationMeta('triggerThreshold');
+  @override
+  late final GeneratedColumn<int> triggerThreshold = GeneratedColumn<int>(
+      'trigger_threshold', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _triggerConfigMeta =
+      const VerificationMeta('triggerConfig');
+  @override
+  late final GeneratedColumn<String> triggerConfig = GeneratedColumn<String>(
+      'trigger_config', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _bonusPointsMeta =
+      const VerificationMeta('bonusPoints');
+  @override
+  late final GeneratedColumn<int> bonusPoints = GeneratedColumn<int>(
+      'bonus_points', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _sortOrderMeta =
+      const VerificationMeta('sortOrder');
+  @override
+  late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
+      'sort_order', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _isActiveMeta =
+      const VerificationMeta('isActive');
+  @override
+  late final GeneratedColumn<bool> isActive = GeneratedColumn<bool>(
+      'is_active', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_active" IN (0, 1))'),
+      defaultValue: const Constant(true));
+  static const VerificationMeta _isSystemMeta =
+      const VerificationMeta('isSystem');
+  @override
+  late final GeneratedColumn<bool> isSystem = GeneratedColumn<bool>(
+      'is_system', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_system" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _isDeletedMeta =
+      const VerificationMeta('isDeleted');
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+      'is_deleted', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_deleted" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        name,
+        description,
+        icon,
+        level,
+        triggerType,
+        triggerThreshold,
+        triggerConfig,
+        bonusPoints,
+        sortOrder,
+        isActive,
+        isSystem,
+        isDeleted,
+        createdAt,
+        updatedAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'badges';
+  @override
+  VerificationContext validateIntegrity(Insertable<Badge> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    }
+    if (data.containsKey('icon')) {
+      context.handle(
+          _iconMeta, icon.isAcceptableOrUnknown(data['icon']!, _iconMeta));
+    } else if (isInserting) {
+      context.missing(_iconMeta);
+    }
+    if (data.containsKey('level')) {
+      context.handle(
+          _levelMeta, level.isAcceptableOrUnknown(data['level']!, _levelMeta));
+    }
+    if (data.containsKey('trigger_type')) {
+      context.handle(
+          _triggerTypeMeta,
+          triggerType.isAcceptableOrUnknown(
+              data['trigger_type']!, _triggerTypeMeta));
+    } else if (isInserting) {
+      context.missing(_triggerTypeMeta);
+    }
+    if (data.containsKey('trigger_threshold')) {
+      context.handle(
+          _triggerThresholdMeta,
+          triggerThreshold.isAcceptableOrUnknown(
+              data['trigger_threshold']!, _triggerThresholdMeta));
+    } else if (isInserting) {
+      context.missing(_triggerThresholdMeta);
+    }
+    if (data.containsKey('trigger_config')) {
+      context.handle(
+          _triggerConfigMeta,
+          triggerConfig.isAcceptableOrUnknown(
+              data['trigger_config']!, _triggerConfigMeta));
+    }
+    if (data.containsKey('bonus_points')) {
+      context.handle(
+          _bonusPointsMeta,
+          bonusPoints.isAcceptableOrUnknown(
+              data['bonus_points']!, _bonusPointsMeta));
+    }
+    if (data.containsKey('sort_order')) {
+      context.handle(_sortOrderMeta,
+          sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta));
+    }
+    if (data.containsKey('is_active')) {
+      context.handle(_isActiveMeta,
+          isActive.isAcceptableOrUnknown(data['is_active']!, _isActiveMeta));
+    }
+    if (data.containsKey('is_system')) {
+      context.handle(_isSystemMeta,
+          isSystem.isAcceptableOrUnknown(data['is_system']!, _isSystemMeta));
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(_isDeletedMeta,
+          isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Badge map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Badge(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description']),
+      icon: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}icon'])!,
+      level: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}level'])!,
+      triggerType: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}trigger_type'])!,
+      triggerThreshold: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}trigger_threshold'])!,
+      triggerConfig: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}trigger_config']),
+      bonusPoints: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}bonus_points'])!,
+      sortOrder: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}sort_order'])!,
+      isActive: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_active'])!,
+      isSystem: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_system'])!,
+      isDeleted: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_deleted'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
+    );
+  }
+
+  @override
+  $BadgesTable createAlias(String alias) {
+    return $BadgesTable(attachedDatabase, alias);
+  }
+}
+
+class Badge extends DataClass implements Insertable<Badge> {
+  final int id;
+  final String name;
+  final String? description;
+  final String icon;
+  final int level;
+  final String triggerType;
+  final int triggerThreshold;
+  final String? triggerConfig;
+  final int bonusPoints;
+  final int sortOrder;
+  final bool isActive;
+  final bool isSystem;
+  final bool isDeleted;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  const Badge(
+      {required this.id,
+      required this.name,
+      this.description,
+      required this.icon,
+      required this.level,
+      required this.triggerType,
+      required this.triggerThreshold,
+      this.triggerConfig,
+      required this.bonusPoints,
+      required this.sortOrder,
+      required this.isActive,
+      required this.isSystem,
+      required this.isDeleted,
+      required this.createdAt,
+      this.updatedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
+    map['icon'] = Variable<String>(icon);
+    map['level'] = Variable<int>(level);
+    map['trigger_type'] = Variable<String>(triggerType);
+    map['trigger_threshold'] = Variable<int>(triggerThreshold);
+    if (!nullToAbsent || triggerConfig != null) {
+      map['trigger_config'] = Variable<String>(triggerConfig);
+    }
+    map['bonus_points'] = Variable<int>(bonusPoints);
+    map['sort_order'] = Variable<int>(sortOrder);
+    map['is_active'] = Variable<bool>(isActive);
+    map['is_system'] = Variable<bool>(isSystem);
+    map['is_deleted'] = Variable<bool>(isDeleted);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
+    return map;
+  }
+
+  BadgesCompanion toCompanion(bool nullToAbsent) {
+    return BadgesCompanion(
+      id: Value(id),
+      name: Value(name),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
+      icon: Value(icon),
+      level: Value(level),
+      triggerType: Value(triggerType),
+      triggerThreshold: Value(triggerThreshold),
+      triggerConfig: triggerConfig == null && nullToAbsent
+          ? const Value.absent()
+          : Value(triggerConfig),
+      bonusPoints: Value(bonusPoints),
+      sortOrder: Value(sortOrder),
+      isActive: Value(isActive),
+      isSystem: Value(isSystem),
+      isDeleted: Value(isDeleted),
+      createdAt: Value(createdAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+    );
+  }
+
+  factory Badge.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Badge(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      description: serializer.fromJson<String?>(json['description']),
+      icon: serializer.fromJson<String>(json['icon']),
+      level: serializer.fromJson<int>(json['level']),
+      triggerType: serializer.fromJson<String>(json['triggerType']),
+      triggerThreshold: serializer.fromJson<int>(json['triggerThreshold']),
+      triggerConfig: serializer.fromJson<String?>(json['triggerConfig']),
+      bonusPoints: serializer.fromJson<int>(json['bonusPoints']),
+      sortOrder: serializer.fromJson<int>(json['sortOrder']),
+      isActive: serializer.fromJson<bool>(json['isActive']),
+      isSystem: serializer.fromJson<bool>(json['isSystem']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+      'description': serializer.toJson<String?>(description),
+      'icon': serializer.toJson<String>(icon),
+      'level': serializer.toJson<int>(level),
+      'triggerType': serializer.toJson<String>(triggerType),
+      'triggerThreshold': serializer.toJson<int>(triggerThreshold),
+      'triggerConfig': serializer.toJson<String?>(triggerConfig),
+      'bonusPoints': serializer.toJson<int>(bonusPoints),
+      'sortOrder': serializer.toJson<int>(sortOrder),
+      'isActive': serializer.toJson<bool>(isActive),
+      'isSystem': serializer.toJson<bool>(isSystem),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
+    };
+  }
+
+  Badge copyWith(
+          {int? id,
+          String? name,
+          Value<String?> description = const Value.absent(),
+          String? icon,
+          int? level,
+          String? triggerType,
+          int? triggerThreshold,
+          Value<String?> triggerConfig = const Value.absent(),
+          int? bonusPoints,
+          int? sortOrder,
+          bool? isActive,
+          bool? isSystem,
+          bool? isDeleted,
+          DateTime? createdAt,
+          Value<DateTime?> updatedAt = const Value.absent()}) =>
+      Badge(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        description: description.present ? description.value : this.description,
+        icon: icon ?? this.icon,
+        level: level ?? this.level,
+        triggerType: triggerType ?? this.triggerType,
+        triggerThreshold: triggerThreshold ?? this.triggerThreshold,
+        triggerConfig:
+            triggerConfig.present ? triggerConfig.value : this.triggerConfig,
+        bonusPoints: bonusPoints ?? this.bonusPoints,
+        sortOrder: sortOrder ?? this.sortOrder,
+        isActive: isActive ?? this.isActive,
+        isSystem: isSystem ?? this.isSystem,
+        isDeleted: isDeleted ?? this.isDeleted,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+      );
+  Badge copyWithCompanion(BadgesCompanion data) {
+    return Badge(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      description:
+          data.description.present ? data.description.value : this.description,
+      icon: data.icon.present ? data.icon.value : this.icon,
+      level: data.level.present ? data.level.value : this.level,
+      triggerType:
+          data.triggerType.present ? data.triggerType.value : this.triggerType,
+      triggerThreshold: data.triggerThreshold.present
+          ? data.triggerThreshold.value
+          : this.triggerThreshold,
+      triggerConfig: data.triggerConfig.present
+          ? data.triggerConfig.value
+          : this.triggerConfig,
+      bonusPoints:
+          data.bonusPoints.present ? data.bonusPoints.value : this.bonusPoints,
+      sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+      isActive: data.isActive.present ? data.isActive.value : this.isActive,
+      isSystem: data.isSystem.present ? data.isSystem.value : this.isSystem,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Badge(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('description: $description, ')
+          ..write('icon: $icon, ')
+          ..write('level: $level, ')
+          ..write('triggerType: $triggerType, ')
+          ..write('triggerThreshold: $triggerThreshold, ')
+          ..write('triggerConfig: $triggerConfig, ')
+          ..write('bonusPoints: $bonusPoints, ')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('isActive: $isActive, ')
+          ..write('isSystem: $isSystem, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      name,
+      description,
+      icon,
+      level,
+      triggerType,
+      triggerThreshold,
+      triggerConfig,
+      bonusPoints,
+      sortOrder,
+      isActive,
+      isSystem,
+      isDeleted,
+      createdAt,
+      updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Badge &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.description == this.description &&
+          other.icon == this.icon &&
+          other.level == this.level &&
+          other.triggerType == this.triggerType &&
+          other.triggerThreshold == this.triggerThreshold &&
+          other.triggerConfig == this.triggerConfig &&
+          other.bonusPoints == this.bonusPoints &&
+          other.sortOrder == this.sortOrder &&
+          other.isActive == this.isActive &&
+          other.isSystem == this.isSystem &&
+          other.isDeleted == this.isDeleted &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class BadgesCompanion extends UpdateCompanion<Badge> {
+  final Value<int> id;
+  final Value<String> name;
+  final Value<String?> description;
+  final Value<String> icon;
+  final Value<int> level;
+  final Value<String> triggerType;
+  final Value<int> triggerThreshold;
+  final Value<String?> triggerConfig;
+  final Value<int> bonusPoints;
+  final Value<int> sortOrder;
+  final Value<bool> isActive;
+  final Value<bool> isSystem;
+  final Value<bool> isDeleted;
+  final Value<DateTime> createdAt;
+  final Value<DateTime?> updatedAt;
+  const BadgesCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.description = const Value.absent(),
+    this.icon = const Value.absent(),
+    this.level = const Value.absent(),
+    this.triggerType = const Value.absent(),
+    this.triggerThreshold = const Value.absent(),
+    this.triggerConfig = const Value.absent(),
+    this.bonusPoints = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+    this.isActive = const Value.absent(),
+    this.isSystem = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  BadgesCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    this.description = const Value.absent(),
+    required String icon,
+    this.level = const Value.absent(),
+    required String triggerType,
+    required int triggerThreshold,
+    this.triggerConfig = const Value.absent(),
+    this.bonusPoints = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+    this.isActive = const Value.absent(),
+    this.isSystem = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    required DateTime createdAt,
+    this.updatedAt = const Value.absent(),
+  })  : name = Value(name),
+        icon = Value(icon),
+        triggerType = Value(triggerType),
+        triggerThreshold = Value(triggerThreshold),
+        createdAt = Value(createdAt);
+  static Insertable<Badge> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+    Expression<String>? description,
+    Expression<String>? icon,
+    Expression<int>? level,
+    Expression<String>? triggerType,
+    Expression<int>? triggerThreshold,
+    Expression<String>? triggerConfig,
+    Expression<int>? bonusPoints,
+    Expression<int>? sortOrder,
+    Expression<bool>? isActive,
+    Expression<bool>? isSystem,
+    Expression<bool>? isDeleted,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (description != null) 'description': description,
+      if (icon != null) 'icon': icon,
+      if (level != null) 'level': level,
+      if (triggerType != null) 'trigger_type': triggerType,
+      if (triggerThreshold != null) 'trigger_threshold': triggerThreshold,
+      if (triggerConfig != null) 'trigger_config': triggerConfig,
+      if (bonusPoints != null) 'bonus_points': bonusPoints,
+      if (sortOrder != null) 'sort_order': sortOrder,
+      if (isActive != null) 'is_active': isActive,
+      if (isSystem != null) 'is_system': isSystem,
+      if (isDeleted != null) 'is_deleted': isDeleted,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    });
+  }
+
+  BadgesCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? name,
+      Value<String?>? description,
+      Value<String>? icon,
+      Value<int>? level,
+      Value<String>? triggerType,
+      Value<int>? triggerThreshold,
+      Value<String?>? triggerConfig,
+      Value<int>? bonusPoints,
+      Value<int>? sortOrder,
+      Value<bool>? isActive,
+      Value<bool>? isSystem,
+      Value<bool>? isDeleted,
+      Value<DateTime>? createdAt,
+      Value<DateTime?>? updatedAt}) {
+    return BadgesCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      icon: icon ?? this.icon,
+      level: level ?? this.level,
+      triggerType: triggerType ?? this.triggerType,
+      triggerThreshold: triggerThreshold ?? this.triggerThreshold,
+      triggerConfig: triggerConfig ?? this.triggerConfig,
+      bonusPoints: bonusPoints ?? this.bonusPoints,
+      sortOrder: sortOrder ?? this.sortOrder,
+      isActive: isActive ?? this.isActive,
+      isSystem: isSystem ?? this.isSystem,
+      isDeleted: isDeleted ?? this.isDeleted,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (icon.present) {
+      map['icon'] = Variable<String>(icon.value);
+    }
+    if (level.present) {
+      map['level'] = Variable<int>(level.value);
+    }
+    if (triggerType.present) {
+      map['trigger_type'] = Variable<String>(triggerType.value);
+    }
+    if (triggerThreshold.present) {
+      map['trigger_threshold'] = Variable<int>(triggerThreshold.value);
+    }
+    if (triggerConfig.present) {
+      map['trigger_config'] = Variable<String>(triggerConfig.value);
+    }
+    if (bonusPoints.present) {
+      map['bonus_points'] = Variable<int>(bonusPoints.value);
+    }
+    if (sortOrder.present) {
+      map['sort_order'] = Variable<int>(sortOrder.value);
+    }
+    if (isActive.present) {
+      map['is_active'] = Variable<bool>(isActive.value);
+    }
+    if (isSystem.present) {
+      map['is_system'] = Variable<bool>(isSystem.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BadgesCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('description: $description, ')
+          ..write('icon: $icon, ')
+          ..write('level: $level, ')
+          ..write('triggerType: $triggerType, ')
+          ..write('triggerThreshold: $triggerThreshold, ')
+          ..write('triggerConfig: $triggerConfig, ')
+          ..write('bonusPoints: $bonusPoints, ')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('isActive: $isActive, ')
+          ..write('isSystem: $isSystem, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $BadgeAcquisitionsTable extends BadgeAcquisitions
+    with TableInfo<$BadgeAcquisitionsTable, BadgeAcquisition> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $BadgeAcquisitionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _childIdMeta =
+      const VerificationMeta('childId');
+  @override
+  late final GeneratedColumn<int> childId = GeneratedColumn<int>(
+      'child_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES children (id)'));
+  static const VerificationMeta _badgeIdMeta =
+      const VerificationMeta('badgeId');
+  @override
+  late final GeneratedColumn<int> badgeId = GeneratedColumn<int>(
+      'badge_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES badges (id)'));
+  static const VerificationMeta _badgeSnapshotMeta =
+      const VerificationMeta('badgeSnapshot');
+  @override
+  late final GeneratedColumn<String> badgeSnapshot = GeneratedColumn<String>(
+      'badge_snapshot', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _bonusPointsAwardedMeta =
+      const VerificationMeta('bonusPointsAwarded');
+  @override
+  late final GeneratedColumn<int> bonusPointsAwarded = GeneratedColumn<int>(
+      'bonus_points_awarded', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _pointRecordIdMeta =
+      const VerificationMeta('pointRecordId');
+  @override
+  late final GeneratedColumn<int> pointRecordId = GeneratedColumn<int>(
+      'point_record_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _triggerValueMeta =
+      const VerificationMeta('triggerValue');
+  @override
+  late final GeneratedColumn<int> triggerValue = GeneratedColumn<int>(
+      'trigger_value', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+      'note', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _isDeletedMeta =
+      const VerificationMeta('isDeleted');
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+      'is_deleted', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_deleted" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        childId,
+        badgeId,
+        badgeSnapshot,
+        bonusPointsAwarded,
+        pointRecordId,
+        triggerValue,
+        note,
+        isDeleted,
+        createdAt,
+        updatedAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'badge_acquisitions';
+  @override
+  VerificationContext validateIntegrity(Insertable<BadgeAcquisition> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('child_id')) {
+      context.handle(_childIdMeta,
+          childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta));
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    if (data.containsKey('badge_id')) {
+      context.handle(_badgeIdMeta,
+          badgeId.isAcceptableOrUnknown(data['badge_id']!, _badgeIdMeta));
+    } else if (isInserting) {
+      context.missing(_badgeIdMeta);
+    }
+    if (data.containsKey('badge_snapshot')) {
+      context.handle(
+          _badgeSnapshotMeta,
+          badgeSnapshot.isAcceptableOrUnknown(
+              data['badge_snapshot']!, _badgeSnapshotMeta));
+    } else if (isInserting) {
+      context.missing(_badgeSnapshotMeta);
+    }
+    if (data.containsKey('bonus_points_awarded')) {
+      context.handle(
+          _bonusPointsAwardedMeta,
+          bonusPointsAwarded.isAcceptableOrUnknown(
+              data['bonus_points_awarded']!, _bonusPointsAwardedMeta));
+    } else if (isInserting) {
+      context.missing(_bonusPointsAwardedMeta);
+    }
+    if (data.containsKey('point_record_id')) {
+      context.handle(
+          _pointRecordIdMeta,
+          pointRecordId.isAcceptableOrUnknown(
+              data['point_record_id']!, _pointRecordIdMeta));
+    }
+    if (data.containsKey('trigger_value')) {
+      context.handle(
+          _triggerValueMeta,
+          triggerValue.isAcceptableOrUnknown(
+              data['trigger_value']!, _triggerValueMeta));
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+          _noteMeta, note.isAcceptableOrUnknown(data['note']!, _noteMeta));
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(_isDeletedMeta,
+          isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  BadgeAcquisition map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return BadgeAcquisition(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      childId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}child_id'])!,
+      badgeId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}badge_id'])!,
+      badgeSnapshot: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}badge_snapshot'])!,
+      bonusPointsAwarded: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}bonus_points_awarded'])!,
+      pointRecordId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}point_record_id']),
+      triggerValue: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}trigger_value']),
+      note: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}note']),
+      isDeleted: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_deleted'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
+    );
+  }
+
+  @override
+  $BadgeAcquisitionsTable createAlias(String alias) {
+    return $BadgeAcquisitionsTable(attachedDatabase, alias);
+  }
+}
+
+class BadgeAcquisition extends DataClass
+    implements Insertable<BadgeAcquisition> {
+  final int id;
+  final int childId;
+  final int badgeId;
+  final String badgeSnapshot;
+  final int bonusPointsAwarded;
+  final int? pointRecordId;
+  final int? triggerValue;
+  final String? note;
+  final bool isDeleted;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  const BadgeAcquisition(
+      {required this.id,
+      required this.childId,
+      required this.badgeId,
+      required this.badgeSnapshot,
+      required this.bonusPointsAwarded,
+      this.pointRecordId,
+      this.triggerValue,
+      this.note,
+      required this.isDeleted,
+      required this.createdAt,
+      this.updatedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['child_id'] = Variable<int>(childId);
+    map['badge_id'] = Variable<int>(badgeId);
+    map['badge_snapshot'] = Variable<String>(badgeSnapshot);
+    map['bonus_points_awarded'] = Variable<int>(bonusPointsAwarded);
+    if (!nullToAbsent || pointRecordId != null) {
+      map['point_record_id'] = Variable<int>(pointRecordId);
+    }
+    if (!nullToAbsent || triggerValue != null) {
+      map['trigger_value'] = Variable<int>(triggerValue);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    map['is_deleted'] = Variable<bool>(isDeleted);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
+    return map;
+  }
+
+  BadgeAcquisitionsCompanion toCompanion(bool nullToAbsent) {
+    return BadgeAcquisitionsCompanion(
+      id: Value(id),
+      childId: Value(childId),
+      badgeId: Value(badgeId),
+      badgeSnapshot: Value(badgeSnapshot),
+      bonusPointsAwarded: Value(bonusPointsAwarded),
+      pointRecordId: pointRecordId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(pointRecordId),
+      triggerValue: triggerValue == null && nullToAbsent
+          ? const Value.absent()
+          : Value(triggerValue),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+      isDeleted: Value(isDeleted),
+      createdAt: Value(createdAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+    );
+  }
+
+  factory BadgeAcquisition.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return BadgeAcquisition(
+      id: serializer.fromJson<int>(json['id']),
+      childId: serializer.fromJson<int>(json['childId']),
+      badgeId: serializer.fromJson<int>(json['badgeId']),
+      badgeSnapshot: serializer.fromJson<String>(json['badgeSnapshot']),
+      bonusPointsAwarded: serializer.fromJson<int>(json['bonusPointsAwarded']),
+      pointRecordId: serializer.fromJson<int?>(json['pointRecordId']),
+      triggerValue: serializer.fromJson<int?>(json['triggerValue']),
+      note: serializer.fromJson<String?>(json['note']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'childId': serializer.toJson<int>(childId),
+      'badgeId': serializer.toJson<int>(badgeId),
+      'badgeSnapshot': serializer.toJson<String>(badgeSnapshot),
+      'bonusPointsAwarded': serializer.toJson<int>(bonusPointsAwarded),
+      'pointRecordId': serializer.toJson<int?>(pointRecordId),
+      'triggerValue': serializer.toJson<int?>(triggerValue),
+      'note': serializer.toJson<String?>(note),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
+    };
+  }
+
+  BadgeAcquisition copyWith(
+          {int? id,
+          int? childId,
+          int? badgeId,
+          String? badgeSnapshot,
+          int? bonusPointsAwarded,
+          Value<int?> pointRecordId = const Value.absent(),
+          Value<int?> triggerValue = const Value.absent(),
+          Value<String?> note = const Value.absent(),
+          bool? isDeleted,
+          DateTime? createdAt,
+          Value<DateTime?> updatedAt = const Value.absent()}) =>
+      BadgeAcquisition(
+        id: id ?? this.id,
+        childId: childId ?? this.childId,
+        badgeId: badgeId ?? this.badgeId,
+        badgeSnapshot: badgeSnapshot ?? this.badgeSnapshot,
+        bonusPointsAwarded: bonusPointsAwarded ?? this.bonusPointsAwarded,
+        pointRecordId:
+            pointRecordId.present ? pointRecordId.value : this.pointRecordId,
+        triggerValue:
+            triggerValue.present ? triggerValue.value : this.triggerValue,
+        note: note.present ? note.value : this.note,
+        isDeleted: isDeleted ?? this.isDeleted,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+      );
+  BadgeAcquisition copyWithCompanion(BadgeAcquisitionsCompanion data) {
+    return BadgeAcquisition(
+      id: data.id.present ? data.id.value : this.id,
+      childId: data.childId.present ? data.childId.value : this.childId,
+      badgeId: data.badgeId.present ? data.badgeId.value : this.badgeId,
+      badgeSnapshot: data.badgeSnapshot.present
+          ? data.badgeSnapshot.value
+          : this.badgeSnapshot,
+      bonusPointsAwarded: data.bonusPointsAwarded.present
+          ? data.bonusPointsAwarded.value
+          : this.bonusPointsAwarded,
+      pointRecordId: data.pointRecordId.present
+          ? data.pointRecordId.value
+          : this.pointRecordId,
+      triggerValue: data.triggerValue.present
+          ? data.triggerValue.value
+          : this.triggerValue,
+      note: data.note.present ? data.note.value : this.note,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BadgeAcquisition(')
+          ..write('id: $id, ')
+          ..write('childId: $childId, ')
+          ..write('badgeId: $badgeId, ')
+          ..write('badgeSnapshot: $badgeSnapshot, ')
+          ..write('bonusPointsAwarded: $bonusPointsAwarded, ')
+          ..write('pointRecordId: $pointRecordId, ')
+          ..write('triggerValue: $triggerValue, ')
+          ..write('note: $note, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      childId,
+      badgeId,
+      badgeSnapshot,
+      bonusPointsAwarded,
+      pointRecordId,
+      triggerValue,
+      note,
+      isDeleted,
+      createdAt,
+      updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BadgeAcquisition &&
+          other.id == this.id &&
+          other.childId == this.childId &&
+          other.badgeId == this.badgeId &&
+          other.badgeSnapshot == this.badgeSnapshot &&
+          other.bonusPointsAwarded == this.bonusPointsAwarded &&
+          other.pointRecordId == this.pointRecordId &&
+          other.triggerValue == this.triggerValue &&
+          other.note == this.note &&
+          other.isDeleted == this.isDeleted &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class BadgeAcquisitionsCompanion extends UpdateCompanion<BadgeAcquisition> {
+  final Value<int> id;
+  final Value<int> childId;
+  final Value<int> badgeId;
+  final Value<String> badgeSnapshot;
+  final Value<int> bonusPointsAwarded;
+  final Value<int?> pointRecordId;
+  final Value<int?> triggerValue;
+  final Value<String?> note;
+  final Value<bool> isDeleted;
+  final Value<DateTime> createdAt;
+  final Value<DateTime?> updatedAt;
+  const BadgeAcquisitionsCompanion({
+    this.id = const Value.absent(),
+    this.childId = const Value.absent(),
+    this.badgeId = const Value.absent(),
+    this.badgeSnapshot = const Value.absent(),
+    this.bonusPointsAwarded = const Value.absent(),
+    this.pointRecordId = const Value.absent(),
+    this.triggerValue = const Value.absent(),
+    this.note = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  BadgeAcquisitionsCompanion.insert({
+    this.id = const Value.absent(),
+    required int childId,
+    required int badgeId,
+    required String badgeSnapshot,
+    required int bonusPointsAwarded,
+    this.pointRecordId = const Value.absent(),
+    this.triggerValue = const Value.absent(),
+    this.note = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    required DateTime createdAt,
+    this.updatedAt = const Value.absent(),
+  })  : childId = Value(childId),
+        badgeId = Value(badgeId),
+        badgeSnapshot = Value(badgeSnapshot),
+        bonusPointsAwarded = Value(bonusPointsAwarded),
+        createdAt = Value(createdAt);
+  static Insertable<BadgeAcquisition> custom({
+    Expression<int>? id,
+    Expression<int>? childId,
+    Expression<int>? badgeId,
+    Expression<String>? badgeSnapshot,
+    Expression<int>? bonusPointsAwarded,
+    Expression<int>? pointRecordId,
+    Expression<int>? triggerValue,
+    Expression<String>? note,
+    Expression<bool>? isDeleted,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (childId != null) 'child_id': childId,
+      if (badgeId != null) 'badge_id': badgeId,
+      if (badgeSnapshot != null) 'badge_snapshot': badgeSnapshot,
+      if (bonusPointsAwarded != null)
+        'bonus_points_awarded': bonusPointsAwarded,
+      if (pointRecordId != null) 'point_record_id': pointRecordId,
+      if (triggerValue != null) 'trigger_value': triggerValue,
+      if (note != null) 'note': note,
+      if (isDeleted != null) 'is_deleted': isDeleted,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    });
+  }
+
+  BadgeAcquisitionsCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? childId,
+      Value<int>? badgeId,
+      Value<String>? badgeSnapshot,
+      Value<int>? bonusPointsAwarded,
+      Value<int?>? pointRecordId,
+      Value<int?>? triggerValue,
+      Value<String?>? note,
+      Value<bool>? isDeleted,
+      Value<DateTime>? createdAt,
+      Value<DateTime?>? updatedAt}) {
+    return BadgeAcquisitionsCompanion(
+      id: id ?? this.id,
+      childId: childId ?? this.childId,
+      badgeId: badgeId ?? this.badgeId,
+      badgeSnapshot: badgeSnapshot ?? this.badgeSnapshot,
+      bonusPointsAwarded: bonusPointsAwarded ?? this.bonusPointsAwarded,
+      pointRecordId: pointRecordId ?? this.pointRecordId,
+      triggerValue: triggerValue ?? this.triggerValue,
+      note: note ?? this.note,
+      isDeleted: isDeleted ?? this.isDeleted,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (childId.present) {
+      map['child_id'] = Variable<int>(childId.value);
+    }
+    if (badgeId.present) {
+      map['badge_id'] = Variable<int>(badgeId.value);
+    }
+    if (badgeSnapshot.present) {
+      map['badge_snapshot'] = Variable<String>(badgeSnapshot.value);
+    }
+    if (bonusPointsAwarded.present) {
+      map['bonus_points_awarded'] = Variable<int>(bonusPointsAwarded.value);
+    }
+    if (pointRecordId.present) {
+      map['point_record_id'] = Variable<int>(pointRecordId.value);
+    }
+    if (triggerValue.present) {
+      map['trigger_value'] = Variable<int>(triggerValue.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BadgeAcquisitionsCompanion(')
+          ..write('id: $id, ')
+          ..write('childId: $childId, ')
+          ..write('badgeId: $badgeId, ')
+          ..write('badgeSnapshot: $badgeSnapshot, ')
+          ..write('bonusPointsAwarded: $bonusPointsAwarded, ')
+          ..write('pointRecordId: $pointRecordId, ')
+          ..write('triggerValue: $triggerValue, ')
+          ..write('note: $note, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $CheckinRecordsTable extends CheckinRecords
+    with TableInfo<$CheckinRecordsTable, CheckinRecord> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CheckinRecordsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _childIdMeta =
+      const VerificationMeta('childId');
+  @override
+  late final GeneratedColumn<int> childId = GeneratedColumn<int>(
+      'child_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES children (id)'));
+  static const VerificationMeta _checkinDateMeta =
+      const VerificationMeta('checkinDate');
+  @override
+  late final GeneratedColumn<String> checkinDate = GeneratedColumn<String>(
+      'checkin_date', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _streakDaysMeta =
+      const VerificationMeta('streakDays');
+  @override
+  late final GeneratedColumn<int> streakDays = GeneratedColumn<int>(
+      'streak_days', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _pointRecordIdMeta =
+      const VerificationMeta('pointRecordId');
+  @override
+  late final GeneratedColumn<int> pointRecordId = GeneratedColumn<int>(
+      'point_record_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _isDeletedMeta =
+      const VerificationMeta('isDeleted');
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+      'is_deleted', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_deleted" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        childId,
+        checkinDate,
+        streakDays,
+        pointRecordId,
+        isDeleted,
+        createdAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'checkin_records';
+  @override
+  VerificationContext validateIntegrity(Insertable<CheckinRecord> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('child_id')) {
+      context.handle(_childIdMeta,
+          childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta));
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    if (data.containsKey('checkin_date')) {
+      context.handle(
+          _checkinDateMeta,
+          checkinDate.isAcceptableOrUnknown(
+              data['checkin_date']!, _checkinDateMeta));
+    } else if (isInserting) {
+      context.missing(_checkinDateMeta);
+    }
+    if (data.containsKey('streak_days')) {
+      context.handle(
+          _streakDaysMeta,
+          streakDays.isAcceptableOrUnknown(
+              data['streak_days']!, _streakDaysMeta));
+    } else if (isInserting) {
+      context.missing(_streakDaysMeta);
+    }
+    if (data.containsKey('point_record_id')) {
+      context.handle(
+          _pointRecordIdMeta,
+          pointRecordId.isAcceptableOrUnknown(
+              data['point_record_id']!, _pointRecordIdMeta));
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(_isDeletedMeta,
+          isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CheckinRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CheckinRecord(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      childId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}child_id'])!,
+      checkinDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}checkin_date'])!,
+      streakDays: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}streak_days'])!,
+      pointRecordId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}point_record_id']),
+      isDeleted: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_deleted'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $CheckinRecordsTable createAlias(String alias) {
+    return $CheckinRecordsTable(attachedDatabase, alias);
+  }
+}
+
+class CheckinRecord extends DataClass implements Insertable<CheckinRecord> {
+  final int id;
+  final int childId;
+  final String checkinDate;
+  final int streakDays;
+  final int? pointRecordId;
+  final bool isDeleted;
+  final DateTime createdAt;
+  const CheckinRecord(
+      {required this.id,
+      required this.childId,
+      required this.checkinDate,
+      required this.streakDays,
+      this.pointRecordId,
+      required this.isDeleted,
+      required this.createdAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['child_id'] = Variable<int>(childId);
+    map['checkin_date'] = Variable<String>(checkinDate);
+    map['streak_days'] = Variable<int>(streakDays);
+    if (!nullToAbsent || pointRecordId != null) {
+      map['point_record_id'] = Variable<int>(pointRecordId);
+    }
+    map['is_deleted'] = Variable<bool>(isDeleted);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  CheckinRecordsCompanion toCompanion(bool nullToAbsent) {
+    return CheckinRecordsCompanion(
+      id: Value(id),
+      childId: Value(childId),
+      checkinDate: Value(checkinDate),
+      streakDays: Value(streakDays),
+      pointRecordId: pointRecordId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(pointRecordId),
+      isDeleted: Value(isDeleted),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory CheckinRecord.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CheckinRecord(
+      id: serializer.fromJson<int>(json['id']),
+      childId: serializer.fromJson<int>(json['childId']),
+      checkinDate: serializer.fromJson<String>(json['checkinDate']),
+      streakDays: serializer.fromJson<int>(json['streakDays']),
+      pointRecordId: serializer.fromJson<int?>(json['pointRecordId']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'childId': serializer.toJson<int>(childId),
+      'checkinDate': serializer.toJson<String>(checkinDate),
+      'streakDays': serializer.toJson<int>(streakDays),
+      'pointRecordId': serializer.toJson<int?>(pointRecordId),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  CheckinRecord copyWith(
+          {int? id,
+          int? childId,
+          String? checkinDate,
+          int? streakDays,
+          Value<int?> pointRecordId = const Value.absent(),
+          bool? isDeleted,
+          DateTime? createdAt}) =>
+      CheckinRecord(
+        id: id ?? this.id,
+        childId: childId ?? this.childId,
+        checkinDate: checkinDate ?? this.checkinDate,
+        streakDays: streakDays ?? this.streakDays,
+        pointRecordId:
+            pointRecordId.present ? pointRecordId.value : this.pointRecordId,
+        isDeleted: isDeleted ?? this.isDeleted,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  CheckinRecord copyWithCompanion(CheckinRecordsCompanion data) {
+    return CheckinRecord(
+      id: data.id.present ? data.id.value : this.id,
+      childId: data.childId.present ? data.childId.value : this.childId,
+      checkinDate:
+          data.checkinDate.present ? data.checkinDate.value : this.checkinDate,
+      streakDays:
+          data.streakDays.present ? data.streakDays.value : this.streakDays,
+      pointRecordId: data.pointRecordId.present
+          ? data.pointRecordId.value
+          : this.pointRecordId,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CheckinRecord(')
+          ..write('id: $id, ')
+          ..write('childId: $childId, ')
+          ..write('checkinDate: $checkinDate, ')
+          ..write('streakDays: $streakDays, ')
+          ..write('pointRecordId: $pointRecordId, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, childId, checkinDate, streakDays,
+      pointRecordId, isDeleted, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CheckinRecord &&
+          other.id == this.id &&
+          other.childId == this.childId &&
+          other.checkinDate == this.checkinDate &&
+          other.streakDays == this.streakDays &&
+          other.pointRecordId == this.pointRecordId &&
+          other.isDeleted == this.isDeleted &&
+          other.createdAt == this.createdAt);
+}
+
+class CheckinRecordsCompanion extends UpdateCompanion<CheckinRecord> {
+  final Value<int> id;
+  final Value<int> childId;
+  final Value<String> checkinDate;
+  final Value<int> streakDays;
+  final Value<int?> pointRecordId;
+  final Value<bool> isDeleted;
+  final Value<DateTime> createdAt;
+  const CheckinRecordsCompanion({
+    this.id = const Value.absent(),
+    this.childId = const Value.absent(),
+    this.checkinDate = const Value.absent(),
+    this.streakDays = const Value.absent(),
+    this.pointRecordId = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  CheckinRecordsCompanion.insert({
+    this.id = const Value.absent(),
+    required int childId,
+    required String checkinDate,
+    required int streakDays,
+    this.pointRecordId = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    required DateTime createdAt,
+  })  : childId = Value(childId),
+        checkinDate = Value(checkinDate),
+        streakDays = Value(streakDays),
+        createdAt = Value(createdAt);
+  static Insertable<CheckinRecord> custom({
+    Expression<int>? id,
+    Expression<int>? childId,
+    Expression<String>? checkinDate,
+    Expression<int>? streakDays,
+    Expression<int>? pointRecordId,
+    Expression<bool>? isDeleted,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (childId != null) 'child_id': childId,
+      if (checkinDate != null) 'checkin_date': checkinDate,
+      if (streakDays != null) 'streak_days': streakDays,
+      if (pointRecordId != null) 'point_record_id': pointRecordId,
+      if (isDeleted != null) 'is_deleted': isDeleted,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  CheckinRecordsCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? childId,
+      Value<String>? checkinDate,
+      Value<int>? streakDays,
+      Value<int?>? pointRecordId,
+      Value<bool>? isDeleted,
+      Value<DateTime>? createdAt}) {
+    return CheckinRecordsCompanion(
+      id: id ?? this.id,
+      childId: childId ?? this.childId,
+      checkinDate: checkinDate ?? this.checkinDate,
+      streakDays: streakDays ?? this.streakDays,
+      pointRecordId: pointRecordId ?? this.pointRecordId,
+      isDeleted: isDeleted ?? this.isDeleted,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (childId.present) {
+      map['child_id'] = Variable<int>(childId.value);
+    }
+    if (checkinDate.present) {
+      map['checkin_date'] = Variable<String>(checkinDate.value);
+    }
+    if (streakDays.present) {
+      map['streak_days'] = Variable<int>(streakDays.value);
+    }
+    if (pointRecordId.present) {
+      map['point_record_id'] = Variable<int>(pointRecordId.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CheckinRecordsCompanion(')
+          ..write('id: $id, ')
+          ..write('childId: $childId, ')
+          ..write('checkinDate: $checkinDate, ')
+          ..write('streakDays: $streakDays, ')
+          ..write('pointRecordId: $pointRecordId, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3435,12 +5119,26 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $PointRecordsTable pointRecords = $PointRecordsTable(this);
   late final $AppContentsTable appContents = $AppContentsTable(this);
   late final $AppLogsTable appLogs = $AppLogsTable(this);
+  late final $BadgesTable badges = $BadgesTable(this);
+  late final $BadgeAcquisitionsTable badgeAcquisitions =
+      $BadgeAcquisitionsTable(this);
+  late final $CheckinRecordsTable checkinRecords = $CheckinRecordsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [children, rules, rewards, exchanges, pointRecords, appContents, appLogs];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        children,
+        rules,
+        rewards,
+        exchanges,
+        pointRecords,
+        appContents,
+        appLogs,
+        badges,
+        badgeAcquisitions,
+        checkinRecords
+      ];
 }
 
 typedef $$ChildrenTableCreateCompanionBuilder = ChildrenCompanion Function({
@@ -3510,6 +5208,38 @@ final class $$ChildrenTableReferences
         .filter((f) => f.childId.id($_item.id));
 
     final cache = $_typedResult.readTableOrNull(_pointRecordsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$BadgeAcquisitionsTable, List<BadgeAcquisition>>
+      _badgeAcquisitionsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.badgeAcquisitions,
+              aliasName: $_aliasNameGenerator(
+                  db.children.id, db.badgeAcquisitions.childId));
+
+  $$BadgeAcquisitionsTableProcessedTableManager get badgeAcquisitionsRefs {
+    final manager =
+        $$BadgeAcquisitionsTableTableManager($_db, $_db.badgeAcquisitions)
+            .filter((f) => f.childId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_badgeAcquisitionsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$CheckinRecordsTable, List<CheckinRecord>>
+      _checkinRecordsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.checkinRecords,
+              aliasName: $_aliasNameGenerator(
+                  db.children.id, db.checkinRecords.childId));
+
+  $$CheckinRecordsTableProcessedTableManager get checkinRecordsRefs {
+    final manager = $$CheckinRecordsTableTableManager($_db, $_db.checkinRecords)
+        .filter((f) => f.childId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_checkinRecordsRefsTable($_db));
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
@@ -3606,6 +5336,48 @@ class $$ChildrenTableFilterComposer
             $$PointRecordsTableFilterComposer(
               $db: $db,
               $table: $db.pointRecords,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> badgeAcquisitionsRefs(
+      Expression<bool> Function($$BadgeAcquisitionsTableFilterComposer f) f) {
+    final $$BadgeAcquisitionsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.badgeAcquisitions,
+        getReferencedColumn: (t) => t.childId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$BadgeAcquisitionsTableFilterComposer(
+              $db: $db,
+              $table: $db.badgeAcquisitions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> checkinRecordsRefs(
+      Expression<bool> Function($$CheckinRecordsTableFilterComposer f) f) {
+    final $$CheckinRecordsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.checkinRecords,
+        getReferencedColumn: (t) => t.childId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CheckinRecordsTableFilterComposer(
+              $db: $db,
+              $table: $db.checkinRecords,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -3750,6 +5522,49 @@ class $$ChildrenTableAnnotationComposer
             ));
     return f(composer);
   }
+
+  Expression<T> badgeAcquisitionsRefs<T extends Object>(
+      Expression<T> Function($$BadgeAcquisitionsTableAnnotationComposer a) f) {
+    final $$BadgeAcquisitionsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.badgeAcquisitions,
+            getReferencedColumn: (t) => t.childId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$BadgeAcquisitionsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.badgeAcquisitions,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> checkinRecordsRefs<T extends Object>(
+      Expression<T> Function($$CheckinRecordsTableAnnotationComposer a) f) {
+    final $$CheckinRecordsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.checkinRecords,
+        getReferencedColumn: (t) => t.childId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CheckinRecordsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.checkinRecords,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$ChildrenTableTableManager extends RootTableManager<
@@ -3764,7 +5579,11 @@ class $$ChildrenTableTableManager extends RootTableManager<
     (ChildrenData, $$ChildrenTableReferences),
     ChildrenData,
     PrefetchHooks Function(
-        {bool rulesRefs, bool exchangesRefs, bool pointRecordsRefs})> {
+        {bool rulesRefs,
+        bool exchangesRefs,
+        bool pointRecordsRefs,
+        bool badgeAcquisitionsRefs,
+        bool checkinRecordsRefs})> {
   $$ChildrenTableTableManager(_$AppDatabase db, $ChildrenTable table)
       : super(TableManagerState(
           db: db,
@@ -3826,13 +5645,17 @@ class $$ChildrenTableTableManager extends RootTableManager<
           prefetchHooksCallback: (
               {rulesRefs = false,
               exchangesRefs = false,
-              pointRecordsRefs = false}) {
+              pointRecordsRefs = false,
+              badgeAcquisitionsRefs = false,
+              checkinRecordsRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
                 if (rulesRefs) db.rules,
                 if (exchangesRefs) db.exchanges,
-                if (pointRecordsRefs) db.pointRecords
+                if (pointRecordsRefs) db.pointRecords,
+                if (badgeAcquisitionsRefs) db.badgeAcquisitions,
+                if (checkinRecordsRefs) db.checkinRecords
               ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
@@ -3871,6 +5694,30 @@ class $$ChildrenTableTableManager extends RootTableManager<
                         referencedItemsForCurrentItem: (item,
                                 referencedItems) =>
                             referencedItems.where((e) => e.childId == item.id),
+                        typedResults: items),
+                  if (badgeAcquisitionsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChildrenTableReferences
+                            ._badgeAcquisitionsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChildrenTableReferences(db, table, p0)
+                                .badgeAcquisitionsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.childId == item.id),
+                        typedResults: items),
+                  if (checkinRecordsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChildrenTableReferences
+                            ._checkinRecordsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChildrenTableReferences(db, table, p0)
+                                .checkinRecordsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.childId == item.id),
                         typedResults: items)
                 ];
               },
@@ -3891,7 +5738,11 @@ typedef $$ChildrenTableProcessedTableManager = ProcessedTableManager<
     (ChildrenData, $$ChildrenTableReferences),
     ChildrenData,
     PrefetchHooks Function(
-        {bool rulesRefs, bool exchangesRefs, bool pointRecordsRefs})>;
+        {bool rulesRefs,
+        bool exchangesRefs,
+        bool pointRecordsRefs,
+        bool badgeAcquisitionsRefs,
+        bool checkinRecordsRefs})>;
 typedef $$RulesTableCreateCompanionBuilder = RulesCompanion Function({
   Value<int> id,
   Value<int?> childId,
@@ -6053,6 +7904,1149 @@ typedef $$AppLogsTableProcessedTableManager = ProcessedTableManager<
     (AppLog, BaseReferences<_$AppDatabase, $AppLogsTable, AppLog>),
     AppLog,
     PrefetchHooks Function()>;
+typedef $$BadgesTableCreateCompanionBuilder = BadgesCompanion Function({
+  Value<int> id,
+  required String name,
+  Value<String?> description,
+  required String icon,
+  Value<int> level,
+  required String triggerType,
+  required int triggerThreshold,
+  Value<String?> triggerConfig,
+  Value<int> bonusPoints,
+  Value<int> sortOrder,
+  Value<bool> isActive,
+  Value<bool> isSystem,
+  Value<bool> isDeleted,
+  required DateTime createdAt,
+  Value<DateTime?> updatedAt,
+});
+typedef $$BadgesTableUpdateCompanionBuilder = BadgesCompanion Function({
+  Value<int> id,
+  Value<String> name,
+  Value<String?> description,
+  Value<String> icon,
+  Value<int> level,
+  Value<String> triggerType,
+  Value<int> triggerThreshold,
+  Value<String?> triggerConfig,
+  Value<int> bonusPoints,
+  Value<int> sortOrder,
+  Value<bool> isActive,
+  Value<bool> isSystem,
+  Value<bool> isDeleted,
+  Value<DateTime> createdAt,
+  Value<DateTime?> updatedAt,
+});
+
+final class $$BadgesTableReferences
+    extends BaseReferences<_$AppDatabase, $BadgesTable, Badge> {
+  $$BadgesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$BadgeAcquisitionsTable, List<BadgeAcquisition>>
+      _badgeAcquisitionsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.badgeAcquisitions,
+              aliasName: $_aliasNameGenerator(
+                  db.badges.id, db.badgeAcquisitions.badgeId));
+
+  $$BadgeAcquisitionsTableProcessedTableManager get badgeAcquisitionsRefs {
+    final manager =
+        $$BadgeAcquisitionsTableTableManager($_db, $_db.badgeAcquisitions)
+            .filter((f) => f.badgeId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_badgeAcquisitionsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$BadgesTableFilterComposer
+    extends Composer<_$AppDatabase, $BadgesTable> {
+  $$BadgesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get level => $composableBuilder(
+      column: $table.level, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get triggerType => $composableBuilder(
+      column: $table.triggerType, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get triggerThreshold => $composableBuilder(
+      column: $table.triggerThreshold,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get triggerConfig => $composableBuilder(
+      column: $table.triggerConfig, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get bonusPoints => $composableBuilder(
+      column: $table.bonusPoints, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get sortOrder => $composableBuilder(
+      column: $table.sortOrder, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isSystem => $composableBuilder(
+      column: $table.isSystem, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> badgeAcquisitionsRefs(
+      Expression<bool> Function($$BadgeAcquisitionsTableFilterComposer f) f) {
+    final $$BadgeAcquisitionsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.badgeAcquisitions,
+        getReferencedColumn: (t) => t.badgeId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$BadgeAcquisitionsTableFilterComposer(
+              $db: $db,
+              $table: $db.badgeAcquisitions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$BadgesTableOrderingComposer
+    extends Composer<_$AppDatabase, $BadgesTable> {
+  $$BadgesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get level => $composableBuilder(
+      column: $table.level, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get triggerType => $composableBuilder(
+      column: $table.triggerType, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get triggerThreshold => $composableBuilder(
+      column: $table.triggerThreshold,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get triggerConfig => $composableBuilder(
+      column: $table.triggerConfig,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get bonusPoints => $composableBuilder(
+      column: $table.bonusPoints, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get sortOrder => $composableBuilder(
+      column: $table.sortOrder, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isSystem => $composableBuilder(
+      column: $table.isSystem, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$BadgesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $BadgesTable> {
+  $$BadgesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => column);
+
+  GeneratedColumn<String> get icon =>
+      $composableBuilder(column: $table.icon, builder: (column) => column);
+
+  GeneratedColumn<int> get level =>
+      $composableBuilder(column: $table.level, builder: (column) => column);
+
+  GeneratedColumn<String> get triggerType => $composableBuilder(
+      column: $table.triggerType, builder: (column) => column);
+
+  GeneratedColumn<int> get triggerThreshold => $composableBuilder(
+      column: $table.triggerThreshold, builder: (column) => column);
+
+  GeneratedColumn<String> get triggerConfig => $composableBuilder(
+      column: $table.triggerConfig, builder: (column) => column);
+
+  GeneratedColumn<int> get bonusPoints => $composableBuilder(
+      column: $table.bonusPoints, builder: (column) => column);
+
+  GeneratedColumn<int> get sortOrder =>
+      $composableBuilder(column: $table.sortOrder, builder: (column) => column);
+
+  GeneratedColumn<bool> get isActive =>
+      $composableBuilder(column: $table.isActive, builder: (column) => column);
+
+  GeneratedColumn<bool> get isSystem =>
+      $composableBuilder(column: $table.isSystem, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  Expression<T> badgeAcquisitionsRefs<T extends Object>(
+      Expression<T> Function($$BadgeAcquisitionsTableAnnotationComposer a) f) {
+    final $$BadgeAcquisitionsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.badgeAcquisitions,
+            getReferencedColumn: (t) => t.badgeId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$BadgeAcquisitionsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.badgeAcquisitions,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$BadgesTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $BadgesTable,
+    Badge,
+    $$BadgesTableFilterComposer,
+    $$BadgesTableOrderingComposer,
+    $$BadgesTableAnnotationComposer,
+    $$BadgesTableCreateCompanionBuilder,
+    $$BadgesTableUpdateCompanionBuilder,
+    (Badge, $$BadgesTableReferences),
+    Badge,
+    PrefetchHooks Function({bool badgeAcquisitionsRefs})> {
+  $$BadgesTableTableManager(_$AppDatabase db, $BadgesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$BadgesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$BadgesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$BadgesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String?> description = const Value.absent(),
+            Value<String> icon = const Value.absent(),
+            Value<int> level = const Value.absent(),
+            Value<String> triggerType = const Value.absent(),
+            Value<int> triggerThreshold = const Value.absent(),
+            Value<String?> triggerConfig = const Value.absent(),
+            Value<int> bonusPoints = const Value.absent(),
+            Value<int> sortOrder = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+            Value<bool> isSystem = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              BadgesCompanion(
+            id: id,
+            name: name,
+            description: description,
+            icon: icon,
+            level: level,
+            triggerType: triggerType,
+            triggerThreshold: triggerThreshold,
+            triggerConfig: triggerConfig,
+            bonusPoints: bonusPoints,
+            sortOrder: sortOrder,
+            isActive: isActive,
+            isSystem: isSystem,
+            isDeleted: isDeleted,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String name,
+            Value<String?> description = const Value.absent(),
+            required String icon,
+            Value<int> level = const Value.absent(),
+            required String triggerType,
+            required int triggerThreshold,
+            Value<String?> triggerConfig = const Value.absent(),
+            Value<int> bonusPoints = const Value.absent(),
+            Value<int> sortOrder = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+            Value<bool> isSystem = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
+            required DateTime createdAt,
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              BadgesCompanion.insert(
+            id: id,
+            name: name,
+            description: description,
+            icon: icon,
+            level: level,
+            triggerType: triggerType,
+            triggerThreshold: triggerThreshold,
+            triggerConfig: triggerConfig,
+            bonusPoints: bonusPoints,
+            sortOrder: sortOrder,
+            isActive: isActive,
+            isSystem: isSystem,
+            isDeleted: isDeleted,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) =>
+                  (e.readTable(table), $$BadgesTableReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: ({badgeAcquisitionsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (badgeAcquisitionsRefs) db.badgeAcquisitions
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (badgeAcquisitionsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$BadgesTableReferences
+                            ._badgeAcquisitionsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$BadgesTableReferences(db, table, p0)
+                                .badgeAcquisitionsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.badgeId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$BadgesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $BadgesTable,
+    Badge,
+    $$BadgesTableFilterComposer,
+    $$BadgesTableOrderingComposer,
+    $$BadgesTableAnnotationComposer,
+    $$BadgesTableCreateCompanionBuilder,
+    $$BadgesTableUpdateCompanionBuilder,
+    (Badge, $$BadgesTableReferences),
+    Badge,
+    PrefetchHooks Function({bool badgeAcquisitionsRefs})>;
+typedef $$BadgeAcquisitionsTableCreateCompanionBuilder
+    = BadgeAcquisitionsCompanion Function({
+  Value<int> id,
+  required int childId,
+  required int badgeId,
+  required String badgeSnapshot,
+  required int bonusPointsAwarded,
+  Value<int?> pointRecordId,
+  Value<int?> triggerValue,
+  Value<String?> note,
+  Value<bool> isDeleted,
+  required DateTime createdAt,
+  Value<DateTime?> updatedAt,
+});
+typedef $$BadgeAcquisitionsTableUpdateCompanionBuilder
+    = BadgeAcquisitionsCompanion Function({
+  Value<int> id,
+  Value<int> childId,
+  Value<int> badgeId,
+  Value<String> badgeSnapshot,
+  Value<int> bonusPointsAwarded,
+  Value<int?> pointRecordId,
+  Value<int?> triggerValue,
+  Value<String?> note,
+  Value<bool> isDeleted,
+  Value<DateTime> createdAt,
+  Value<DateTime?> updatedAt,
+});
+
+final class $$BadgeAcquisitionsTableReferences extends BaseReferences<
+    _$AppDatabase, $BadgeAcquisitionsTable, BadgeAcquisition> {
+  $$BadgeAcquisitionsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChildrenTable _childIdTable(_$AppDatabase db) =>
+      db.children.createAlias(
+          $_aliasNameGenerator(db.badgeAcquisitions.childId, db.children.id));
+
+  $$ChildrenTableProcessedTableManager? get childId {
+    if ($_item.childId == null) return null;
+    final manager = $$ChildrenTableTableManager($_db, $_db.children)
+        .filter((f) => f.id($_item.childId!));
+    final item = $_typedResult.readTableOrNull(_childIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $BadgesTable _badgeIdTable(_$AppDatabase db) => db.badges.createAlias(
+      $_aliasNameGenerator(db.badgeAcquisitions.badgeId, db.badges.id));
+
+  $$BadgesTableProcessedTableManager? get badgeId {
+    if ($_item.badgeId == null) return null;
+    final manager = $$BadgesTableTableManager($_db, $_db.badges)
+        .filter((f) => f.id($_item.badgeId!));
+    final item = $_typedResult.readTableOrNull(_badgeIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$BadgeAcquisitionsTableFilterComposer
+    extends Composer<_$AppDatabase, $BadgeAcquisitionsTable> {
+  $$BadgeAcquisitionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get badgeSnapshot => $composableBuilder(
+      column: $table.badgeSnapshot, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get bonusPointsAwarded => $composableBuilder(
+      column: $table.bonusPointsAwarded,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get pointRecordId => $composableBuilder(
+      column: $table.pointRecordId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get triggerValue => $composableBuilder(
+      column: $table.triggerValue, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get note => $composableBuilder(
+      column: $table.note, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  $$ChildrenTableFilterComposer get childId {
+    final $$ChildrenTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableFilterComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$BadgesTableFilterComposer get badgeId {
+    final $$BadgesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.badgeId,
+        referencedTable: $db.badges,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$BadgesTableFilterComposer(
+              $db: $db,
+              $table: $db.badges,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$BadgeAcquisitionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $BadgeAcquisitionsTable> {
+  $$BadgeAcquisitionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get badgeSnapshot => $composableBuilder(
+      column: $table.badgeSnapshot,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get bonusPointsAwarded => $composableBuilder(
+      column: $table.bonusPointsAwarded,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get pointRecordId => $composableBuilder(
+      column: $table.pointRecordId,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get triggerValue => $composableBuilder(
+      column: $table.triggerValue,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get note => $composableBuilder(
+      column: $table.note, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+
+  $$ChildrenTableOrderingComposer get childId {
+    final $$ChildrenTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableOrderingComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$BadgesTableOrderingComposer get badgeId {
+    final $$BadgesTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.badgeId,
+        referencedTable: $db.badges,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$BadgesTableOrderingComposer(
+              $db: $db,
+              $table: $db.badges,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$BadgeAcquisitionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $BadgeAcquisitionsTable> {
+  $$BadgeAcquisitionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get badgeSnapshot => $composableBuilder(
+      column: $table.badgeSnapshot, builder: (column) => column);
+
+  GeneratedColumn<int> get bonusPointsAwarded => $composableBuilder(
+      column: $table.bonusPointsAwarded, builder: (column) => column);
+
+  GeneratedColumn<int> get pointRecordId => $composableBuilder(
+      column: $table.pointRecordId, builder: (column) => column);
+
+  GeneratedColumn<int> get triggerValue => $composableBuilder(
+      column: $table.triggerValue, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$ChildrenTableAnnotationComposer get childId {
+    final $$ChildrenTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableAnnotationComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$BadgesTableAnnotationComposer get badgeId {
+    final $$BadgesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.badgeId,
+        referencedTable: $db.badges,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$BadgesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.badges,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$BadgeAcquisitionsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $BadgeAcquisitionsTable,
+    BadgeAcquisition,
+    $$BadgeAcquisitionsTableFilterComposer,
+    $$BadgeAcquisitionsTableOrderingComposer,
+    $$BadgeAcquisitionsTableAnnotationComposer,
+    $$BadgeAcquisitionsTableCreateCompanionBuilder,
+    $$BadgeAcquisitionsTableUpdateCompanionBuilder,
+    (BadgeAcquisition, $$BadgeAcquisitionsTableReferences),
+    BadgeAcquisition,
+    PrefetchHooks Function({bool childId, bool badgeId})> {
+  $$BadgeAcquisitionsTableTableManager(
+      _$AppDatabase db, $BadgeAcquisitionsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$BadgeAcquisitionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$BadgeAcquisitionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$BadgeAcquisitionsTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> childId = const Value.absent(),
+            Value<int> badgeId = const Value.absent(),
+            Value<String> badgeSnapshot = const Value.absent(),
+            Value<int> bonusPointsAwarded = const Value.absent(),
+            Value<int?> pointRecordId = const Value.absent(),
+            Value<int?> triggerValue = const Value.absent(),
+            Value<String?> note = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              BadgeAcquisitionsCompanion(
+            id: id,
+            childId: childId,
+            badgeId: badgeId,
+            badgeSnapshot: badgeSnapshot,
+            bonusPointsAwarded: bonusPointsAwarded,
+            pointRecordId: pointRecordId,
+            triggerValue: triggerValue,
+            note: note,
+            isDeleted: isDeleted,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int childId,
+            required int badgeId,
+            required String badgeSnapshot,
+            required int bonusPointsAwarded,
+            Value<int?> pointRecordId = const Value.absent(),
+            Value<int?> triggerValue = const Value.absent(),
+            Value<String?> note = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
+            required DateTime createdAt,
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              BadgeAcquisitionsCompanion.insert(
+            id: id,
+            childId: childId,
+            badgeId: badgeId,
+            badgeSnapshot: badgeSnapshot,
+            bonusPointsAwarded: bonusPointsAwarded,
+            pointRecordId: pointRecordId,
+            triggerValue: triggerValue,
+            note: note,
+            isDeleted: isDeleted,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$BadgeAcquisitionsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({childId = false, badgeId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (childId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.childId,
+                    referencedTable:
+                        $$BadgeAcquisitionsTableReferences._childIdTable(db),
+                    referencedColumn:
+                        $$BadgeAcquisitionsTableReferences._childIdTable(db).id,
+                  ) as T;
+                }
+                if (badgeId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.badgeId,
+                    referencedTable:
+                        $$BadgeAcquisitionsTableReferences._badgeIdTable(db),
+                    referencedColumn:
+                        $$BadgeAcquisitionsTableReferences._badgeIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$BadgeAcquisitionsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $BadgeAcquisitionsTable,
+    BadgeAcquisition,
+    $$BadgeAcquisitionsTableFilterComposer,
+    $$BadgeAcquisitionsTableOrderingComposer,
+    $$BadgeAcquisitionsTableAnnotationComposer,
+    $$BadgeAcquisitionsTableCreateCompanionBuilder,
+    $$BadgeAcquisitionsTableUpdateCompanionBuilder,
+    (BadgeAcquisition, $$BadgeAcquisitionsTableReferences),
+    BadgeAcquisition,
+    PrefetchHooks Function({bool childId, bool badgeId})>;
+typedef $$CheckinRecordsTableCreateCompanionBuilder = CheckinRecordsCompanion
+    Function({
+  Value<int> id,
+  required int childId,
+  required String checkinDate,
+  required int streakDays,
+  Value<int?> pointRecordId,
+  Value<bool> isDeleted,
+  required DateTime createdAt,
+});
+typedef $$CheckinRecordsTableUpdateCompanionBuilder = CheckinRecordsCompanion
+    Function({
+  Value<int> id,
+  Value<int> childId,
+  Value<String> checkinDate,
+  Value<int> streakDays,
+  Value<int?> pointRecordId,
+  Value<bool> isDeleted,
+  Value<DateTime> createdAt,
+});
+
+final class $$CheckinRecordsTableReferences
+    extends BaseReferences<_$AppDatabase, $CheckinRecordsTable, CheckinRecord> {
+  $$CheckinRecordsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChildrenTable _childIdTable(_$AppDatabase db) =>
+      db.children.createAlias(
+          $_aliasNameGenerator(db.checkinRecords.childId, db.children.id));
+
+  $$ChildrenTableProcessedTableManager? get childId {
+    if ($_item.childId == null) return null;
+    final manager = $$ChildrenTableTableManager($_db, $_db.children)
+        .filter((f) => f.id($_item.childId!));
+    final item = $_typedResult.readTableOrNull(_childIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$CheckinRecordsTableFilterComposer
+    extends Composer<_$AppDatabase, $CheckinRecordsTable> {
+  $$CheckinRecordsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get checkinDate => $composableBuilder(
+      column: $table.checkinDate, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get streakDays => $composableBuilder(
+      column: $table.streakDays, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get pointRecordId => $composableBuilder(
+      column: $table.pointRecordId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  $$ChildrenTableFilterComposer get childId {
+    final $$ChildrenTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableFilterComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$CheckinRecordsTableOrderingComposer
+    extends Composer<_$AppDatabase, $CheckinRecordsTable> {
+  $$CheckinRecordsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get checkinDate => $composableBuilder(
+      column: $table.checkinDate, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get streakDays => $composableBuilder(
+      column: $table.streakDays, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get pointRecordId => $composableBuilder(
+      column: $table.pointRecordId,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  $$ChildrenTableOrderingComposer get childId {
+    final $$ChildrenTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableOrderingComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$CheckinRecordsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CheckinRecordsTable> {
+  $$CheckinRecordsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get checkinDate => $composableBuilder(
+      column: $table.checkinDate, builder: (column) => column);
+
+  GeneratedColumn<int> get streakDays => $composableBuilder(
+      column: $table.streakDays, builder: (column) => column);
+
+  GeneratedColumn<int> get pointRecordId => $composableBuilder(
+      column: $table.pointRecordId, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$ChildrenTableAnnotationComposer get childId {
+    final $$ChildrenTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableAnnotationComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$CheckinRecordsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $CheckinRecordsTable,
+    CheckinRecord,
+    $$CheckinRecordsTableFilterComposer,
+    $$CheckinRecordsTableOrderingComposer,
+    $$CheckinRecordsTableAnnotationComposer,
+    $$CheckinRecordsTableCreateCompanionBuilder,
+    $$CheckinRecordsTableUpdateCompanionBuilder,
+    (CheckinRecord, $$CheckinRecordsTableReferences),
+    CheckinRecord,
+    PrefetchHooks Function({bool childId})> {
+  $$CheckinRecordsTableTableManager(
+      _$AppDatabase db, $CheckinRecordsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CheckinRecordsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CheckinRecordsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CheckinRecordsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> childId = const Value.absent(),
+            Value<String> checkinDate = const Value.absent(),
+            Value<int> streakDays = const Value.absent(),
+            Value<int?> pointRecordId = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+          }) =>
+              CheckinRecordsCompanion(
+            id: id,
+            childId: childId,
+            checkinDate: checkinDate,
+            streakDays: streakDays,
+            pointRecordId: pointRecordId,
+            isDeleted: isDeleted,
+            createdAt: createdAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int childId,
+            required String checkinDate,
+            required int streakDays,
+            Value<int?> pointRecordId = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
+            required DateTime createdAt,
+          }) =>
+              CheckinRecordsCompanion.insert(
+            id: id,
+            childId: childId,
+            checkinDate: checkinDate,
+            streakDays: streakDays,
+            pointRecordId: pointRecordId,
+            isDeleted: isDeleted,
+            createdAt: createdAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$CheckinRecordsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({childId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (childId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.childId,
+                    referencedTable:
+                        $$CheckinRecordsTableReferences._childIdTable(db),
+                    referencedColumn:
+                        $$CheckinRecordsTableReferences._childIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$CheckinRecordsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $CheckinRecordsTable,
+    CheckinRecord,
+    $$CheckinRecordsTableFilterComposer,
+    $$CheckinRecordsTableOrderingComposer,
+    $$CheckinRecordsTableAnnotationComposer,
+    $$CheckinRecordsTableCreateCompanionBuilder,
+    $$CheckinRecordsTableUpdateCompanionBuilder,
+    (CheckinRecord, $$CheckinRecordsTableReferences),
+    CheckinRecord,
+    PrefetchHooks Function({bool childId})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -6071,4 +9065,10 @@ class $AppDatabaseManager {
       $$AppContentsTableTableManager(_db, _db.appContents);
   $$AppLogsTableTableManager get appLogs =>
       $$AppLogsTableTableManager(_db, _db.appLogs);
+  $$BadgesTableTableManager get badges =>
+      $$BadgesTableTableManager(_db, _db.badges);
+  $$BadgeAcquisitionsTableTableManager get badgeAcquisitions =>
+      $$BadgeAcquisitionsTableTableManager(_db, _db.badgeAcquisitions);
+  $$CheckinRecordsTableTableManager get checkinRecords =>
+      $$CheckinRecordsTableTableManager(_db, _db.checkinRecords);
 }

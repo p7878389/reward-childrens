@@ -159,19 +159,16 @@ class _EditRewardScreenState extends ConsumerState<EditRewardScreen> {
     final name = _nameController.text.trim();
     final price = int.tryParse(_priceController.text) ?? 0;
     
-    // 校验名称
     if (name.isEmpty) {
       AppDialogs.showError(context, l10n.nameRequired);
       return;
     }
 
-    // 校验价格
     if (price <= 0) {
       AppDialogs.showError(context, l10n.numberMustBePositive);
       return;
     }
 
-    // 校验库存
     int? stock;
     if (!_isUnlimited) {
       final stockVal = int.tryParse(_stockController.text);
@@ -212,8 +209,7 @@ class _EditRewardScreenState extends ConsumerState<EditRewardScreen> {
     if (confirmed) {
       await ref.read(rewardsRepositoryProvider).deleteReward(widget.reward.id);
       if (mounted) {
-        Navigator.pop(context); // Pop AddEditRewardScreen
-        Navigator.pop(context); // Pop previous screen
+        Navigator.pop(context);
       }
     }
   }
@@ -248,13 +244,16 @@ class _EditRewardScreenState extends ConsumerState<EditRewardScreen> {
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 children: [
-                  // Image Picker
+                  _buildPreviewCard(l10n),
+                  const SizedBox(height: 24),
+                  
+                  _buildLabel(l10n.rewardImage),
+                  const SizedBox(height: 8),
                   Center(
                     child: GestureDetector(
                       onTap: _pickImage,
                       child: Container(
                         width: 120, height: 120,
-                        margin: const EdgeInsets.symmetric(vertical: 16),
                         decoration: BoxDecoration(
                           color: const Color(0xFFFEF3C7),
                           borderRadius: BorderRadius.circular(24),
@@ -275,17 +274,16 @@ class _EditRewardScreenState extends ConsumerState<EditRewardScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Name Input
                   _buildLabel(l10n.rewardName),
                   const SizedBox(height: 8),
                   CustomInputField(
                     controller: _nameController,
                     icon: Icons.edit_rounded,
                     hintText: 'e.g. LEGO Set',
+                    onChanged: (_) => setState(() {}),
                   ),
                   const SizedBox(height: 24),
 
-                  // Points Input
                   _buildLabel(l10n.points),
                   const SizedBox(height: 8),
                   Row(
@@ -296,6 +294,7 @@ class _EditRewardScreenState extends ConsumerState<EditRewardScreen> {
                           icon: Icons.star_rounded,
                           keyboardType: TextInputType.number,
                           hintText: '0',
+                          onChanged: (_) => setState(() {}),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -308,7 +307,6 @@ class _EditRewardScreenState extends ConsumerState<EditRewardScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Category Selector
                   _buildLabel(l10n.category),
                   const SizedBox(height: 8),
                   Container(
@@ -335,7 +333,6 @@ class _EditRewardScreenState extends ConsumerState<EditRewardScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Stock Toggle
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -360,12 +357,12 @@ class _EditRewardScreenState extends ConsumerState<EditRewardScreen> {
                       icon: Icons.inventory_2_rounded,
                       keyboardType: TextInputType.number,
                       hintText: '0',
+                      onChanged: (_) => setState(() {}),
                     ),
                   ],
                   
                   const SizedBox(height: 24),
 
-                  // Description Input
                   _buildLabel(l10n.description),
                   const SizedBox(height: 8),
                   CustomInputField(
@@ -373,11 +370,11 @@ class _EditRewardScreenState extends ConsumerState<EditRewardScreen> {
                     icon: Icons.description_rounded,
                     hintText: l10n.addDetails,
                     maxLines: 3,
+                    onChanged: (_) => setState(() {}),
                   ),
 
                   const SizedBox(height: 32),
 
-                  // On/Off Toggle (replaces Management Actions)
                   _buildLabel(l10n.dataManagement),
                   const SizedBox(height: 12),
                   Container(
@@ -404,7 +401,6 @@ class _EditRewardScreenState extends ConsumerState<EditRewardScreen> {
                   ),
                   const SizedBox(height: 40),
 
-                  // Submit Button
                   SizedBox(
                     width: double.infinity,
                     height: 52,
@@ -430,12 +426,141 @@ class _EditRewardScreenState extends ConsumerState<EditRewardScreen> {
     );
   }
 
+  Widget _buildPreviewCard(AppLocalizations l10n) {
+    return Opacity(
+      opacity: _isActive ? 1.0 : 0.6,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(color: AppColors.primary.withOpacity(0.05), spreadRadius: 1),
+            BoxShadow(color: AppColors.textMain.withOpacity(0.02), offset: const Offset(0, 4), blurRadius: 10),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 120,
+              child: Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFFEF3C7),
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                    ),
+                    child: _buildRewardIcon(),
+                  ),
+                  Positioned(
+                    top: 12,
+                    right: 12,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.95),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.star_rounded, size: 18, color: Color(0xFFD97706)),
+                          const SizedBox(width: 4),
+                          Text(
+                            _priceController.text.isEmpty ? '0' : _priceController.text,
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Color(0xFFD97706)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: AppColors.background,
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: AppColors.textSecondary.withOpacity(0.1)),
+                        ),
+                        child: Text(
+                          _getLocalizedCategory(_category, l10n).toUpperCase(),
+                          style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: AppColors.textSecondary.withOpacity(0.8)),
+                        ),
+                      ),
+                      if (!_isUnlimited)
+                        Row(
+                          children: [
+                            Icon(Icons.inventory_2_outlined, size: 12, color: AppColors.textSecondary.withOpacity(0.6)),
+                            const SizedBox(width: 2),
+                            Text(
+                              _stockController.text,
+                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.textSecondary.withOpacity(0.6)),
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    _nameController.text.isEmpty ? l10n.rewardName : _nameController.text,
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textMain, height: 1.2),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  SizedBox(
+                    height: 32,
+                    child: Text(
+                      _descController.text,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: AppColors.textSecondary.withOpacity(0.8),
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRewardIcon() {
+    if (_imagePath != null) {
+      final file = File(_imagePath!);
+      if (file.existsSync()) {
+        return ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          child: Image.file(file, fit: BoxFit.cover, width: double.infinity,),
+        );
+      }
+    }
+    return const Icon(Icons.card_giftcard_rounded, color: Color(0xFFD97706), size: 40);
+  }
+
+
   String _getLocalizedCategory(String category, AppLocalizations l10n) {
     switch (category) {
       case 'privileges': return l10n.privileges;
       case 'toys': return l10n.toys;
       case 'snacks': return l10n.snacks;
-      default: return l10n.all;
+      default: return l10n.other;
     }
   }
 

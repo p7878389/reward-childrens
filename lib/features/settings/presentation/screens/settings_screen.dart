@@ -9,6 +9,8 @@ import 'package:children_rewards/shared/widgets/common_widgets.dart';
 import 'package:children_rewards/features/settings/presentation/screens/privacy_policy_screen.dart';
 import 'package:children_rewards/features/settings/presentation/screens/logs_screen.dart';
 import 'package:children_rewards/features/rewards/presentation/screens/rewards_manage_screen.dart';
+import 'package:children_rewards/features/rule/presentation/screens/rules_manage_screen.dart';
+import 'package:children_rewards/features/badges/presentation/screens/badge_manage_screen.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -82,6 +84,26 @@ class SettingsScreen extends ConsumerWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const RewardsManageScreen()),
+                  );
+                },
+              ),
+              _buildSettingTile(
+                icon: Icons.checklist_rounded,
+                title: l10n.manageRules,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const RulesManageScreen(showBackButton: true)),
+                  );
+                },
+              ),
+              _buildSettingTile(
+                icon: Icons.shield_rounded,
+                title: '徽章配置',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const BadgeManageScreen()),
                   );
                 },
               ),

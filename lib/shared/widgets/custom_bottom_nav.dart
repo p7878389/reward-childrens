@@ -43,8 +43,7 @@ class CustomBottomNav extends StatelessWidget {
               children: [
                 _buildNavItem(0, Icons.home_rounded),
                 _buildNavItem(1, Icons.emoji_events_rounded),
-                _buildNavItem(2, Icons.checklist_rounded),
-                _buildNavItem(3, Icons.settings_rounded),
+                _buildNavItem(2, Icons.settings_rounded),
               ],
             ),
           ),

@@ -11,9 +11,13 @@ import 'package:children_rewards/core/constants/avatar_data.dart';
 import 'package:children_rewards/features/children/data/children_repository.dart';
 import 'package:children_rewards/features/children/providers/children_providers.dart';
 import 'package:children_rewards/features/points/presentation/screens/points_history_screen.dart';
-import 'package:children_rewards/features/rule/presentation/screens/rules_manage_screen.dart';
 import 'package:children_rewards/features/children/presentation/screens/edit_child_screen.dart';
 import 'package:children_rewards/features/exchange/presentation/screens/exchange_history_screen.dart';
+import 'package:children_rewards/features/badges/providers/badge_providers.dart';
+import 'package:children_rewards/features/badges/presentation/screens/badge_gallery_screen.dart';
+import 'package:children_rewards/features/badges/presentation/dialogs/checkin_success_dialog.dart';
+import 'package:children_rewards/features/badges/presentation/dialogs/badge_award_dialog.dart';
+import 'package:children_rewards/features/badges/domain/usecases/checkin_usecase.dart';
 
 class ChildManageScreen extends ConsumerWidget {
   final ChildrenData child;
@@ -203,21 +207,33 @@ class ChildManageScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 12),
                   _buildMenuLink(
-                    title: l10n.customRules,
-                    subtitle: l10n.customRulesSubtitle,
-                    icon: Icons.rule_rounded,
-                    iconBg: const Color(0xFFFAF5FF),
-                    iconColor: Colors.purple,
+                    title: l10n.dailyCheckin,
+                    subtitle: l10n.checkinToEarn,
+                    icon: Icons.calendar_today_rounded,
+                    iconBg: const Color(0xFFE0F2F1),
+                    iconColor: Colors.teal,
+                    onTap: () => _handleCheckin(context, ref, l10n),
+                  ),
+                  const SizedBox(height: 12),
+                  _buildMenuLink(
+                    title: l10n.growthBadges,
+                    subtitle: l10n.viewAchievements,
+                    icon: Icons.emoji_events_rounded,
+                    iconBg: const Color(0xFFFFF3E0),
+                    iconColor: Colors.orange,
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const RulesManageScreen(),
+                          builder: (context) => BadgeGalleryScreen(
+                            childId: child.id,
+                            childName: child.name,
+                          ),
                         ),
                       );
                     },
                   ),
-                  const SizedBox(height: 12),
+
                   _buildMenuLink(
                     title: l10n.rewardHistory,
                     subtitle: l10n.rewardHistorySubtitle(child.name),
@@ -273,6 +289,64 @@ class ChildManageScreen extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _handleCheckin(BuildContext context, WidgetRef ref, AppLocalizations l10n) async {
+    final result = await ref.read(checkinUseCaseProvider).execute(CheckinParams(
+      childId: child.id,
+      rewardPoints: 5, // 默认签到奖励
+    ));
+
+    result.when(
+      success: (checkinResult) {
+        showDialog(
+          context: context,
+          builder: (context) => CheckinSuccessDialog(
+            streakDays: checkinResult.streakDays,
+            rewardPoints: 5,
+          ),
+        ).then((_) {
+          // 签到弹窗关闭后，检查是否有徽章奖励
+          if (checkinResult.badgeResult != null && checkinResult.badgeResult!.hasBadges) {
+            for (final badge in checkinResult.badgeResult!.awardedBadges) {
+               showDialog(
+                context: context,
+                builder: (context) => BadgeAwardDialog(
+                  badge: badge,
+                  onDismiss: () => Navigator.pop(context),
+                ),
+              );
+            }
+          }
+        });
+      },
+      failure: (message, _, __) async {
+        // 如果是今日已签到，也显示弹窗保持风格一致
+        if (message == '今日已签到' || message == l10n.alreadyCheckedin) {
+          // 获取当前的连续签到天数
+          final streakDays = await ref.read(checkinRepositoryProvider).getCurrentStreak(child.id);
+          if (context.mounted) {
+            showDialog(
+              context: context,
+              builder: (context) => CheckinSuccessDialog(
+                streakDays: streakDays,
+                rewardPoints: 0,
+                isAlreadyCheckedin: true,
+              ),
+            );
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(message),
+              backgroundColor: Colors.orange,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+          );
+        }
+      },
     );
   }
 

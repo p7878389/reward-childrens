@@ -22,4 +22,7 @@ abstract class IExchangeRepository {
     required int rewardId,
     String? note,
   });
+
+  /// 获取孩子兑换商品的总次数
+  Future<int> getExchangeCount(int childId);
 }

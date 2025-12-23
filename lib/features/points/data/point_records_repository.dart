@@ -108,32 +108,51 @@ class PointRecordsRepository implements IPointRecordsRepository {
     String? ruleName,
     String? note,
   }) async {
+    await addRecordAndReturnId(
+      childId: childId,
+      points: points,
+      type: type,
+      ruleId: ruleId,
+      ruleName: ruleName,
+      note: note,
+    );
+  }
+
+  @override
+  Future<int> addRecordAndReturnId({
+    required int childId,
+    required int points,
+    required String type,
+    int? ruleId,
+    String? ruleName,
+    String? note,
+  }) async {
     return _db.transaction(() async {
       // 1. Determine actual points delta
-      // If type is 'earned', points are positive.
-      // If type is 'spent' or 'deducted', points are stored as negative in DB.
       final int delta = type == 'earned' ? points : -points;
+      final now = DateTime.now();
 
       // 2. Insert Record
-      await _db.into(_db.pointRecords).insert(PointRecordsCompanion.insert(
-        childId: childId,
-        ruleId: Value(ruleId),
-        ruleName: Value(ruleName),
-        points: delta,
-        type: type,
-        note: Value(note),
-        createdAt: DateTime.now(),
-      ));
+      final id = await _db.into(_db.pointRecords).insert(PointRecordsCompanion.insert(
+            childId: childId,
+            ruleId: Value(ruleId),
+            ruleName: Value(ruleName),
+            points: delta,
+            type: type,
+            note: Value(note),
+            createdAt: now,
+          ));
 
       // 3. Update Child's Stars
       final child = await (_db.select(_db.children)..where((t) => t.id.equals(childId))).getSingle();
-      
-      // Ensure stars don't go below zero if that's a rule, but for now we clamp at 0
+
       final newStars = (child.stars + delta) < 0 ? 0 : (child.stars + delta);
 
       await (_db.update(_db.children)..where((t) => t.id.equals(childId))).write(
-        ChildrenCompanion(stars: Value(newStars)),
+        ChildrenCompanion(stars: Value(newStars), updatedAt: Value(now)),
       );
+
+      return id;
     });
   }
 }

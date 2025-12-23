@@ -31,4 +31,14 @@ abstract class IPointRecordsRepository {
     String? ruleName,
     String? note,
   });
+
+  /// 添加积分记录并返回记录 ID
+  Future<int> addRecordAndReturnId({
+    required int childId,
+    required int points,
+    required String type,
+    int? ruleId,
+    String? ruleName,
+    String? note,
+  });
 }

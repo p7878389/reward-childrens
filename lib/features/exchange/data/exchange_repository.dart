@@ -87,4 +87,16 @@ class ExchangeRepository implements IExchangeRepository {
           ));
     });
   }
+
+  @override
+  Future<int> getExchangeCount(int childId) async {
+    final countExp = _db.exchanges.id.count();
+    final query = _db.selectOnly(_db.exchanges)
+      ..addColumns([countExp])
+      ..where(_db.exchanges.childId.equals(childId) &
+          _db.exchanges.isDeleted.equals(false));
+
+    final row = await query.getSingle();
+    return row.read(countExp) ?? 0;
+  }
 }

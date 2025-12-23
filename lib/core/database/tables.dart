@@ -95,3 +95,52 @@ class AppLogs extends Table {
   TextColumn get extra => text().nullable()(); // 额外数据 JSON（可选）
   DateTimeColumn get createdAt => dateTime()();
 }
+
+/// 徽章定义表
+class Badges extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text()(); // 徽章名称
+  TextColumn get description => text().nullable()(); // 描述
+  TextColumn get icon => text()(); // 图标标识
+  IntColumn get level => integer().withDefault(const Constant(1))(); // 等级
+
+  // 触发条件
+  TextColumn get triggerType => text()(); // 条件类型枚举
+  IntColumn get triggerThreshold => integer()(); // 阈值
+  TextColumn get triggerConfig => text().nullable()(); // 扩展配置(JSON)
+
+  IntColumn get bonusPoints =>
+      integer().withDefault(const Constant(0))(); // 奖励积分
+  IntColumn get sortOrder => integer().withDefault(const Constant(0))(); // 排序
+  BoolColumn get isActive => boolean().withDefault(const Constant(true))();
+  BoolColumn get isSystem => boolean().withDefault(const Constant(false))();
+  BoolColumn get isDeleted => boolean().withDefault(const Constant(false))();
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime().nullable()();
+}
+
+/// 徽章获得记录表
+class BadgeAcquisitions extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get childId => integer().references(Children, #id)();
+  IntColumn get badgeId => integer().references(Badges, #id)();
+  TextColumn get badgeSnapshot => text()(); // 徽章快照(JSON)
+  IntColumn get bonusPointsAwarded => integer()(); // 发放的奖励积分
+  IntColumn get pointRecordId => integer().nullable()(); // 关联积分流水
+  IntColumn get triggerValue => integer().nullable()(); // 触发时的实际值
+  TextColumn get note => text().nullable()();
+  BoolColumn get isDeleted => boolean().withDefault(const Constant(false))();
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime().nullable()();
+}
+
+/// 签到记录表（支持连续签到徽章）
+class CheckinRecords extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get childId => integer().references(Children, #id)();
+  TextColumn get checkinDate => text()(); // 签到日期 YYYY-MM-DD
+  IntColumn get streakDays => integer()(); // 连续天数
+  IntColumn get pointRecordId => integer().nullable()();
+  BoolColumn get isDeleted => boolean().withDefault(const Constant(false))();
+  DateTimeColumn get createdAt => dateTime()();
+}

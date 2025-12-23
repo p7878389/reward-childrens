@@ -136,6 +136,22 @@
   "ruleActiveStatus": "Active",
   "rewardActiveStatus": "Active",
   "saveSuccess": "Saved successfully",
+  "checkin": "Check-in",
+  "dailyCheckin": "Daily Check-in",
+  "checkinToEarn": "Check in to earn rewards",
+  "checkinSuccess": "Check-in Success!",
+  "alreadyCheckedin": "Already checked in today",
+  "consecutiveCheckin": "Check-in streak: {days} days",
+  "growthBadges": "Badges",
+  "viewAchievements": "View your achievements",
+  "acceptRewards": "Got it!",
+  "@consecutiveCheckin": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "gotIt": "Got it",
   "addDetails": "Add details...",
   "ruleNameDuplicate": "Name exists",
@@ -145,6 +161,9 @@
   "noDescription": "No description",
   "clearLogsTitle": "Clear Logs?",
   "clearLogsMessage": "Delete all logs. Permanent.",
+  "avatar": "Avatar",
+  "rewardImage": "Reward Image",
+  "other": "Other",
   "@rewardHistorySubtitle": {
     "placeholders": {
       "name": {

@@ -140,11 +140,31 @@
   "noDescription": "暂无描述",
   "clearLogsTitle": "清空日志？",
   "clearLogsMessage": "删除所有日志且无法撤销。",
+  "avatar": "头像",
+  "rewardImage": "奖励图片",
+  "other": "其他",
   "deleteConfirm": "删除 \"{name}\"？",
   "deleteConfirmMessageCommon": "确定要删除 \"{name}\" 吗？",
   "ruleActiveStatus": "上架",
   "rewardActiveStatus": "上架",
   "saveSuccess": "保存成功",
+  "checkin": "签到",
+  "dailyCheckin": "每日签到",
+  "checkinToEarn": "签到获得奖励",
+  "checkinSuccess": "签到成功！",
+  "alreadyCheckedin": "今日已签到",
+  "consecutiveCheckin": "连续签到 {days} 天",
+  "growthBadges": "成长徽章",
+  "viewAchievements": "查看成就徽章",
+  "acceptRewards": "开心收下",
+  "@consecutiveCheckin": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "rewardHistorySubtitle": "{name}的兑换记录",
   "@rewardHistorySubtitle": {
     "placeholders": {
       "name": {
