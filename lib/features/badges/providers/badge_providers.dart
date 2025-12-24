@@ -85,6 +85,19 @@ final childAcquiredBadgesProvider = FutureProvider.family<List<ChildBadgeDisplay
   return result.dataOrNull ?? [];
 });
 
+/// 检查孩子今日是否已签到
+final hasCheckedInTodayProvider = FutureProvider.family<bool, int>((ref, childId) async {
+  final repo = ref.watch(checkinRepositoryProvider);
+  final lastCheckin = await repo.getLastCheckin(childId);
+  if (lastCheckin == null) return false;
+  
+  final today = DateTime.now();
+  final lastDate = DateTime.parse(lastCheckin.checkinDate);
+  return today.year == lastDate.year && 
+         today.month == lastDate.month && 
+         today.day == lastDate.day;
+});
+
 /// 签到用例 Provider
 final checkinUseCaseProvider = Provider<CheckinUseCase>((ref) {
   return CheckinUseCase(

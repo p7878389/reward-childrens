@@ -25,7 +25,7 @@ class CommonFilterTabs extends StatelessWidget {
     return Container(
       height: 40,
       decoration: BoxDecoration(
-        color: const Color(0xFFF2EFE5).withOpacity(0.9),
+        color: const Color(0xFFF2EFE5).withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(24),
       ),
       child: Row(
@@ -44,7 +44,7 @@ class CommonFilterTabs extends StatelessWidget {
           decoration: BoxDecoration(
             color: isSelected ? AppColors.background : null,
             borderRadius: BorderRadius.circular(16),
-            boxShadow: isSelected ? [BoxShadow(color: Colors.black.withOpacity(0.05), offset: const Offset(0, 2), blurRadius: 8)] : null,
+            boxShadow: isSelected ? [BoxShadow(color: Colors.black.withValues(alpha: 0.05), offset: const Offset(0, 2), blurRadius: 8)] : null,
           ),
           alignment: Alignment.center,
           child: Text(
@@ -52,7 +52,7 @@ class CommonFilterTabs extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: isSelected ? AppColors.textMain : AppColors.textSecondary.withOpacity(0.7),
+              color: isSelected ? AppColors.textMain : AppColors.textSecondary.withValues(alpha: 0.7),
             ),
           ),
         ),

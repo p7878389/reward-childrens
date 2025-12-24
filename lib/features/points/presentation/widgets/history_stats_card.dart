@@ -29,13 +29,13 @@ class HistoryStatsCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.08),
+            color: AppColors.primary.withValues(alpha: 0.08),
             offset: const Offset(0, 10),
             blurRadius: 24,
             spreadRadius: -4,
           ),
         ],
-        border: Border.all(color: AppColors.primary.withOpacity(0.1), width: 1),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.1), width: 1),
       ),
       child: IntrinsicHeight(
         child: Row(
@@ -51,7 +51,7 @@ class HistoryStatsCard extends StatelessWidget {
               ),
             
             if (labelEarned.isNotEmpty)
-              VerticalDivider(width: 1, thickness: 1, color: AppColors.textSecondary.withOpacity(0.1), indent: 8, endIndent: 8),
+              VerticalDivider(width: 1, thickness: 1, color: AppColors.textSecondary.withValues(alpha: 0.1), indent: 8, endIndent: 8),
 
             // Center: Primary Metric (Balance/Total)
             Expanded(
@@ -62,7 +62,7 @@ class HistoryStatsCard extends StatelessWidget {
                   Text(
                     labelBalance.toUpperCase(),
                     style: TextStyle(
-                      color: AppColors.textSecondary.withOpacity(0.6),
+                      color: AppColors.textSecondary.withValues(alpha: 0.6),
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 1.0,
@@ -82,7 +82,7 @@ class HistoryStatsCard extends StatelessWidget {
               ),
             ),
 
-            VerticalDivider(width: 1, thickness: 1, color: AppColors.textSecondary.withOpacity(0.1), indent: 8, endIndent: 8),
+            VerticalDivider(width: 1, thickness: 1, color: AppColors.textSecondary.withValues(alpha: 0.1), indent: 8, endIndent: 8),
 
             // Right: Spent
             Expanded(
@@ -105,7 +105,7 @@ class HistoryStatsCard extends StatelessWidget {
         Text(
           label.toUpperCase(),
           style: TextStyle(
-            color: AppColors.textSecondary.withOpacity(0.6),
+            color: AppColors.textSecondary.withValues(alpha: 0.6),
             fontSize: 9,
             fontWeight: FontWeight.w700,
             letterSpacing: 0.5,

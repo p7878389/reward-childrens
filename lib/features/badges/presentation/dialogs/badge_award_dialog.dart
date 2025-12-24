@@ -80,9 +80,9 @@ class BadgeAwardDialog extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
+                      color: AppColors.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+                      border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -110,7 +110,7 @@ class BadgeAwardDialog extends StatelessWidget {
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
                       elevation: 8,
-                      shadowColor: AppColors.primary.withOpacity(0.4),
+                      shadowColor: AppColors.primary.withValues(alpha: 0.4),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
                     ),
                     child: const Text(
@@ -187,7 +187,7 @@ class BadgeAwardDialog extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: iconColor.withOpacity(0.3),
+            color: iconColor.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -196,7 +196,7 @@ class BadgeAwardDialog extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       child: Container(
         decoration: BoxDecoration(
-          color: iconColor.withOpacity(0.1),
+          color: iconColor.withValues(alpha: 0.1),
           shape: BoxShape.circle,
         ),
         child: Icon(

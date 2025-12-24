@@ -165,13 +165,13 @@ class BadgeDetailDialog extends StatelessWidget {
   }) {
     return Row(
       children: [
-        Icon(icon, size: 20, color: AppColors.textSecondary.withOpacity(0.5)),
+        Icon(icon, size: 20, color: AppColors.textSecondary.withValues(alpha: 0.5)),
         const SizedBox(width: 12),
         Text(
           label,
           style: TextStyle(
             fontSize: 14,
-            color: AppColors.textSecondary.withOpacity(0.8),
+            color: AppColors.textSecondary.withValues(alpha: 0.8),
           ),
         ),
         const Spacer(),
@@ -201,7 +201,7 @@ class BadgeDetailDialog extends StatelessWidget {
             boxShadow: badgeDisplay.isAcquired
                 ? [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 20,
                       offset: const Offset(0, 10),
                     )
@@ -248,12 +248,12 @@ class BadgeDetailDialog extends StatelessWidget {
       width: 88,
       height: 88,
       decoration: BoxDecoration(
-        color: iconColor.withOpacity(0.1),
+        color: iconColor.withValues(alpha: 0.1),
         shape: BoxShape.circle,
         boxShadow: badgeDisplay.isAcquired
             ? [
                 BoxShadow(
-                  color: iconColor.withOpacity(0.2),
+                  color: iconColor.withValues(alpha: 0.2),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 )

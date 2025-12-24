@@ -1,7 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:children_rewards/core/database/app_database.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/features/rewards/providers/rewards_providers.dart';
@@ -53,26 +52,21 @@ class _RewardsManageScreenState extends ConsumerState<RewardsManageScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  HeaderButton(icon: Icons.arrow_back_ios_new_rounded, onTap: () => Navigator.pop(context)),
-                  Text(
-                    l10n.manageRewards.toUpperCase(),
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary, letterSpacing: 1.1),
-                  ),
-                  HeaderButton(icon: Icons.add_rounded, onTap: () async {
+            AppHeader(
+              title: l10n.manageRewards,
+              actions: [
+                HeaderButton(
+                  icon: Icons.add_rounded,
+                  onTap: () async {
                     await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const AddRewardScreen()),
                     );
                     // 返回后刷新列表
                     ref.read(rewardsPaginationProvider.notifier).refresh(const RewardsFilter());
-                  }),
-                ],
-              ),
+                  }
+                ),
+              ],
             ),
 
             Expanded(
@@ -90,7 +84,7 @@ class _RewardsManageScreenState extends ConsumerState<RewardsManageScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.inventory_2_outlined, size: 64, color: AppColors.textSecondary.withOpacity(0.2)),
+            Icon(Icons.inventory_2_outlined, size: 64, color: AppColors.textSecondary.withValues(alpha: 0.2)),
           ],
         ),
       );
@@ -126,7 +120,7 @@ class _RewardsManageScreenState extends ConsumerState<RewardsManageScreen> {
                   height: 24,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: AppColors.primary.withOpacity(0.5),
+                    color: AppColors.primary.withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -159,8 +153,8 @@ class _RewardsManageScreenState extends ConsumerState<RewardsManageScreen> {
             color: AppColors.surface,
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
-              BoxShadow(color: AppColors.primary.withOpacity(0.05), spreadRadius: 1),
-              BoxShadow(color: AppColors.textMain.withOpacity(0.02), offset: const Offset(0, 4), blurRadius: 10),
+              BoxShadow(color: AppColors.primary.withValues(alpha: 0.05), spreadRadius: 1),
+              BoxShadow(color: AppColors.textMain.withValues(alpha: 0.02), offset: const Offset(0, 4), blurRadius: 10),
             ],
           ),
           child: Column(
@@ -184,10 +178,10 @@ class _RewardsManageScreenState extends ConsumerState<RewardsManageScreen> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.95),
+                          color: Colors.white.withValues(alpha: 0.95),
                           borderRadius: BorderRadius.circular(14),
                           boxShadow: [
-                            BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8, offset: const Offset(0, 2)),
+                            BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8, offset: const Offset(0, 2)),
                           ],
                         ),
                         child: Row(
@@ -221,21 +215,21 @@ class _RewardsManageScreenState extends ConsumerState<RewardsManageScreen> {
                           decoration: BoxDecoration(
                             color: AppColors.background,
                             borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: AppColors.textSecondary.withOpacity(0.1)),
+                            border: Border.all(color: AppColors.textSecondary.withValues(alpha: 0.1)),
                           ),
                           child: Text(
                             _getLocalizedCategory(reward.category, l10n).toUpperCase(),
-                            style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: AppColors.textSecondary.withOpacity(0.8)),
+                            style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: AppColors.textSecondary.withValues(alpha: 0.8)),
                           ),
                         ),
                         if (reward.stock != null)
                           Row(
                             children: [
-                              Icon(Icons.inventory_2_outlined, size: 12, color: AppColors.textSecondary.withOpacity(0.6)),
+                              Icon(Icons.inventory_2_outlined, size: 12, color: AppColors.textSecondary.withValues(alpha: 0.6)),
                               const SizedBox(width: 2),
                               Text(
                                 reward.stock.toString(),
-                                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.textSecondary.withOpacity(0.6)),
+                                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.textSecondary.withValues(alpha: 0.6)),
                               ),
                             ],
                           ),
@@ -258,7 +252,7 @@ class _RewardsManageScreenState extends ConsumerState<RewardsManageScreen> {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 11,
-                          color: AppColors.textSecondary.withOpacity(0.8),
+                          color: AppColors.textSecondary.withValues(alpha: 0.8),
                           height: 1.4,
                         ),
                       ),
@@ -275,15 +269,18 @@ class _RewardsManageScreenState extends ConsumerState<RewardsManageScreen> {
 
   Widget _buildRewardIcon(Reward reward) {
     if (reward.image != null) {
-      final file = File(reward.image!);
-      if (file.existsSync()) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Image.file(file, fit: BoxFit.cover),
-        );
-      }
+      return PersistentImage(
+        imagePath: reward.image,
+        borderRadius: BorderRadius.circular(16),
+        fit: BoxFit.cover,
+        placeholder: const Center(
+          child: Icon(Icons.card_giftcard_rounded, color: Color(0xFFD97706), size: 28),
+        ),
+      );
     }
-    return const Icon(Icons.card_giftcard_rounded, color: Color(0xFFD97706), size: 28);
+    return const Center(
+      child: Icon(Icons.card_giftcard_rounded, color: Color(0xFFD97706), size: 28),
+    );
   }
 
   String _getLocalizedCategory(String category, AppLocalizations l10n) {

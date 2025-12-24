@@ -44,4 +44,7 @@ abstract class IRulesRepository {
 
   /// 检查规则名称是否已存在
   Future<bool> isRuleNameExists(String name, {int? excludeId});
+
+  /// 根据名称获取规则
+  Future<Rule?> getRuleByName(String name);
 }

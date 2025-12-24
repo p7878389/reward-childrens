@@ -1,7 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:children_rewards/core/database/app_database.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/core/exceptions/app_exceptions.dart';
@@ -47,20 +46,7 @@ class RewardDetailScreen extends ConsumerWidget {
         child: Column(
           children: [
             // Header
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  HeaderButton(icon: Icons.arrow_back_ios_new_rounded, onTap: () => Navigator.pop(context)),
-                  Text(
-                    l10n.rewardDetail.toUpperCase(),
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary, letterSpacing: 1.1),
-                  ),
-                  const SizedBox(width: 40),
-                ],
-              ),
-            ),
+            AppHeader(title: l10n.rewardDetail),
 
             Expanded(
               child: Stack(
@@ -80,7 +66,7 @@ class RewardDetailScreen extends ConsumerWidget {
                               color: const Color(0xFFFEF3C7),
                               borderRadius: BorderRadius.circular(28),
                               boxShadow: [
-                                BoxShadow(color: AppColors.primary.withOpacity(0.08), spreadRadius: 1, blurRadius: 20, offset: const Offset(0, 10)),
+                                BoxShadow(color: AppColors.primary.withValues(alpha: 0.08), spreadRadius: 1, blurRadius: 20, offset: const Offset(0, 10)),
                               ],
                             ),
                             child: RepaintBoundary(
@@ -106,7 +92,7 @@ class RewardDetailScreen extends ConsumerWidget {
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                     decoration: BoxDecoration(
-                                      color: AppColors.primary.withOpacity(0.1),
+                                      color: AppColors.primary.withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Text(
@@ -157,8 +143,8 @@ class RewardDetailScreen extends ConsumerWidget {
                                 style: TextStyle(
                                   fontSize: 14, 
                                   color: (reward.description != null && reward.description!.isNotEmpty)
-                                      ? AppColors.textMain.withOpacity(0.9)
-                                      : AppColors.textSecondary.withOpacity(0.5), 
+                                      ? AppColors.textMain.withValues(alpha: 0.9)
+                                      : AppColors.textSecondary.withValues(alpha: 0.5), 
                                   height: 1.6,
                                   fontWeight: FontWeight.w500,
                                   fontStyle: (reward.description != null && reward.description!.isNotEmpty)
@@ -174,7 +160,7 @@ class RewardDetailScreen extends ConsumerWidget {
                                   decoration: BoxDecoration(
                                     color: AppColors.surface,
                                     borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(color: Colors.black.withOpacity(0.03)),
+                                    border: Border.all(color: Colors.black.withValues(alpha: 0.03)),
                                   ),
                                   child: Row(
                                     children: [
@@ -192,7 +178,7 @@ class RewardDetailScreen extends ConsumerWidget {
                                         children: [
                                           Text(
                                             l10n.availableQuantity,
-                                            style: TextStyle(fontSize: 11, color: AppColors.textSecondary.withOpacity(0.6), fontWeight: FontWeight.bold),
+                                            style: TextStyle(fontSize: 11, color: AppColors.textSecondary.withValues(alpha: 0.6), fontWeight: FontWeight.bold),
                                           ),
                                           const SizedBox(height: 2),
                                           Text(
@@ -223,8 +209,8 @@ class RewardDetailScreen extends ConsumerWidget {
                         boxShadow: [
                           BoxShadow(
                             color: (canAfford && hasStock) 
-                                ? AppColors.primary.withOpacity(0.4)
-                                : Colors.black.withOpacity(0.05), 
+                                ? AppColors.primary.withValues(alpha: 0.4)
+                                : Colors.black.withValues(alpha: 0.05), 
                             offset: const Offset(0, 8), 
                             blurRadius: 20,
                             spreadRadius: -4,
@@ -270,22 +256,17 @@ class RewardDetailScreen extends ConsumerWidget {
   }
 
   Widget _buildImage() {
-    if (reward.image != null) {
-      final file = File(reward.image!);
-      if (file.existsSync()) {
-        return Hero(
-          tag: 'reward_image_${reward.id}',
-          child: Image.file(file, fit: BoxFit.cover),
-        );
-      }
-    }
-    return const Icon(Icons.card_giftcard_rounded, size: 100, color: Color(0xFFD97706));
+    return Hero(
+      tag: 'reward_image_${reward.id}',
+      child: PersistentImage(
+        imagePath: reward.image,
+        placeholder: const Icon(Icons.card_giftcard_rounded, size: 100, color: Color(0xFFD97706)),
+      ),
+    );
   }
 
   void _showFullScreenImage(BuildContext context) {
     if (reward.image == null) return;
-    final file = File(reward.image!);
-    if (!file.existsSync()) return;
 
     Navigator.push(
       context,
@@ -300,7 +281,7 @@ class RewardDetailScreen extends ConsumerWidget {
                   maxScale: 4.0,
                   child: Hero(
                     tag: 'reward_image_${reward.id}',
-                    child: Image.file(file),
+                    child: PersistentImage(imagePath: reward.image),
                   ),
                 ),
               ),

@@ -1,16 +1,14 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/core/database/app_database.dart';
-import 'package:children_rewards/core/constants/avatar_data.dart';
 import 'package:children_rewards/features/children/providers/children_providers.dart';
 import 'package:children_rewards/features/rewards/providers/rewards_providers.dart';
 import 'package:children_rewards/features/rewards/presentation/widgets/reward_card.dart';
 import 'package:children_rewards/features/rewards/presentation/screens/reward_detail_screen.dart';
 import 'package:children_rewards/shared/widgets/common_widgets.dart';
+import 'package:children_rewards/shared/widgets/skeleton_loader.dart';
 import 'package:children_rewards/shared/providers/pagination_provider.dart';
 
 class RewardsStoreScreen extends ConsumerStatefulWidget {
@@ -81,43 +79,9 @@ class _RewardsStoreScreenState extends ConsumerState<RewardsStoreScreen> {
       slivers: [
         // Header
         SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(width: 40), // Placeholder for balance
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(color: AppColors.primary.withOpacity(0.1), spreadRadius: 1),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 8, height: 8,
-                        decoration: const BoxDecoration(color: Color(0xFF88C458), shape: BoxShape.circle),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        l10n.rewardsStore.toUpperCase(),
-                        style: const TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textSecondary,
-                          letterSpacing: 1.1,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 40),
-              ],
-            ),
+          child: AppHeader(
+            title: l10n.rewardsStore,
+            showBack: false, // Usually a main tab or accessed differently
           ),
         ),
 
@@ -182,11 +146,11 @@ class _RewardsStoreScreenState extends ConsumerState<RewardsStoreScreen> {
             padding: const EdgeInsets.only(top: 40),
             child: Column(
               children: [
-                Icon(Icons.inventory_2_outlined, size: 64, color: AppColors.textSecondary.withOpacity(0.2)),
+                Icon(Icons.inventory_2_outlined, size: 64, color: AppColors.textSecondary.withValues(alpha: 0.2)),
                 const SizedBox(height: 16),
                 Text(
                   l10n.noRecordsFound,
-                  style: TextStyle(color: AppColors.textSecondary.withOpacity(0.5)),
+                  style: TextStyle(color: AppColors.textSecondary.withValues(alpha: 0.5)),
                 ),
               ],
             ),
@@ -196,7 +160,27 @@ class _RewardsStoreScreenState extends ConsumerState<RewardsStoreScreen> {
     }
 
     if (state.items.isEmpty && state.isLoading) {
-      return const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator()));
+      return const SliverToBoxAdapter(
+        child: Padding(
+          padding: EdgeInsets.only(top: 0),
+          child: SkeletonGrid(
+            itemCount: 6,
+            childAspectRatio: 0.75,
+            crossAxisCount: 2,
+            spacing: 16,
+          ),
+        ),
+      );
+    }
+
+    // Determine current child's points
+    int currentPoints = 0;
+    final allChildrenAsync = ref.watch(allChildrenStreamProvider);
+    if (allChildrenAsync.hasValue && _selectedChildId != null) {
+      try {
+        final child = allChildrenAsync.value!.firstWhere((c) => c.id == _selectedChildId);
+        currentPoints = child.stars;
+      } catch (_) {}
     }
 
     final itemCount = state.items.length + (state.hasMore ? 2 : 0); // 加载指示器占两格
@@ -221,7 +205,7 @@ class _RewardsStoreScreenState extends ConsumerState<RewardsStoreScreen> {
                     height: 24,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      color: AppColors.primary.withOpacity(0.5),
+                      color: AppColors.primary.withValues(alpha: 0.5),
                     ),
                   ),
                 ),
@@ -231,9 +215,21 @@ class _RewardsStoreScreenState extends ConsumerState<RewardsStoreScreen> {
           }
 
           final reward = state.items[index];
+          final isAffordable = currentPoints >= reward.price;
+          final isOutOfStock = reward.stock != null && reward.stock! <= 0;
+
           return RewardCard(
             reward: reward,
+            isAffordable: isAffordable,
+            isOutOfStock: isOutOfStock,
             onTap: () {
+              if (isOutOfStock) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(l10n.outOfStock)),
+                );
+                return;
+              }
+
               if (_selectedChildId != null) {
                 Navigator.push(
                   context,
@@ -282,8 +278,10 @@ class _RewardsStoreScreenState extends ConsumerState<RewardsStoreScreen> {
                       shape: BoxShape.circle,
                     ),
                     child: RepaintBoundary(
-                      child: ClipOval(
-                        child: _buildAvatarImage(child.avatar, size: size),
+                      child: AvatarImage(
+                        avatar: child.avatar,
+                        fallbackText: child.name,
+                        size: size,
                       ),
                     ),
                   ),
@@ -302,7 +300,7 @@ class _RewardsStoreScreenState extends ConsumerState<RewardsStoreScreen> {
             Text(
               child.name,
               style: TextStyle(
-                fontSize: isSelected ? 14 : 12,
+                fontSize: 14,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                 color: isSelected ? AppColors.textMain : AppColors.textSecondary,
               ),
@@ -310,26 +308,6 @@ class _RewardsStoreScreenState extends ConsumerState<RewardsStoreScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildAvatarImage(String? avatarPath, {double size = 48}) {
-    if (avatarPath == null) return const Icon(Icons.person, color: Colors.white);
-    if (avatarPath.startsWith('builtin:')) {
-      final index = int.tryParse(avatarPath.split(':')[1]) ?? 0;
-      return SvgPicture.string(
-        AvatarData.builtInSvgs[index % AvatarData.builtInSvgs.length],
-        fit: BoxFit.cover,
-        width: size,
-        height: size,
-      );
-    }
-    return Image.file(
-      File(avatarPath),
-      fit: BoxFit.cover,
-      width: size,
-      height: size,
-      errorBuilder: (_, __, ___) => const Icon(Icons.person, color: Colors.white),
     );
   }
 }

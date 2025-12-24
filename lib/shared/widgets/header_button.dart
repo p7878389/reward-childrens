@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 
 /// 通用圆形头部按钮组件
@@ -21,7 +22,12 @@ class HeaderButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        if (onTap != null) {
+          HapticFeedback.lightImpact();
+          onTap!();
+        }
+      },
       child: Container(
         width: size,
         height: size,
@@ -29,8 +35,8 @@ class HeaderButton extends StatelessWidget {
           color: AppColors.surface,
           shape: BoxShape.circle,
           boxShadow: [
-            BoxShadow(color: AppColors.primary.withOpacity(0.1), spreadRadius: 1),
-            BoxShadow(color: AppColors.textMain.withOpacity(0.03), offset: const Offset(0, 4), blurRadius: 14),
+            BoxShadow(color: AppColors.primary.withValues(alpha: 0.1), spreadRadius: 1),
+            BoxShadow(color: AppColors.textMain.withValues(alpha: 0.03), offset: const Offset(0, 4), blurRadius: 14),
           ],
         ),
         child: Icon(icon, color: AppColors.textSecondary, size: iconSize),

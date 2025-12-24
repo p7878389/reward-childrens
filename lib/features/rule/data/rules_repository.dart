@@ -114,4 +114,11 @@ class RulesRepository implements IRulesRepository {
     final result = await query.get();
     return result.isNotEmpty;
   }
+
+  @override
+  Future<Rule?> getRuleByName(String name) {
+    return (_db.select(_db.rules)
+          ..where((t) => t.name.equals(name) & t.isDeleted.equals(false)))
+        .getSingleOrNull();
+  }
 }

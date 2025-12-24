@@ -6,13 +6,16 @@ class RuleIcons {
   static const Map<String, IconData> _icons = {
     'star': Icons.star_rounded,
     'menu_book': Icons.menu_book_rounded,
+    'book': Icons.menu_book_rounded, // Added for compatibility
     'cleaning_services': Icons.cleaning_services_rounded,
     'sentiment_dissatisfied': Icons.sentiment_dissatisfied_rounded,
+    'sentiment_very_dissatisfied': Icons.sentiment_very_dissatisfied_rounded, // Added
     'warning': Icons.warning_rounded,
     'fitness_center': Icons.fitness_center_rounded,
     'piano': Icons.piano_rounded,
     'pets': Icons.pets_rounded,
     'bedtime': Icons.bedtime_rounded,
+    'bed': Icons.bed_rounded, // Added
     'restaurant': Icons.restaurant_rounded,
     'brush': Icons.brush_rounded,
     'more_horiz': Icons.more_horiz_rounded,
@@ -27,6 +30,7 @@ class RuleIcons {
     'self_improvement': Icons.self_improvement_rounded,
     'directions_walk': Icons.directions_walk_rounded,
     'wash': Icons.wash_rounded,
+    'water_drop': Icons.water_drop_rounded, // Added
     'directions_bike': Icons.directions_bike_rounded,
     'emoji_events': Icons.emoji_events_rounded,
     'school': Icons.school_rounded,
@@ -43,6 +47,9 @@ class RuleIcons {
     'flight': Icons.flight_rounded,
     'beach_access': Icons.beach_access_rounded,
     'spa': Icons.spa_rounded,
+    'sports_mma': Icons.sports_mma_rounded, // Added
+    'hearing_disabled': Icons.hearing_disabled_rounded, // Added
+    'remove_circle': Icons.remove_circle_rounded, // Added
   };
 
   /// 根据图标名称获取 IconData

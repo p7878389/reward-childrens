@@ -1,15 +1,13 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:children_rewards/core/database/app_database.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
-import 'package:children_rewards/core/constants/avatar_data.dart';
 import 'package:children_rewards/features/children/providers/children_providers.dart';
 import 'package:children_rewards/features/points/providers/point_records_providers.dart';
 import 'package:children_rewards/features/rule/providers/rules_providers.dart';
 import 'package:children_rewards/features/rule/utils/rule_localization.dart';
+import 'package:children_rewards/features/rule/utils/rule_icons.dart';
 import 'package:children_rewards/shared/utils/form_validator.dart';
 import 'package:children_rewards/shared/widgets/common_widgets.dart';
 
@@ -59,20 +57,7 @@ class _AddRecordScreenState extends ConsumerState<AddRecordScreen> {
         child: Column(
           children: [
             // Header
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  HeaderButton(icon: Icons.arrow_back_ios_new_rounded, onTap: () => Navigator.pop(context)),
-                  Text(
-                    l10n.addRecord.toUpperCase(),
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary, letterSpacing: 1.1),
-                  ),
-                  const SizedBox(width: 40),
-                ],
-              ),
-            ),
+            AppHeader(title: l10n.addRecord),
 
             Expanded(
               child: childAsync.when(
@@ -102,10 +87,14 @@ class _AddRecordScreenState extends ConsumerState<AddRecordScreen> {
                                 shape: BoxShape.circle,
                                 border: Border.all(color: Colors.white, width: 3),
                                 boxShadow: [
-                                  BoxShadow(color: AppColors.primary.withOpacity(0.15), offset: const Offset(0, 4), blurRadius: 16),
+                                  BoxShadow(color: AppColors.primary.withValues(alpha: 0.15), offset: const Offset(0, 4), blurRadius: 16),
                                 ],
                               ),
-                              child: _buildAvatarContent(child),
+                              child: AvatarImage(
+                                avatar: child.avatar,
+                                fallbackText: child.name,
+                                size: 80,
+                              ),
                             ),
                             const SizedBox(height: 12),
                             Text(child.name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: AppColors.textMain)),
@@ -174,7 +163,7 @@ class _AddRecordScreenState extends ConsumerState<AddRecordScreen> {
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
                             elevation: 2,
-                            shadowColor: AppColors.primary.withOpacity(0.3),
+                            shadowColor: AppColors.primary.withValues(alpha: 0.3),
                           ),
                           child: Text(l10n.confirm, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                         ),
@@ -246,19 +235,19 @@ class _AddRecordScreenState extends ConsumerState<AddRecordScreen> {
           decoration: BoxDecoration(
             color: isSelected ? Colors.white : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
-            boxShadow: isSelected ? [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4)] : null,
+            boxShadow: isSelected ? [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4)] : null,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 18, color: isSelected ? activeColor : AppColors.textSecondary.withOpacity(0.5)),
+              Icon(icon, size: 18, color: isSelected ? activeColor : AppColors.textSecondary.withValues(alpha: 0.5)),
               const SizedBox(width: 8),
               Text(
                 label,
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
-                  color: isSelected ? activeColor : AppColors.textSecondary.withOpacity(0.5),
+                  color: isSelected ? activeColor : AppColors.textSecondary.withValues(alpha: 0.5),
                 ),
               ),
             ],
@@ -274,7 +263,7 @@ class _AddRecordScreenState extends ConsumerState<AddRecordScreen> {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.black.withOpacity(0.05)),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<Rule>(
@@ -288,7 +277,11 @@ class _AddRecordScreenState extends ConsumerState<AddRecordScreen> {
               value: rule,
               child: Row(
                 children: [
-                  const Icon(Icons.category_rounded, size: 18, color: AppColors.textSecondary),
+                  RuleIcons.buildIconOrImage(
+                    rule.icon,
+                    size: 24,
+                    color: AppColors.textSecondary,
+                  ),
                   const SizedBox(width: 12),
                   Text(getLocalizedRuleName(rule, l10n), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: AppColors.textMain)),
                   const Spacer(),
@@ -322,7 +315,7 @@ class _AddRecordScreenState extends ConsumerState<AddRecordScreen> {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.black.withOpacity(0.05)),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
       ),
       child: TextField(
         controller: controller,
@@ -332,7 +325,7 @@ class _AddRecordScreenState extends ConsumerState<AddRecordScreen> {
           border: InputBorder.none,
           icon: Icon(icon, color: AppColors.textSecondary, size: 20),
           hintText: hint,
-          hintStyle: TextStyle(color: AppColors.textSecondary.withOpacity(0.3)),
+          hintStyle: TextStyle(color: AppColors.textSecondary.withValues(alpha: 0.3)),
         ),
         style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.textMain, fontSize: 14),
       ),
@@ -343,38 +336,6 @@ class _AddRecordScreenState extends ConsumerState<AddRecordScreen> {
     return Text(
       text.toUpperCase(),
       style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.textSecondary, letterSpacing: 0.5),
-    );
-  }
-
-  Widget _buildAvatarContent(ChildrenData child) {
-    if (child.avatar != null) {
-      if (child.avatar!.startsWith('builtin:')) {
-        final index = int.tryParse(child.avatar!.split(':')[1]) ?? 0;
-        if (index >= 0 && index < AvatarData.builtInSvgs.length) {
-          return ClipOval(
-            child: SvgPicture.string(
-              AvatarData.builtInSvgs[index],
-              fit: BoxFit.cover,
-            ),
-          );
-        }
-      } else {
-        final file = File(child.avatar!);
-        if (file.existsSync()) {
-          return ClipOval(
-            child: Image.file(
-              file,
-              fit: BoxFit.cover,
-            ),
-          );
-        }
-      }
-    }
-    return Center(
-      child: Text(
-        child.name.isNotEmpty ? child.name[0].toUpperCase() : "?",
-        style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: AppColors.textMain),
-      ),
     );
   }
 }

@@ -36,14 +36,14 @@ class GenderSelector extends StatelessWidget {
       child: Container(
         height: 48,
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.1) : AppColors.surface,
+          color: isSelected ? color.withValues(alpha: 0.1) : AppColors.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: isSelected ? color : Colors.black.withOpacity(0.05)),
+          border: Border.all(color: isSelected ? color : Colors.black.withValues(alpha: 0.05)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: isSelected ? color : AppColors.textSecondary.withOpacity(0.5), size: 20),
+            Icon(icon, color: isSelected ? color : AppColors.textSecondary.withValues(alpha: 0.5), size: 20),
             const SizedBox(width: 8),
             Text(
               label.toUpperCase(),

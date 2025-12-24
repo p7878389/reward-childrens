@@ -67,7 +67,7 @@
   "manageRules": "Manage Rules",
   "rules": "Rules",
   "deleteRuleTitle": "Delete Rule?",
-  "deleteRuleConfirm": "Delete \"{name}\"?",
+  "deleteRuleConfirm": "Delete \"{name}\"",
   "newRule": "New Rule",
   "editRule": "Edit Rule",
   "ruleName": "Rule Name",
@@ -77,7 +77,7 @@
   "saveRuleTitle": "Save Rule?",
   "saveRuleMessage": "Save changes?",
   "swipeToDelete": "Swipe to delete",
-  "deleteConfirm": "Delete \"{name}\"?",
+  "deleteConfirm": "Delete \"{name}\"",
   "goodMorning": "GOOD MORNING!",
   "goodAfternoon": "GOOD AFTERNOON!",
   "goodEvening": "GOOD EVENING!",
@@ -98,8 +98,16 @@
   "outOfStock": "Out of stock",
   "redeemNow": "Redeem Now",
   "needMoreStars": "Need stars",
+  "insufficientPoints": "Need {diff} more stars",
+  "@insufficientPoints": {
+    "placeholders": {
+      "diff": {
+        "type": "int"
+      }
+    }
+  },
   "deleteRewardTitle": "Delete Reward?",
-  "deleteRewardConfirm": "Delete \"{name}\"?",
+  "deleteRewardConfirm": "Delete \"{name}\"",
   "settings": "Settings",
   "language": "Language",
   "systemDefault": "System Default",
@@ -130,9 +138,11 @@
   "invalidNumber": "Enter a number",
   "numberMustBePositive": "Must be > 0",
   "nameRequired": "Name required",
+  "nameTooLong": "Name cannot exceed 20 characters",
+  "operationFailed": "Operation failed, please try again",
   "priceRequired": "Price required",
   "stockRequired": "Stock required",
-  "deleteConfirmMessageCommon": "Delete \"{name}\"?",
+  "deleteConfirmMessageCommon": "Delete \"{name}\"",
   "ruleActiveStatus": "Active",
   "rewardActiveStatus": "Active",
   "saveSuccess": "Saved successfully",
@@ -164,6 +174,38 @@
   "avatar": "Avatar",
   "rewardImage": "Reward Image",
   "other": "Other",
+  "idiomGame": "Idiom Chain",
+  "idiomGameDesc": "Challenge idiom chain game, expand vocabulary",
+  "yourTurn": "Your Turn",
+  "aiTurn": "AI Turn",
+  "chainLength": "Chain Length",
+  "starsEarned": "Stars Earned",
+  "gameOver": "Game Over",
+  "playAgain": "Play Again",
+  "backToHome": "Back to Home",
+  "failureNextTip": "Could have been:",
+  "learnMore": "Learn More",
+  "errorTitle": "Something went wrong",
+  "retry": "Retry",
+  "errorDetails": "Error Details",
+  "gameHall": "Game Hall",
+  "mainQuest": "Main Quest",
+  "specialTraining": "Special Training",
+  "idiomChainChallenge": "Idiom Chain Challenge",
+  "idiomCompletion": "Idiom Completion",
+  "completeMissingCharacters": "Complete missing characters",
+  "guessIdiomByMeaning": "Guess by Meaning",
+  "guessIdiomFromMeaning": "Guess idiom from meaning",
+  "myMistakeBook": "My Mistake Book",
+  "reviewAndLearn": "Review and learn",
+  "ageYears": "{age} yrs",
+  "@ageYears": {
+    "placeholders": {
+      "age": {
+        "type": "int"
+      }
+    }
+  },
   "@rewardHistorySubtitle": {
     "placeholders": {
       "name": {

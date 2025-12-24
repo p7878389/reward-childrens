@@ -67,6 +67,8 @@ class BadgeRepository implements IBadgeRepository {
           bonusPoints: Value(badge.bonusPoints),
           sortOrder: Value(badge.sortOrder),
           isActive: Value(badge.isActive),
+          isSystem: Value(badge.isSystem),
+          createdAt: Value(badge.createdAt),
           updatedAt: Value(DateTime.now()),
         ));
   }

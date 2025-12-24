@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:children_rewards/core/database/app_database.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
+import 'package:children_rewards/core/theme/app_dimens.dart';
 import 'package:children_rewards/features/rule/providers/rules_providers.dart';
 import 'package:children_rewards/features/rule/utils/rule_localization.dart';
 import 'package:children_rewards/features/rule/utils/rule_icons.dart';
@@ -37,69 +38,37 @@ class _RulesManageScreenState extends ConsumerState<RulesManageScreen> {
         child: Column(
           children: [
             // Header with Add Button
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (widget.showBackButton)
-                    HeaderButton(
-                        icon: Icons.arrow_back_ios_new_rounded,
-                        onTap: () => Navigator.pop(context))
-                  else
-                    const SizedBox(width: 40),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.1), spreadRadius: 1)],
-                    ),
-                    child: Row(
-                      children: [
-                        Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF9333EA), shape: BoxShape.circle)),
-                        const SizedBox(width: 8),
-                        Text(
-                          l10n.rules.toUpperCase(),
-                          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary, letterSpacing: 1.1),
-                        ),
-                      ],
-                    ),
-                  ),
-                  HeaderButton(
-                      icon: Icons.add_rounded,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AddRuleScreen()),
-                        );
-                      }),
-                ],
-              ),
+            AppHeader(
+              title: l10n.rules,
+              showBack: widget.showBackButton,
+              actions: [
+                HeaderButton(
+                  icon: Icons.add_rounded,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AddRuleScreen()),
+                    );
+                  }
+                ),
+              ],
             ),
 
             // Mode Switcher
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF2EFE5),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  children: [
-                    _buildModeBtn(l10n.reward, 'reward',
-                        Icons.add_circle_outline, const Color(0xFF16A34A)),
-                    _buildModeBtn(l10n.punish, 'punish',
-                        Icons.remove_circle_outline, const Color(0xFFDC2626)),
-                  ],
-                ),
+              padding: const EdgeInsets.symmetric(horizontal: AppDimens.paddingL, vertical: 8),
+              child: CommonFilterTabs(
+                selectedValue: _mode,
+                onSelect: (val) => setState(() => _mode = val),
+                tabs: [
+                  FilterTabData(label: l10n.reward, value: 'reward'),
+                  FilterTabData(label: l10n.punish, value: 'punish'),
+                ],
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimens.paddingM),
 
             // Rules List
             Expanded(
@@ -114,7 +83,7 @@ class _RulesManageScreenState extends ConsumerState<RulesManageScreen> {
                     },
                     color: AppColors.primary,
                     child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      padding: const EdgeInsets.symmetric(horizontal: AppDimens.paddingL),
                       itemCount: rules.length,
                       itemBuilder: (context, index) {
                         final rule = rules[index];
@@ -133,56 +102,12 @@ class _RulesManageScreenState extends ConsumerState<RulesManageScreen> {
     );
   }
 
-  Widget _buildModeBtn(
-      String label, String value, IconData icon, Color activeColor) {
-    final isSelected = _mode == value;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => _switchMode(value),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          decoration: BoxDecoration(
-            color: isSelected ? Colors.white : Colors.transparent,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(0.05), blurRadius: 4)
-                  ]
-                : null,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon,
-                  size: 18,
-                  color: isSelected
-                      ? activeColor
-                      : AppColors.textSecondary.withOpacity(0.5)),
-              const SizedBox(width: 8),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color: isSelected
-                      ? activeColor
-                      : AppColors.textSecondary.withOpacity(0.5),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildRuleItem(BuildContext context, Rule rule, AppLocalizations l10n) {
     final isReward = rule.type == 'reward';
     final isActive = rule.isActive;
 
     final pointsColor = !isActive
-        ? AppColors.textSecondary.withOpacity(0.4)
+        ? AppColors.textSecondary.withValues(alpha: 0.4)
         : (isReward ? const Color(0xFF16A34A) : const Color(0xFFDC2626));
     final pointsSign = isReward ? '+' : '-';
 
@@ -202,10 +127,10 @@ class _RulesManageScreenState extends ConsumerState<RulesManageScreen> {
                 color: isActive ? AppColors.surface : const Color(0xFFF8FAFC),
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: isActive ? [
-                  BoxShadow(color: AppColors.primary.withOpacity(0.05), spreadRadius: 1),
-                  BoxShadow(color: AppColors.textMain.withOpacity(0.02), offset: const Offset(0, 4), blurRadius: 10),
+                  BoxShadow(color: AppColors.primary.withValues(alpha: 0.05), spreadRadius: 1),
+                  BoxShadow(color: AppColors.textMain.withValues(alpha: 0.02), offset: const Offset(0, 4), blurRadius: 10),
                 ] : null,
-                border: isActive ? null : Border.all(color: Colors.black.withOpacity(0.03)),
+                border: isActive ? null : Border.all(color: Colors.black.withValues(alpha: 0.03)),
               ),
               child: Row(
               children: [
@@ -213,7 +138,7 @@ class _RulesManageScreenState extends ConsumerState<RulesManageScreen> {
                   width: 48, height: 48,
                   decoration: BoxDecoration(
                     color: !isActive
-                        ? Colors.grey.withOpacity(0.1)
+                        ? Colors.grey.withValues(alpha: 0.1)
                         : (isReward ? const Color(0xFFEFF6FF) : const Color(0xFFFEF2F2)),
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -221,7 +146,7 @@ class _RulesManageScreenState extends ConsumerState<RulesManageScreen> {
                     rule.icon,
                     size: 24,
                     color: !isActive
-                        ? Colors.grey.withOpacity(0.5)
+                        ? Colors.grey.withValues(alpha: 0.5)
                         : (isReward ? Colors.blue : Colors.red),
                   ),
                 ),
@@ -235,14 +160,14 @@ class _RulesManageScreenState extends ConsumerState<RulesManageScreen> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: isActive ? AppColors.textMain : AppColors.textMain.withOpacity(0.4),
+                          color: isActive ? AppColors.textMain : AppColors.textMain.withValues(alpha: 0.4),
                         )
                       ),
                       const SizedBox(height: 4),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: pointsColor.withOpacity(0.1),
+                          color: pointsColor.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
@@ -257,7 +182,7 @@ class _RulesManageScreenState extends ConsumerState<RulesManageScreen> {
                   scale: 0.8,
                   child: Switch(
                     value: rule.isActive,
-                    activeColor: AppColors.primary,
+                    activeThumbColor: AppColors.primary,
                     onChanged: rule.isEditable ? (val) {
                       ref.read(rulesRepositoryProvider).toggleRuleStatus(rule.id, val);
                     } : null,
@@ -277,12 +202,6 @@ class _RulesManageScreenState extends ConsumerState<RulesManageScreen> {
       context,
       MaterialPageRoute(builder: (context) => EditRuleScreen(rule: rule)),
     );
-  }
-
-  void _switchMode(String mode) {
-    setState(() {
-      _mode = mode;
-    });
   }
 
   void _confirmDelete(BuildContext context, Rule rule, AppLocalizations l10n) {

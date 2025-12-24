@@ -1,10 +1,7 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:children_rewards/core/database/app_database.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
-import 'package:children_rewards/core/constants/avatar_data.dart';
 import 'package:children_rewards/core/services/logger_service.dart';
 import 'package:children_rewards/shared/widgets/common_widgets.dart';
 
@@ -42,7 +39,7 @@ class ChildCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: AppColors.textMain.withOpacity(0.05),
+              color: AppColors.textMain.withValues(alpha: 0.05),
               offset: const Offset(0, 4),
               blurRadius: 16,
             ),
@@ -60,7 +57,7 @@ class ChildCard extends StatelessWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        child.gender == 'boy' ? AppColors.blueTag.withOpacity(0.05) : AppColors.overlayYellow.withOpacity(0.05),
+                        child.gender == 'boy' ? AppColors.blueTag.withValues(alpha: 0.05) : AppColors.overlayYellow.withValues(alpha: 0.05),
                         Colors.white,
                       ],
                     ),
@@ -175,7 +172,7 @@ class ChildCard extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primary.withOpacity(0.2),
+                  color: AppColors.primary.withValues(alpha: 0.2),
                   offset: const Offset(0, 4),
                   blurRadius: 12,
                 )
@@ -256,7 +253,7 @@ class ChildCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
-                color: color.withOpacity(0.8),
+                color: color.withValues(alpha: 0.8),
                 letterSpacing: 0.5,
               ),
               overflow: TextOverflow.ellipsis,
@@ -269,40 +266,10 @@ class ChildCard extends StatelessWidget {
   }
 
   Widget _buildAvatarContent(ChildrenData child, {double size = 56}) {
-    if (child.avatar != null) {
-      if (child.avatar!.startsWith('builtin:')) {
-        final index = int.tryParse(child.avatar!.split(':')[1]) ?? 0;
-        if (index >= 0 && index < AvatarData.builtInSvgs.length) {
-          return ClipOval(
-            child: SvgPicture.string(
-              AvatarData.builtInSvgs[index],
-              fit: BoxFit.cover,
-              width: size, height: size,
-            ),
-          );
-        }
-      } else {
-        final file = File(child.avatar!);
-        if (file.existsSync()) {
-          return ClipOval(
-            child: Image.file(
-              file,
-              fit: BoxFit.cover,
-              width: size, height: size,
-            ),
-          );
-        }
-      }
-    }
-    return Center(
-      child: Text(
-        child.name.isNotEmpty ? child.name[0].toUpperCase() : "?",
-        style: TextStyle(
-          fontSize: size * 0.4,
-          fontWeight: FontWeight.bold,
-          color: AppColors.textMain,
-        ),
-      ),
+    return AvatarImage(
+      avatar: child.avatar,
+      fallbackText: child.name,
+      size: size,
     );
   }
 }

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -9,6 +8,10 @@ import 'package:children_rewards/features/badges/providers/badge_providers.dart'
 import 'package:children_rewards/features/badges/presentation/screens/add_badge_screen.dart';
 import 'package:children_rewards/features/badges/presentation/screens/edit_badge_screen.dart';
 
+import 'package:children_rewards/shared/widgets/common_widgets.dart';
+
+import 'package:children_rewards/features/badges/presentation/widgets/badge_icon.dart';
+
 class BadgeManageScreen extends ConsumerWidget {
   const BadgeManageScreen({super.key});
 
@@ -18,53 +21,55 @@ class BadgeManageScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('徽章管理',
-            style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textMain)),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textMain),
-          onPressed: () => Navigator.pop(context),
+      body: SafeArea(
+        child: Column(
+          children: [
+            AppHeader(
+              title: '徽章管理',
+              actions: [
+                HeaderButton(
+                    icon: Icons.add_rounded,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddBadgeScreen()),
+                      ).then((_) => ref.invalidate(allBadgesStreamProvider));
+                    }),
+              ],
+            ),
+            Expanded(
+              child: badgesAsync.when(
+                data: (badges) {
+                  if (badges.isEmpty) {
+                    return const Center(child: Text('暂无徽章配置'));
+                  }
+
+                  return ListView.builder(
+                    padding: const EdgeInsets.all(24),
+                    itemCount: badges.length,
+                    itemBuilder: (context, index) {
+                      final badge = badges[index];
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: _buildBadgeItem(context, ref, badge),
+                      );
+                    },
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (err, stack) => Center(child: Text('Error: $err')),
+              ),
+            ),
+          ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add_rounded, color: AppColors.textMain, size: 28),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AddBadgeScreen()),
-              ).then((_) => ref.invalidate(allBadgesStreamProvider));
-            },
-          ),
-          const SizedBox(width: 8),
-        ],
-      ),
-      body: badgesAsync.when(
-        data: (badges) {
-          if (badges.isEmpty) {
-            return const Center(child: Text('暂无徽章配置'));
-          }
-          return ListView.builder(
-            padding: const EdgeInsets.all(24),
-            itemCount: badges.length,
-            itemBuilder: (context, index) {
-              final badge = badges[index];
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: _buildBadgeItem(context, ref, badge),
-              );
-            },
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('Error: $err')),
       ),
     );
   }
 
-  Widget _buildBadgeItem(BuildContext context, WidgetRef ref, BadgeEntity badge) {
+  Widget _buildBadgeItem(
+      BuildContext context, WidgetRef ref, BadgeEntity badge) {
     return Slidable(
       key: ValueKey(badge.id),
       endActionPane: ActionPane(
@@ -88,7 +93,8 @@ class BadgeManageScreen extends ConsumerWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => EditBadgeScreen(badge: badge)),
+            MaterialPageRoute(
+                builder: (context) => EditBadgeScreen(badge: badge)),
           ).then((_) => ref.invalidate(allBadgesStreamProvider));
         },
         child: Container(
@@ -99,9 +105,10 @@ class BadgeManageScreen extends ConsumerWidget {
           ),
           child: Row(
             children: [
-              Opacity(
-                opacity: badge.isActive ? 1.0 : 0.4,
-                child: _buildBadgeIcon(badge.icon),
+              BadgeIcon(
+                icon: badge.icon,
+                isActive: badge.isActive,
+                size: 48,
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -115,16 +122,21 @@ class BadgeManageScreen extends ConsumerWidget {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: badge.isActive ? AppColors.textMain : AppColors.textSecondary,
-                            decoration: badge.isActive ? null : TextDecoration.lineThrough,
+                            color: badge.isActive
+                                ? AppColors.textMain
+                                : AppColors.textSecondary,
+                            decoration: badge.isActive
+                                ? null
+                                : TextDecoration.lineThrough,
                           ),
                         ),
                         if (badge.isSystem)
                           Container(
                             margin: const EdgeInsets.only(left: 8),
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
-                              color: AppColors.primary.withOpacity(0.1),
+                              color: AppColors.primary.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: const Text('系统',
@@ -138,12 +150,14 @@ class BadgeManageScreen extends ConsumerWidget {
                     const SizedBox(height: 4),
                     Text(
                       badge.triggerDescription,
-                      style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                      style: const TextStyle(
+                          fontSize: 12, color: AppColors.textSecondary),
                     ),
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right_rounded, color: AppColors.textSecondary.withOpacity(0.3)),
+              Icon(Icons.chevron_right_rounded,
+                  color: AppColors.textSecondary.withValues(alpha: 0.3)),
             ],
           ),
         ),
@@ -151,44 +165,8 @@ class BadgeManageScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildBadgeIcon(String iconPath) {
-    if (iconPath.startsWith('/') || iconPath.contains('cache') || iconPath.contains('app_flutter')) {
-      final file = File(iconPath);
-      if (file.existsSync()) {
-        return ClipOval(
-          child: Image.file(file, width: 48, height: 48, fit: BoxFit.cover),
-        );
-      }
-    }
-
-    IconData iconData = Icons.stars_rounded;
-    Color color = AppColors.primary;
-
-    if (iconPath.contains('calendar')) {
-      iconData = Icons.calendar_month_rounded;
-      color = Colors.blueAccent;
-    } else if (iconPath.contains('gift')) {
-      iconData = Icons.card_giftcard_rounded;
-      color = Colors.purpleAccent;
-    } else if (iconPath.contains('lightning')) {
-      iconData = Icons.bolt_rounded;
-      color = Colors.orangeAccent;
-    }
-
-    return Container(
-      width: 48,
-      height: 48,
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        shape: BoxShape.circle,
-      ),
-      child: Icon(iconData, color: color, size: 28),
-    );
-  }
-
-  
-
-  void _showDeleteConfirm(BuildContext context, WidgetRef ref, BadgeEntity badge) async {
+  void _showDeleteConfirm(
+      BuildContext context, WidgetRef ref, BadgeEntity badge) async {
     await SwipeDeleteHelper.showDeleteConfirmDialog(
       context: context,
       title: '删除徽章',

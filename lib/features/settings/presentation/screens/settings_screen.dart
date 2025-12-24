@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/core/providers/locale_provider.dart';
 import 'package:children_rewards/core/services/logger_service.dart';
@@ -11,6 +11,7 @@ import 'package:children_rewards/features/settings/presentation/screens/logs_scr
 import 'package:children_rewards/features/rewards/presentation/screens/rewards_manage_screen.dart';
 import 'package:children_rewards/features/rule/presentation/screens/rules_manage_screen.dart';
 import 'package:children_rewards/features/badges/presentation/screens/badge_manage_screen.dart';
+import 'package:children_rewards/core/services/database_backup_service.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -22,31 +23,10 @@ class SettingsScreen extends ConsumerWidget {
 
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.1), spreadRadius: 1)],
-                ),
-                child: Row(
-                  children: [
-                    Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF6366F1), shape: BoxShape.circle)),
-                    const SizedBox(width: 8),
-                    Text(
-                      l10n.settings.toUpperCase(),
-                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary, letterSpacing: 1.1),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+        AppHeader(
+          title: l10n.settings,
+          showBack: false,
+          dotColor: const Color(0xFF6366F1),
         ),
 
         Expanded(
@@ -77,6 +57,7 @@ class SettingsScreen extends ConsumerWidget {
 
               const SizedBox(height: 32),
               _buildSectionHeader(l10n.dataManagement),
+              
               _buildSettingTile(
                 icon: Icons.card_giftcard_rounded,
                 title: l10n.manageRewards,
@@ -106,6 +87,16 @@ class SettingsScreen extends ConsumerWidget {
                     MaterialPageRoute(builder: (context) => const BadgeManageScreen()),
                   );
                 },
+              ),
+              _buildSettingTile(
+                icon: Icons.cloud_upload_rounded,
+                title: '数据备份 (导出)',
+                onTap: () => _exportData(context),
+              ),
+              _buildSettingTile(
+                icon: Icons.cloud_download_rounded,
+                title: '数据恢复 (导入)',
+                onTap: () => _importData(context, ref),
               ),
               _buildSettingTile(
                 icon: Icons.article_outlined,
@@ -175,8 +166,8 @@ class SettingsScreen extends ConsumerWidget {
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
-            BoxShadow(color: AppColors.primary.withOpacity(0.05), spreadRadius: 1),
-            BoxShadow(color: AppColors.textMain.withOpacity(0.02), offset: const Offset(0, 4), blurRadius: 10),
+            BoxShadow(color: AppColors.primary.withValues(alpha: 0.05), spreadRadius: 1),
+            BoxShadow(color: AppColors.textMain.withValues(alpha: 0.02), offset: const Offset(0, 4), blurRadius: 10),
           ],
         ),
         child: Row(
@@ -193,7 +184,7 @@ class SettingsScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            if (trailing != null) trailing else Icon(Icons.chevron_right_rounded, color: AppColors.textSecondary.withOpacity(0.3)),
+            if (trailing != null) trailing else Icon(Icons.chevron_right_rounded, color: AppColors.textSecondary.withValues(alpha: 0.3)),
           ],
         ),
       ),
@@ -219,6 +210,40 @@ class SettingsScreen extends ConsumerWidget {
         logError('清空数据失败', tag: 'SettingsScreen', error: e, stackTrace: stackTrace);
         if (context.mounted) {
           AppDialogs.showError(context, "Error: $e");
+        }
+      }
+    }
+  }
+
+  Future<void> _exportData(BuildContext context) async {
+    try {
+      await DatabaseBackupService().exportDatabase();
+    } catch (e) {
+      if (context.mounted) {
+        AppDialogs.showError(context, "导出失败: $e");
+      }
+    }
+  }
+
+  Future<void> _importData(BuildContext context, WidgetRef ref) async {
+    final confirmed = await AppDialogs.showConfirm(
+      context: context,
+      title: '确认恢复数据？',
+      message: '恢复数据将覆盖当前所有数据，建议先备份当前数据.\n\n恢复成功后应用需要重启。',
+      confirmText: '选择文件',
+      isDanger: true,
+    );
+
+    if (confirmed) {
+      try {
+        final db = ref.read(databaseProvider);
+        final success = await DatabaseBackupService(db).importDatabase();
+        if (success && context.mounted) {
+          await AppDialogs.showSuccess(context, "数据恢复成功！\n请重启应用以生效。");
+        }
+      } catch (e) {
+        if (context.mounted) {
+          AppDialogs.showError(context, "恢复失败: $e");
         }
       }
     }

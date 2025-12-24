@@ -1,14 +1,18 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
+import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:children_rewards/core/database/app_database.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
+import 'package:children_rewards/core/constants/icon_mappings.dart';
 import 'package:children_rewards/features/rule/providers/rules_providers.dart';
 import 'package:children_rewards/features/rule/utils/rule_localization.dart';
 import 'package:children_rewards/shared/widgets/common_widgets.dart';
 import 'package:children_rewards/shared/widgets/custom_input_field.dart';
+import 'package:children_rewards/core/services/logger_service.dart';
 
 class EditRuleScreen extends ConsumerStatefulWidget {
   final Rule rule;
@@ -28,26 +32,25 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
   bool _initialized = false; // 标记是否已初始化本地化名称
   final ImagePicker _picker = ImagePicker();
 
-  final List<String> _availableIcons = [
-    'star', 'menu_book', 'cleaning_services', 'fitness_center', 'piano',
-    'pets', 'bedtime', 'restaurant', 'brush', 'more_horiz', 'sports_soccer',
-    'local_pizza', 'videogame_asset', 'local_library', 'computer', 'camera_alt',
-    'palette', 'music_note', 'self_improvement', 'directions_walk', 'wash',
-    'directions_bike', 'emoji_events', 'school', 'build', 'fastfood', 'local_hospital',
-    'science', 'rowing', 'extension', 'public', 'work', 'volunteer_activism',
-    'hiking', 'flight', 'beach_access', 'spa',
-  ];
-
   Future<void> _pickImage(ImageSource source) async {
     try {
       final XFile? image = await _picker.pickImage(source: source, imageQuality: 50);
       if (image != null) {
+        final appDir = await getApplicationDocumentsDirectory();
+        final rulesDir = Directory('${appDir.path}/rules');
+        if (!rulesDir.existsSync()) {
+          await rulesDir.create(recursive: true);
+        }
+
+        final fileName = 'rule_${DateTime.now().millisecondsSinceEpoch}${path.extension(image.path)}';
+        await File(image.path).copy('${rulesDir.path}/$fileName');
+        
         if (mounted) {
-          Navigator.pop(context, image.path);
+          Navigator.pop(context, 'rules/$fileName');
         }
       }
-    } catch (e) {
-      debugPrint('Error picking image: $e');
+    } catch (e, stackTrace) {
+      logError('选择规则图标失败', tag: 'EditRuleScreen', error: e, stackTrace: stackTrace);
     }
   }
 
@@ -71,7 +74,7 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
                 width: 40, height: 4,
                 margin: const EdgeInsets.only(bottom: 24),
                 decoration: BoxDecoration(
-                  color: AppColors.textSecondary.withOpacity(0.2),
+                  color: AppColors.textSecondary.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -101,9 +104,9 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 10,
                   ),
-                  itemCount: _availableIcons.length,
+                  itemCount: RuleIconMappings.availableIcons.length,
                   itemBuilder: (context, index) {
-                    final iconName = _availableIcons[index];
+                    final iconName = RuleIconMappings.availableIcons[index];
                     final isSelected = _selectedIcon == iconName;
                     return GestureDetector(
                       onTap: () => Navigator.pop(context, iconName),
@@ -111,10 +114,10 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
                         decoration: BoxDecoration(
                           color: isSelected ? AppColors.primary : AppColors.background,
                           borderRadius: BorderRadius.circular(12),
-                          boxShadow: isSelected ? [BoxShadow(color: AppColors.primary.withOpacity(0.3), blurRadius: 8, offset: const Offset(0, 4))] : null,
+                          boxShadow: isSelected ? [BoxShadow(color: AppColors.primary.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 4))] : null,
                         ),
                         child: Icon(
-                          _getIconData(iconName),
+                          RuleIconMappings.getIconData(iconName),
                           color: isSelected ? Colors.white : AppColors.textSecondary,
                           size: 24,
                         ),
@@ -145,7 +148,7 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
             decoration: BoxDecoration(
               color: AppColors.background,
               shape: BoxShape.circle,
-              border: Border.all(color: AppColors.textSecondary.withOpacity(0.1)),
+              border: Border.all(color: AppColors.textSecondary.withValues(alpha: 0.1)),
             ),
             child: Icon(icon, color: AppColors.textMain),
           ),
@@ -157,16 +160,15 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
   }
 
   Widget _buildIconOrImage(String iconDataOrPath, {double size = 24, Color? color}) {
-    if (iconDataOrPath.startsWith('/') || iconDataOrPath.contains(Platform.pathSeparator)) {
-       final file = File(iconDataOrPath);
-       if (file.existsSync()) {
-         return ClipRRect(
-           borderRadius: BorderRadius.circular(8),
-           child: Image.file(file, width: size, height: size, fit: BoxFit.cover),
-         );
-       }
+    if (iconDataOrPath.contains('/') || iconDataOrPath.contains(Platform.pathSeparator)) {
+       return PersistentImage(
+         imagePath: iconDataOrPath,
+         width: size,
+         height: size,
+         borderRadius: BorderRadius.circular(8),
+       );
     }
-    return Icon(_getIconData(iconDataOrPath), size: size, color: color);
+    return Icon(RuleIconMappings.getIconData(iconDataOrPath), size: size, color: color);
   }
 
   @override
@@ -210,27 +212,19 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          l10n.editRule.toUpperCase(),
-          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary, letterSpacing: 1.1),
-        ),
-        leading: HeaderButton(icon: Icons.arrow_back_ios_new_rounded, onTap: () => Navigator.pop(context)),
-        actions: [
-          if (isEditable)
-            IconButton(
-              icon: const Icon(Icons.delete_outline_rounded, color: Color(0xFFDC2626)),
-              onPressed: _deleteRule,
-            ),
-          const SizedBox(width: 8),
-        ],
-      ),
       body: SafeArea(
         child: Column(
           children: [
+            AppHeader(
+              title: l10n.editRule,
+              actions: [
+                if (isEditable)
+                  HeaderButton(
+                    icon: Icons.delete_outline_rounded,
+                    onTap: _deleteRule,
+                  ),
+              ],
+            ),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -246,8 +240,8 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
                         color: AppColors.surface,
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
-                          BoxShadow(color: AppColors.primary.withOpacity(0.1), spreadRadius: 1),
-                          BoxShadow(color: AppColors.textMain.withOpacity(0.03), offset: const Offset(0, 4), blurRadius: 10),
+                          BoxShadow(color: AppColors.primary.withValues(alpha: 0.1), spreadRadius: 1),
+                          BoxShadow(color: AppColors.textMain.withValues(alpha: 0.03), offset: const Offset(0, 4), blurRadius: 10),
                         ],
                       ),
                       child: Row(
@@ -278,7 +272,7 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                   decoration: BoxDecoration(
-                                    color: pointsColor.withOpacity(0.1),
+                                    color: pointsColor.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(6),
                                   ),
                                   child: Text(
@@ -345,13 +339,13 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
                         decoration: BoxDecoration(
                           color: AppColors.surface,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: Colors.black.withOpacity(0.05)),
+                          border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
                         ),
                         child: Row(
                           children: [
                             _buildIconOrImage(_selectedIcon, color: AppColors.textSecondary, size: 20),
                             const Spacer(),
-                            Icon(Icons.keyboard_arrow_right_rounded, color: AppColors.textSecondary.withOpacity(0.5), size: 20),
+                            Icon(Icons.keyboard_arrow_right_rounded, color: AppColors.textSecondary.withValues(alpha: 0.5), size: 20),
                           ],
                         ),
                       ),
@@ -368,7 +362,7 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.surface,
                       borderRadius: BorderRadius.circular(24),
-                      border: Border.all(color: Colors.black.withOpacity(0.05)),
+                      border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -379,7 +373,7 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
                         ),
                         Switch(
                           value: _isActive,
-                          activeColor: AppColors.primary,
+                          activeThumbColor: AppColors.primary,
                           onChanged: isEditable ? (val) => setState(() => _isActive = val) : null,
                         ),
                       ],
@@ -399,7 +393,7 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
                           elevation: 2,
-                          shadowColor: AppColors.primary.withOpacity(0.3),
+                          shadowColor: AppColors.primary.withValues(alpha: 0.3),
                         ),
                         child: Text(l10n.saveChanges, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                       ),
@@ -484,7 +478,7 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
           decoration: BoxDecoration(
             color: AppColors.surface,
             borderRadius: BorderRadius.circular(14),
-            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4)],
+            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4)],
           ),
           alignment: Alignment.center,
           child: Text(
@@ -501,50 +495,5 @@ class _EditRuleScreenState extends ConsumerState<EditRuleScreen> {
       text.toUpperCase(),
       style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.textSecondary, letterSpacing: 0.5),
     );
-  }
-
-  IconData _getIconData(String? iconName) {
-    switch (iconName) {
-      case 'menu_book': return Icons.menu_book_rounded;
-      case 'cleaning_services': return Icons.cleaning_services_rounded;
-      case 'sentiment_dissatisfied': return Icons.sentiment_dissatisfied_rounded;
-      case 'warning': return Icons.warning_rounded;
-      case 'star': return Icons.star_rounded;
-      case 'fitness_center': return Icons.fitness_center_rounded;
-      case 'piano': return Icons.piano_rounded;
-      case 'pets': return Icons.pets_rounded;
-      case 'bedtime': return Icons.bedtime_rounded;
-      case 'restaurant': return Icons.restaurant_rounded;
-      case 'brush': return Icons.brush_rounded;
-      case 'more_horiz': return Icons.more_horiz_rounded;
-      case 'sports_soccer': return Icons.sports_soccer_rounded;
-      case 'local_pizza': return Icons.local_pizza_rounded;
-      case 'videogame_asset': return Icons.videogame_asset_rounded;
-      case 'local_library': return Icons.local_library_rounded;
-      case 'computer': return Icons.computer_rounded;
-      case 'camera_alt': return Icons.camera_alt_rounded;
-      case 'palette': return Icons.palette_rounded;
-      case 'music_note': return Icons.music_note_rounded;
-      case 'self_improvement': return Icons.self_improvement_rounded;
-      case 'directions_walk': return Icons.directions_walk_rounded;
-      case 'wash': return Icons.wash_rounded;
-      case 'directions_bike': return Icons.directions_bike_rounded;
-      case 'emoji_events': return Icons.emoji_events_rounded;
-      case 'school': return Icons.school_rounded;
-      case 'build': return Icons.build_rounded;
-      case 'fastfood': return Icons.fastfood_rounded;
-      case 'local_hospital': return Icons.local_hospital_rounded;
-      case 'science': return Icons.science_rounded;
-      case 'rowing': return Icons.rowing_rounded;
-      case 'extension': return Icons.extension_rounded;
-      case 'public': return Icons.public_rounded;
-      case 'work': return Icons.work_rounded;
-      case 'volunteer_activism': return Icons.volunteer_activism_rounded;
-      case 'hiking': return Icons.hiking_rounded;
-      case 'flight': return Icons.flight_rounded;
-      case 'beach_access': return Icons.beach_access_rounded;
-      case 'spa': return Icons.spa_rounded;
-      default: return Icons.category_rounded;
-    }
   }
 }

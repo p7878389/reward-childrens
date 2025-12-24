@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:children_rewards/core/database/app_database.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/features/rewards/providers/rewards_providers.dart';
@@ -65,7 +65,7 @@ class _AddRewardScreenState extends ConsumerState<AddRewardScreen> {
               width: 40, height: 4,
               margin: const EdgeInsets.only(bottom: 24),
               decoration: BoxDecoration(
-                color: AppColors.textSecondary.withOpacity(0.2),
+                color: AppColors.textSecondary.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -105,10 +105,16 @@ class _AddRewardScreenState extends ConsumerState<AddRewardScreen> {
     final pickedFile = await picker.pickImage(source: source);
     if (pickedFile != null) {
       final appDir = await getApplicationDocumentsDirectory();
-      final fileName = path.basename(pickedFile.path);
-      final savedImage = await File(pickedFile.path).copy('${appDir.path}/$fileName');
+      final rewardsDir = Directory('${appDir.path}/rewards');
+      if (!rewardsDir.existsSync()) {
+        await rewardsDir.create(recursive: true);
+      }
+
+      final fileName = 'reward_${DateTime.now().millisecondsSinceEpoch}${path.extension(pickedFile.path)}';
+      await File(pickedFile.path).copy('${rewardsDir.path}/$fileName');
+      
       setState(() {
-        _imagePath = savedImage.path;
+        _imagePath = 'rewards/$fileName';
       });
     }
   }
@@ -126,7 +132,7 @@ class _AddRewardScreenState extends ConsumerState<AddRewardScreen> {
           decoration: BoxDecoration(
             color: AppColors.background,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: AppColors.primary.withOpacity(0.1)),
+            border: Border.all(color: AppColors.primary.withValues(alpha: 0.1)),
           ),
           child: Column(
             children: [
@@ -199,19 +205,10 @@ class _AddRewardScreenState extends ConsumerState<AddRewardScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          l10n.addReward.toUpperCase(),
-          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary, letterSpacing: 1.1),
-        ),
-        leading: HeaderButton(icon: Icons.arrow_back_ios_new_rounded, onTap: () => Navigator.pop(context)),
-      ),
       body: SafeArea(
         child: Column(
           children: [
+            AppHeader(title: l10n.addReward),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -227,12 +224,12 @@ class _AddRewardScreenState extends ConsumerState<AddRewardScreen> {
                         decoration: BoxDecoration(
                           color: const Color(0xFFFEF3C7),
                           borderRadius: BorderRadius.circular(24),
-                          border: Border.all(color: AppColors.primary.withOpacity(0.2), width: 2),
+                          border: Border.all(color: AppColors.primary.withValues(alpha: 0.2), width: 2),
                         ),
                         child: _imagePath != null
-                            ? ClipRRect(
+                            ? PersistentImage(
+                                imagePath: _imagePath,
                                 borderRadius: BorderRadius.circular(22),
-                                child: Image.file(File(_imagePath!), fit: BoxFit.cover),
                               )
                             : const Icon(Icons.add_a_photo_rounded, color: AppColors.primary, size: 40),
                       ),
@@ -280,7 +277,7 @@ class _AddRewardScreenState extends ConsumerState<AddRewardScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.surface,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.black.withOpacity(0.05)),
+                      border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
@@ -307,7 +304,7 @@ class _AddRewardScreenState extends ConsumerState<AddRewardScreen> {
                         scale: 0.8,
                         child: Switch(
                           value: _isUnlimited,
-                          activeColor: AppColors.primary,
+                          activeThumbColor: AppColors.primary,
                           onChanged: (val) => setState(() => _isUnlimited = val),
                         ),
                       ),
@@ -351,7 +348,7 @@ class _AddRewardScreenState extends ConsumerState<AddRewardScreen> {
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
                         elevation: 2,
-                        shadowColor: AppColors.primary.withOpacity(0.3),
+                        shadowColor: AppColors.primary.withValues(alpha: 0.3),
                       ),
                       child: Text(l10n.confirm, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     ),
@@ -390,7 +387,7 @@ class _AddRewardScreenState extends ConsumerState<AddRewardScreen> {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(14),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4)],
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4)],
         ),
         alignment: Alignment.center,
         child: Text(

@@ -36,7 +36,7 @@ class EmptyState extends StatelessWidget {
                 width: iconSize * 1.6,
                 height: iconSize * 1.6,
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.04),
+                  color: AppColors.primary.withValues(alpha: 0.04),
                   shape: BoxShape.circle,
                 ),
               ),
@@ -48,7 +48,7 @@ class EmptyState extends StatelessWidget {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primary.withOpacity(0.1),
+                      color: AppColors.primary.withValues(alpha: 0.1),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
                     ),
@@ -57,7 +57,7 @@ class EmptyState extends StatelessWidget {
                 child: Icon(
                   icon,
                   size: iconSize * 0.6,
-                  color: AppColors.primary.withOpacity(0.8),
+                  color: AppColors.primary.withValues(alpha: 0.8),
                 ),
               ),
             ],
@@ -83,7 +83,7 @@ class EmptyState extends StatelessWidget {
               description!,
               style: TextStyle(
                 fontSize: 14,
-                color: AppColors.textSecondary.withOpacity(0.6),
+                color: AppColors.textSecondary.withValues(alpha: 0.6),
                 height: 1.5,
                 fontWeight: FontWeight.w500,
               ),
@@ -106,7 +106,7 @@ class EmptyState extends StatelessWidget {
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
                   elevation: 4,
-                  shadowColor: AppColors.primary.withOpacity(0.3),
+                  shadowColor: AppColors.primary.withValues(alpha: 0.3),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                 ),

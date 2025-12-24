@@ -1,7 +1,7 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/features/badges/domain/usecases/get_child_badges_usecase.dart';
+import 'package:children_rewards/features/badges/presentation/widgets/badge_icon.dart';
 
 class BadgeCard extends StatelessWidget {
   final ChildBadgeDisplay badgeDisplay;
@@ -24,12 +24,12 @@ class BadgeCard extends StatelessWidget {
           color: isAcquired ? Colors.white : const Color(0xFFF5F5F5),
           borderRadius: BorderRadius.circular(24),
           border: isAcquired
-              ? Border.all(color: AppColors.primary.withOpacity(0.1), width: 1)
+              ? Border.all(color: AppColors.primary.withValues(alpha: 0.1), width: 1)
               : null,
           boxShadow: isAcquired
               ? [
                   BoxShadow(
-                    color: AppColors.primary.withOpacity(0.08),
+                    color: AppColors.primary.withValues(alpha: 0.08),
                     blurRadius: 16,
                     offset: const Offset(0, 8),
                   )
@@ -43,9 +43,10 @@ class BadgeCard extends StatelessWidget {
             // Icon
             Expanded(
               flex: 3,
-              child: Opacity(
-                opacity: isAcquired ? 1.0 : 0.5,
-                child: _buildIcon(context),
+              child: BadgeIcon(
+                icon: badgeDisplay.badge.icon,
+                isAcquired: isAcquired,
+                size: 56,
               ),
             ),
             const SizedBox(height: 8),
@@ -78,62 +79,5 @@ class BadgeCard extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildIcon(BuildContext context) {
-    final iconPath = badgeDisplay.badge.icon;
-    
-    if (iconPath.startsWith('/') || iconPath.contains('cache') || iconPath.contains('app_flutter')) {
-      final file = File(iconPath);
-      if (file.existsSync()) {
-        return ClipOval(
-          child: Image.file(
-            file,
-            width: 56,
-            height: 56,
-            fit: BoxFit.cover,
-            color: badgeDisplay.isAcquired ? null : Colors.grey,
-            colorBlendMode: badgeDisplay.isAcquired ? null : BlendMode.saturation,
-          ),
-        );
-      }
-    }
-
-    // Map icon string to Flutter IconData or Asset
-    // Using simple mapping for now based on icon string
-    IconData iconData = Icons.stars_rounded;
-    Color iconColor = AppColors.primary;
-
-    if (badgeDisplay.badge.icon.contains('calendar')) {
-      iconData = Icons.calendar_month_rounded;
-      iconColor = Colors.blueAccent;
-    } else if (badgeDisplay.badge.icon.contains('gift')) {
-      iconData = Icons.card_giftcard_rounded;
-      iconColor = Colors.purpleAccent;
-    } else if (badgeDisplay.badge.icon.contains('lightning')) {
-      iconData = Icons.bolt_rounded;
-      iconColor = Colors.orangeAccent;
-    } else if (badgeDisplay.badge.icon.contains('silver')) {
-      iconColor = Colors.grey;
-    } else if (badgeDisplay.badge.icon.contains('bronze')) {
-      iconColor = Colors.brown;
-    }
-
-    if (!badgeDisplay.isAcquired) {
-      iconColor = Colors.grey;
-    }
-
-    return Container(
-      width: 56,
-      height: 56,
-      decoration: BoxDecoration(
-        color: badgeDisplay.isAcquired ? iconColor.withOpacity(0.1) : Colors.black12,
-        shape: BoxShape.circle,
-      ),
-      child: Icon(
-        iconData,
-        color: iconColor,
-        size: 32,
-      ),
-    );
-  }
 }
+

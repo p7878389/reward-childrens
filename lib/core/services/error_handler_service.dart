@@ -48,12 +48,19 @@ class ErrorHandler {
   }
 
   /// 在 Zone 中运行应用，捕获所有异步错误
-  static void runAppWithErrorHandler(Widget app, {bool ensureInitialized = false}) {
+  static void runAppWithErrorHandler(Widget app, {Future<void> Function()? onInit}) {
     runZonedGuarded(
-      () {
-        if (ensureInitialized) {
-          WidgetsFlutterBinding.ensureInitialized();
+      () async {
+        WidgetsFlutterBinding.ensureInitialized();
+
+        // 初始化错误处理
+        init();
+
+        // 执行自定义初始化
+        if (onInit != null) {
+          await onInit();
         }
+
         runApp(app);
       },
       (error, stackTrace) {

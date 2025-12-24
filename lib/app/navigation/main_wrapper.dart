@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/shared/widgets/custom_bottom_nav.dart';
 import 'package:children_rewards/features/children/presentation/screens/home_screen.dart';
@@ -30,20 +31,26 @@ class _MainWrapperState extends State<MainWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      extendBody: true,
-      body: SafeArea(
-        bottom: false,
-        child: _buildPage(_selectedIndex),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark, // Android: 深色图标
+        statusBarBrightness: Brightness.light,    // iOS: 深色图标
+        systemNavigationBarColor: AppColors.background,
+        systemNavigationBarIconBrightness: Brightness.dark,
       ),
-      bottomNavigationBar: CustomBottomNav(
-        selectedIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
+      child: Scaffold(
+        backgroundColor: AppColors.background,
+        extendBody: true,
+        body: _buildPage(_selectedIndex),
+        bottomNavigationBar: CustomBottomNav(
+          selectedIndex: _selectedIndex,
+          onTap: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+        ),
       ),
     );
   }

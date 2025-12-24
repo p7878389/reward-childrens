@@ -5,7 +5,7 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
-		<string>星轨成长社</string>
+		<string>成长星轨</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
 		<key>CFBundleName</key>
-		<string>星轨成长社</string>
+		<string>成长星轨</string>
 		<key>CFBundlePackageType</key>
 		<string>APPL</string>
 		<key>CFBundleShortVersionString</key>
@@ -53,5 +53,9 @@
 		<string>需要访问相机来拍摄头像照片</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>需要访问相册来选择头像照片</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>需要访问麦克风进行语音输入</string>
+		<key>NSSpeechRecognitionUsageDescription</key>
+		<string>需要语音识别功能来识别成语</string>
 	</dict>
 </plist>

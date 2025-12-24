@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 
 class CheckinSuccessDialog extends StatefulWidget {
@@ -58,7 +58,7 @@ class _CheckinSuccessDialogState extends State<CheckinSuccessDialog> with Single
             borderRadius: BorderRadius.circular(32),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 20,
                 offset: const Offset(0, 10),
               ),
@@ -79,7 +79,7 @@ class _CheckinSuccessDialogState extends State<CheckinSuccessDialog> with Single
                       width: 80,
                       height: 80,
                       decoration: BoxDecoration(
-                        color: (widget.isAlreadyCheckedin ? Colors.orange : Colors.green).withOpacity(0.1),
+                        color: (widget.isAlreadyCheckedin ? Colors.orange : Colors.green).withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -109,9 +109,9 @@ class _CheckinSuccessDialogState extends State<CheckinSuccessDialog> with Single
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
+                    color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -137,7 +137,7 @@ class _CheckinSuccessDialogState extends State<CheckinSuccessDialog> with Single
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
                     elevation: 4,
-                    shadowColor: AppColors.primary.withOpacity(0.3),
+                    shadowColor: AppColors.primary.withValues(alpha: 0.3),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
                   ),
                   child: Text(l10n.acceptRewards, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),

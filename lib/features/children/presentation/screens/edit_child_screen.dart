@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/core/services/logger_service.dart';
@@ -12,7 +10,6 @@ import 'package:children_rewards/features/children/data/children_repository.dart
 import 'package:children_rewards/shared/utils/form_validator.dart';
 import 'package:children_rewards/core/database/app_database.dart';
 import 'package:children_rewards/shared/widgets/custom_input_field.dart';
-import 'package:children_rewards/core/constants/avatar_data.dart';
 
 class EditChildScreen extends ConsumerStatefulWidget {
   final ChildrenData child;
@@ -58,24 +55,23 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          l10n.editProfile.toUpperCase(),
-          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary, letterSpacing: 1.1),
-        ),
-        leading: HeaderButton(icon: Icons.arrow_back_ios_new_rounded, onTap: () => Navigator.pop(context)),
-      ),
       body: SafeArea(
         child: Column(
           children: [
+            AppHeader(title: l10n.editProfile),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 children: [
-                  _buildPreviewCard(l10n),
+                  const SizedBox(height: 24),
+                  // 头像选择器（移到最上方）
+                  Center(
+                    child: AvatarPicker(
+                      initialAvatar: _avatarData,
+                      onAvatarChanged: (val) => setState(() => _avatarData = val),
+                      hintText: l10n.tapPhoto,
+                    ),
+                  ),
                   const SizedBox(height: 32),
                   _buildLabel(l10n.childName),
                   const SizedBox(height: 8),
@@ -103,17 +99,15 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                   _buildLabel(l10n.birthdayOptional),
                   const SizedBox(height: 8),
                   GestureDetector(
-                    onTap: () async {
+                    onTap: () {
                       FocusScope.of(context).unfocus();
-                      final date = await showDatePicker(
-                        context: context,
-                        initialDate: _birthday ?? DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime.now(),
+                      _showScrollableDatePicker(
+                        context,
+                        initialDate: _birthday,
+                        onDateSelected: (date) {
+                          setState(() => _birthday = date);
+                        }
                       );
-                      if (date != null) {
-                        setState(() => _birthday = date);
-                      }
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -122,7 +116,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                         color: AppColors.surface,
                         borderRadius: BorderRadius.circular(12),
                         border:
-                            Border.all(color: Colors.black.withOpacity(0.05)),
+                            Border.all(color: Colors.black.withValues(alpha: 0.05)),
                       ),
                       child: Row(
                         children: [
@@ -137,21 +131,13 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                               color: _birthday == null
-                                  ? AppColors.textSecondary.withOpacity(0.5)
+                                  ? AppColors.textSecondary.withValues(alpha: 0.5)
                                   : AppColors.textMain,
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  _buildLabel(l10n.avatar),
-                  const SizedBox(height: 8),
-                  AvatarPicker(
-                    initialAvatar: _avatarData,
-                    onAvatarChanged: (val) => setState(() => _avatarData = val),
-                    hintText: l10n.tapPhoto,
                   ),
                   const SizedBox(height: 40),
                   SizedBox(
@@ -165,7 +151,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
                         elevation: 2,
-                        shadowColor: AppColors.primary.withOpacity(0.3),
+                        shadowColor: AppColors.primary.withValues(alpha: 0.3),
                       ),
                       child: Text(l10n.saveChanges,
                           style: const TextStyle(
@@ -177,147 +163,6 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPreviewCard(AppLocalizations l10n) {
-    String ageText = "";
-    if (_birthday != null) {
-      final age = DateTime.now().year - _birthday!.year;
-      ageText = "$age ${l10n.years.toLowerCase()}";
-    }
-
-    return Center(
-      child: Container(
-        width: double.infinity,
-        constraints: const BoxConstraints(maxWidth: 320),
-        padding: const EdgeInsets.all(16),
-        margin: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(color: AppColors.primary.withOpacity(0.1), spreadRadius: 1),
-            BoxShadow(color: AppColors.textMain.withOpacity(0.03), offset: const Offset(0, 4), blurRadius: 10),
-          ],
-        ),
-        child: Row(
-          children: [
-            SizedBox(
-              width: 48,
-              height: 48,
-              child: _buildAvatarContent(
-                _avatarData,
-                _nameController.text,
-                size: 48,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _nameController.text.isEmpty ? l10n.childName : _nameController.text,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textMain),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Wrap(
-                    spacing: 6.0,
-                    runSpacing: 4.0,
-                    children: [
-                      _buildInfoTag(
-                        icon: _gender == 'boy' ? Icons.male_rounded : Icons.female_rounded,
-                        text: _gender == 'boy' ? l10n.boy : l10n.girl,
-                        color: _gender == 'boy' ? Colors.blue : Colors.pink,
-                        bgColor: _gender == 'boy' ? const Color(0xFFEFF6FF) : const Color(0xFFFFF1F2),
-                      ),
-                      if (ageText.isNotEmpty)
-                        _buildInfoTag(
-                          icon: Icons.cake_rounded,
-                          text: ageText,
-                          color: AppColors.textSecondary,
-                          bgColor: const Color(0xFFF1F5F9),
-                        ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInfoTag({
-    required IconData icon,
-    required String text,
-    required Color color,
-    required Color bgColor,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 12, color: color),
-          const SizedBox(width: 4),
-          Text(
-            text.toUpperCase(),
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w800,
-              color: color.withOpacity(0.8),
-              letterSpacing: 0.5,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAvatarContent(String? avatar, String name, {double size = 56}) {
-    if (avatar != null) {
-      if (avatar.startsWith('builtin:')) {
-        final index = int.tryParse(avatar.split(':')[1]) ?? 0;
-        if (index >= 0 && index < AvatarData.builtInSvgs.length) {
-          return ClipOval(
-            child: SvgPicture.string(
-              AvatarData.builtInSvgs[index],
-              fit: BoxFit.cover,
-              width: size, height: size,
-            ),
-          );
-        }
-      } else {
-        final file = File(avatar);
-        if (file.existsSync()) {
-          return ClipOval(
-            child: Image.file(
-              file,
-              fit: BoxFit.cover,
-              width: size, height: size,
-            ),
-          );
-        }
-      }
-    }
-    return Center(
-      child: Text(
-        name.isNotEmpty ? name[0].toUpperCase() : "?",
-        style: TextStyle(
-          fontSize: size * 0.4,
-          fontWeight: FontWeight.bold,
-          color: AppColors.textMain,
         ),
       ),
     );
@@ -368,10 +213,10 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
       child: Container(
         height: 48,
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.1) : AppColors.surface,
+          color: isSelected ? color.withValues(alpha: 0.1) : AppColors.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-              color: isSelected ? color : Colors.black.withOpacity(0.05)),
+              color: isSelected ? color : Colors.black.withValues(alpha: 0.05)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -379,7 +224,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
             Icon(icon,
                 color: isSelected
                     ? color
-                    : AppColors.textSecondary.withOpacity(0.5),
+                    : AppColors.textSecondary.withValues(alpha: 0.5),
                 size: 20),
             const SizedBox(width: 8),
             Text(
@@ -404,6 +249,162 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
           fontWeight: FontWeight.bold,
           color: AppColors.textSecondary,
           letterSpacing: 0.5),
+    );
+  }
+
+  void _showScrollableDatePicker(
+    BuildContext context, {
+    required DateTime? initialDate,
+    required ValueChanged<DateTime> onDateSelected,
+  }) {
+    DateTime selectedDate = initialDate ?? DateTime(2018, 1, 1);
+    final now = DateTime.now();
+    const minYear = 2000;
+    final maxYear = now.year;
+
+    int daysInMonth(int year, int month) {
+      return DateTime(year, month + 1, 0).day;
+    }
+
+    // 在 builder 外部初始化控制器
+    final int initialMonthIndex = 1200 + (selectedDate.month - 1);
+    final int daysCount = daysInMonth(selectedDate.year, selectedDate.month);
+    final int initialDayIndex = (daysCount * 50) + (selectedDate.day - 1);
+
+    final yearController = FixedExtentScrollController(initialItem: selectedDate.year - minYear);
+    final monthController = FixedExtentScrollController(initialItem: initialMonthIndex);
+    final dayController = FixedExtentScrollController(initialItem: initialDayIndex);
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+
+            return SizedBox(
+              height: 280,
+              child: Column(
+                children: [
+                  // Toolbar
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withValues(alpha: 0.05),
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          child: const Text('取消', style: TextStyle(color: AppColors.textSecondary, fontSize: 16)),
+                          onPressed: () {
+                            yearController.dispose();
+                            monthController.dispose();
+                            dayController.dispose();
+                            Navigator.pop(context);
+                          },
+                        ),
+                        CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          child: const Text('确定', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 16)),
+                          onPressed: () {
+                            onDateSelected(selectedDate);
+                            yearController.dispose();
+                            monthController.dispose();
+                            dayController.dispose();
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Custom Picker
+                  Expanded(
+                    child: Row(
+                      children: [
+                        // Year (Linear)
+                        Expanded(
+                          child: CupertinoPicker.builder(
+                            scrollController: yearController,
+                            itemExtent: 44,
+                            useMagnifier: true,
+                            magnification: 1.2,
+                            selectionOverlay: const CupertinoPickerDefaultSelectionOverlay(capStartEdge: false, capEndEdge: false),
+                            onSelectedItemChanged: (index) {
+                              final newYear = minYear + index;
+                              final maxDays = daysInMonth(newYear, selectedDate.month);
+                              final newDay = selectedDate.day > maxDays ? maxDays : selectedDate.day;
+                              setModalState(() {
+                                selectedDate = DateTime(newYear, selectedDate.month, newDay);
+                              });
+                            },
+                            itemBuilder: (context, index) {
+                              if (index < 0 || index > maxYear - minYear) return null;
+                              return Center(child: Text('${minYear + index}', style: const TextStyle(fontSize: 20, color: AppColors.textMain)));
+                            },
+                            childCount: maxYear - minYear + 1,
+                          ),
+                        ),
+                        // Month (Looping)
+                        Expanded(
+                          child: CupertinoPicker.builder(
+                            scrollController: monthController,
+                            itemExtent: 44,
+                            useMagnifier: true,
+                            magnification: 1.2,
+                            selectionOverlay: const CupertinoPickerDefaultSelectionOverlay(capStartEdge: false, capEndEdge: false),
+                            onSelectedItemChanged: (index) {
+                              final newMonth = (index % 12) + 1;
+                              final maxDays = daysInMonth(selectedDate.year, newMonth);
+                              final newDay = selectedDate.day > maxDays ? maxDays : selectedDate.day;
+                              setModalState(() {
+                                selectedDate = DateTime(selectedDate.year, newMonth, newDay);
+                              });
+                            },
+                            itemBuilder: (context, index) {
+                              return Center(child: Text('${(index % 12) + 1}', style: const TextStyle(fontSize: 20, color: AppColors.textMain)));
+                            },
+                            // Infinite scrolling simulation
+                          ),
+                        ),
+                        // Day (Looping)
+                        Expanded(
+                          child: CupertinoPicker.builder(
+                            key: ValueKey('${selectedDate.year}-${selectedDate.month}'),
+                            scrollController: dayController,
+                            itemExtent: 44,
+                            useMagnifier: true,
+                            magnification: 1.2,
+                            selectionOverlay: const CupertinoPickerDefaultSelectionOverlay(capStartEdge: false, capEndEdge: false),
+                            onSelectedItemChanged: (index) {
+                              final maxDays = daysInMonth(selectedDate.year, selectedDate.month);
+                              final newDay = (index % maxDays) + 1;
+                              setModalState(() {
+                                selectedDate = DateTime(selectedDate.year, selectedDate.month, newDay);
+                              });
+                            },
+                            itemBuilder: (context, index) {
+                              final maxDays = daysInMonth(selectedDate.year, selectedDate.month);
+                              return Center(child: Text('${(index % maxDays) + 1}', style: const TextStyle(fontSize: 20, color: AppColors.textMain)));
+                            },
+                            // Infinite scrolling simulation
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: MediaQuery.of(context).padding.bottom),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

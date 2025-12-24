@@ -25,6 +25,22 @@ dependencies:
   flutter_svg: ^2.1.0
   flutter_slidable: ^3.1.1
   flutter_markdown: ^0.7.4+3
+  http: ^1.2.0
+  crypto: ^3.0.3
+  archive: ^3.6.1
+  characters: ^1.3.0
+  vosk_flutter:
+    git:
+      url: https://github.com/alphacep/vosk-flutter.git
+  speech_to_text: ^7.0.0
+  permission_handler: ^11.3.1
+  audioplayers: ^6.1.0
+  flutter_tts: ^4.0.2
+  lpinyin: ^2.0.3
+  share_plus: ^12.0.1
+  file_picker: ^10.3.8
+  shared_preferences: ^2.5.4
+  image: ^4.3.0
 
 dev_dependencies:
   flutter_test:
@@ -57,5 +73,15 @@ flutter:
   generate: true
   assets:
     - assets/
-    - assets/sql/
+    - assets/database/
+    - assets/idiom_game/models/
+    - assets/idiom_game/models/vosk-model-small-cn-0.22/
+    - assets/idiom_game/models/vosk-model-small-cn-0.22/am/
+    - assets/idiom_game/models/vosk-model-small-cn-0.22/conf/
+    - assets/idiom_game/models/vosk-model-small-cn-0.22/graph/
+    - assets/idiom_game/models/vosk-model-small-cn-0.22/graph/phones/
+    - assets/idiom_game/models/vosk-model-small-cn-0.22/ivector/
+    - assets/idiom_game/data/
+    - assets/initial_data/
+    - assets/initial_data/rule_images/
     - shorebird.yaml

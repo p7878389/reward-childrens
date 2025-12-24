@@ -30,7 +30,7 @@ class CustomInputField extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.black.withOpacity(0.08)), // More visible border
+          border: Border.all(color: Colors.black.withValues(alpha: 0.08)), // More visible border
         ),
         child: SizedBox(
           height: maxLines > 1 ? null : 56, // Fixed height for single line
@@ -44,7 +44,7 @@ class CustomInputField extends StatelessWidget {
               border: InputBorder.none,
               icon: Icon(icon, color: AppColors.textSecondary, size: 20),
               hintText: hintText,
-              hintStyle: TextStyle(color: AppColors.textSecondary.withOpacity(0.3)),
+              hintStyle: TextStyle(color: AppColors.textSecondary.withValues(alpha: 0.3)),
               contentPadding: maxLines > 1 ? const EdgeInsets.symmetric(vertical: 12) : null,
             ),
             style: const TextStyle(

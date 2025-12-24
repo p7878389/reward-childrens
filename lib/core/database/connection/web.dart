@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:drift/wasm.dart';
+import 'package:flutter/foundation.dart';
 
 QueryExecutor connect() {
   return LazyDatabase(() async {
@@ -10,7 +11,7 @@ QueryExecutor connect() {
     );
     
     if (result.missingFeatures.isNotEmpty) {
-      print('Using ${result.chosenImplementation} due to missing features: ${result.missingFeatures}');
+      debugPrint('Using ${result.chosenImplementation} due to missing features: ${result.missingFeatures}');
     }
     
     return result.resolvedExecutor;

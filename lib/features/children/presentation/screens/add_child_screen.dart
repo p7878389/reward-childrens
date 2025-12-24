@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/core/services/logger_service.dart';
 import 'package:children_rewards/shared/widgets/common_widgets.dart';
-import 'package:children_rewards/features/children/data/children_repository.dart';
+import 'package:children_rewards/features/children/providers/children_providers.dart';
+import 'package:children_rewards/features/children/domain/usecases/create_child_usecase.dart';
 import 'package:children_rewards/shared/utils/form_validator.dart';
 import 'package:children_rewards/shared/widgets/custom_input_field.dart';
 
@@ -21,6 +23,7 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
   String _gender = 'boy';
   DateTime? _birthday;
   String _avatarData = 'builtin:0';
+  bool _isSubmitting = false;
 
   @override
   void dispose() {
@@ -34,25 +37,16 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          l10n.addProfile.toUpperCase(),
-          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary, letterSpacing: 1.1),
-        ),
-        leading: HeaderButton(icon: Icons.arrow_back_ios_new_rounded, onTap: () => Navigator.pop(context)),
-      ),
       body: SafeArea(
         child: Column(
           children: [
+            AppHeader(title: l10n.addProfile),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 children: [
                   const SizedBox(height: 16),
-                  _buildLabel(l10n.avatar),
+                  FormLabel(text: l10n.avatar),
                   const SizedBox(height: 8),
                   AvatarPicker(
                     initialAvatar: _avatarData,
@@ -61,7 +55,7 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  _buildLabel(l10n.childName),
+                  FormLabel(text: l10n.childName),
                   const SizedBox(height: 8),
                   CustomInputField(
                     controller: _nameController,
@@ -71,38 +65,37 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
                   ),
                   const SizedBox(height: 20),
 
-                  _buildLabel(l10n.gender),
+                  FormLabel(text: l10n.gender),
                   const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Expanded(child: _buildGenderCard('boy', Icons.male, Colors.blue, l10n.boy)),
-                      const SizedBox(width: 12),
-                      Expanded(child: _buildGenderCard('girl', Icons.female, Colors.pink, l10n.girl)),
-                    ],
+                  GenderSelector(
+                    value: _gender,
+                    onChanged: (val) => setState(() => _gender = val),
+                    boyLabel: l10n.boy,
+                    girlLabel: l10n.girl,
                   ),
                   const SizedBox(height: 20),
 
-                  _buildLabel(l10n.birthdayOptional),
+                  FormLabel(text: l10n.birthdayOptional),
                   const SizedBox(height: 8),
                   GestureDetector(
-                    onTap: () async {
-                      FocusScope.of(context).unfocus();
-                      final date = await showDatePicker(
-                        context: context,
-                        initialDate: _birthday ?? DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime.now(),
+                    onTap: () {
+                      final currentFocus = FocusScope.of(context);
+                      currentFocus.unfocus();
+                      _showScrollableDatePicker(
+                        context,
+                        initialDate: _birthday,
+                        onDateSelected: (date) {
+                          setState(() => _birthday = date);
+                        },
+                        l10n: l10n,
                       );
-                      if (date != null) {
-                        setState(() => _birthday = date);
-                      }
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                       decoration: BoxDecoration(
                         color: AppColors.surface,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.black.withOpacity(0.05)),
+                        border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
                       ),
                       child: Row(
                         children: [
@@ -113,7 +106,7 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
-                              color: _birthday == null ? AppColors.textSecondary.withOpacity(0.5) : AppColors.textMain,
+                              color: _birthday == null ? AppColors.textSecondary.withValues(alpha: 0.5) : AppColors.textMain,
                             ),
                           ),
                         ],
@@ -126,15 +119,24 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
                     width: double.infinity,
                     height: 52,
                     child: ElevatedButton(
-                      onPressed: _nameController.text.isEmpty ? null : _submit,
+                      onPressed: _nameController.text.isEmpty || _isSubmitting ? null : _submit,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
                         elevation: 2,
-                        shadowColor: AppColors.primary.withOpacity(0.3),
+                        shadowColor: AppColors.primary.withValues(alpha: 0.3),
                       ),
-                      child: Text(l10n.createProfile, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      child: _isSubmitting
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            )
+                          : Text(l10n.createProfile, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     ),
                   ),
                   const SizedBox(height: 40),
@@ -153,64 +155,210 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
 
     final name = _nameController.text.trim();
 
+    // 客户端验证
     if (name.isEmpty) {
       FormValidator.showError(context, l10n.nameRequired);
       return;
     }
 
+    // 名称长度验证
+    if (name.length > 20) {
+      FormValidator.showError(context, l10n.nameTooLong);
+      return;
+    }
+
+    // 防止重复提交
+    if (_isSubmitting) return;
+    setState(() => _isSubmitting = true);
+
     try {
-      await ref.read(childrenRepositoryProvider).createChild(
-        name: name,
-        gender: _gender,
-        birthday: _birthday?.toIso8601String(),
-        avatar: _avatarData,
+      final result = await ref.read(createChildUseCaseProvider).execute(
+        CreateChildParams(
+          name: name,
+          gender: _gender,
+          birthday: _birthday?.toIso8601String(),
+          avatar: _avatarData,
+        ),
       );
-      if (mounted) {
-        await AppDialogs.showSuccess(context, l10n.addSuccess);
-        if (mounted) Navigator.pop(context);
-      }
+
+      if (!mounted) return;
+
+      result.when(
+        success: (_) async {
+          await AppDialogs.showSuccess(context, l10n.addSuccess);
+          if (mounted) Navigator.pop(context);
+        },
+        failure: (message, _, stackTrace) {
+          logError('创建宝贝失败', tag: 'AddChildScreen', error: message, stackTrace: stackTrace);
+          FormValidator.showError(context, l10n.operationFailed);
+        },
+      );
     } catch (e, stackTrace) {
       logError('创建宝贝失败', tag: 'AddChildScreen', error: e, stackTrace: stackTrace);
       if (mounted) {
-        FormValidator.showError(context, 'Failed to create profile: $e');
+        FormValidator.showError(context, l10n.operationFailed);
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isSubmitting = false);
       }
     }
   }
 
-  Widget _buildGenderCard(String value, IconData icon, Color color, String localizedLabel) {
-    final isSelected = _gender == value;
-    return GestureDetector(
-      onTap: () => setState(() => _gender = value),
-      child: Container(
-        height: 48,
-        decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.1) : AppColors.surface,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: isSelected ? color : Colors.black.withOpacity(0.05)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: isSelected ? color : AppColors.textSecondary.withOpacity(0.5), size: 20),
-            const SizedBox(width: 8),
-            Text(
-              localizedLabel.toUpperCase(),
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                color: isSelected ? color : AppColors.textSecondary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  void _showScrollableDatePicker(
+    BuildContext context, {
+    required DateTime? initialDate,
+    required ValueChanged<DateTime> onDateSelected,
+    required AppLocalizations l10n,
+  }) {
+    DateTime selectedDate = initialDate ?? DateTime(2018, 1, 1);
+    final now = DateTime.now();
+    const minYear = 2000;
+    final maxYear = now.year;
 
-  Widget _buildLabel(String text) {
-    return Text(
-      text.toUpperCase(),
-      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.textSecondary, letterSpacing: 0.5),
+    int daysInMonth(int year, int month) {
+      return DateTime(year, month + 1, 0).day;
+    }
+
+    // 在 builder 外部初始化控制器
+    final int initialMonthIndex = 1200 + (selectedDate.month - 1);
+    final int daysCount = daysInMonth(selectedDate.year, selectedDate.month);
+    final int initialDayIndex = (daysCount * 50) + (selectedDate.day - 1);
+
+    final yearController = FixedExtentScrollController(initialItem: selectedDate.year - minYear);
+    final monthController = FixedExtentScrollController(initialItem: initialMonthIndex);
+    final dayController = FixedExtentScrollController(initialItem: initialDayIndex);
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+
+            return SizedBox(
+              height: 280,
+              child: Column(
+                children: [
+                  // Toolbar
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withValues(alpha: 0.05),
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          child: Text(l10n.cancel, style: const TextStyle(color: AppColors.textSecondary, fontSize: 16)),
+                          onPressed: () {
+                            yearController.dispose();
+                            monthController.dispose();
+                            dayController.dispose();
+                            Navigator.pop(context);
+                          },
+                        ),
+                        CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          child: Text(l10n.confirm, style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 16)),
+                          onPressed: () {
+                            onDateSelected(selectedDate);
+                            yearController.dispose();
+                            monthController.dispose();
+                            dayController.dispose();
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Custom Picker
+                  Expanded(
+                    child: Row(
+                      children: [
+                        // Year (Linear)
+                        Expanded(
+                          child: CupertinoPicker.builder(
+                            scrollController: yearController,
+                            itemExtent: 44,
+                            useMagnifier: true,
+                            magnification: 1.2,
+                            selectionOverlay: const CupertinoPickerDefaultSelectionOverlay(capStartEdge: false, capEndEdge: false),
+                            onSelectedItemChanged: (index) {
+                              final newYear = minYear + index;
+                              final maxDays = daysInMonth(newYear, selectedDate.month);
+                              final newDay = selectedDate.day > maxDays ? maxDays : selectedDate.day;
+                              setModalState(() {
+                                selectedDate = DateTime(newYear, selectedDate.month, newDay);
+                              });
+                            },
+                            itemBuilder: (context, index) {
+                              if (index < 0 || index > maxYear - minYear) return null;
+                              return Center(child: Text('${minYear + index}', style: const TextStyle(fontSize: 20, color: AppColors.textMain)));
+                            },
+                            childCount: maxYear - minYear + 1,
+                          ),
+                        ),
+                        // Month (Looping)
+                        Expanded(
+                          child: CupertinoPicker.builder(
+                            scrollController: monthController,
+                            itemExtent: 44,
+                            useMagnifier: true,
+                            magnification: 1.2,
+                            selectionOverlay: const CupertinoPickerDefaultSelectionOverlay(capStartEdge: false, capEndEdge: false),
+                            onSelectedItemChanged: (index) {
+                              final newMonth = (index % 12) + 1;
+                              final maxDays = daysInMonth(selectedDate.year, newMonth);
+                              final newDay = selectedDate.day > maxDays ? maxDays : selectedDate.day;
+                              setModalState(() {
+                                selectedDate = DateTime(selectedDate.year, newMonth, newDay);
+                              });
+                            },
+                            itemBuilder: (context, index) {
+                              return Center(child: Text('${(index % 12) + 1}', style: const TextStyle(fontSize: 20, color: AppColors.textMain)));
+                            },
+                            // Infinite scrolling simulation
+                          ),
+                        ),
+                        // Day (Looping)
+                        Expanded(
+                          child: CupertinoPicker.builder(
+                            key: ValueKey('${selectedDate.year}-${selectedDate.month}'),
+                            scrollController: dayController,
+                            itemExtent: 44,
+                            useMagnifier: true,
+                            magnification: 1.2,
+                            selectionOverlay: const CupertinoPickerDefaultSelectionOverlay(capStartEdge: false, capEndEdge: false),
+                            onSelectedItemChanged: (index) {
+                              final maxDays = daysInMonth(selectedDate.year, selectedDate.month);
+                              final newDay = (index % maxDays) + 1;
+                              setModalState(() {
+                                selectedDate = DateTime(selectedDate.year, selectedDate.month, newDay);
+                              });
+                            },
+                            itemBuilder: (context, index) {
+                              final maxDays = daysInMonth(selectedDate.year, selectedDate.month);
+                              return Center(child: Text('${(index % maxDays) + 1}', style: const TextStyle(fontSize: 20, color: AppColors.textMain)));
+                            },
+                            // Infinite scrolling simulation
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: MediaQuery.of(context).padding.bottom),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

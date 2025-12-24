@@ -1,12 +1,26 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:image/image.dart' as img;
+import 'package:path/path.dart' as path;
+import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/core/constants/avatar_data.dart';
 import 'package:children_rewards/core/services/logger_service.dart';
+import 'package:children_rewards/core/services/file_storage_service.dart';
+
+/// 后台处理图片：裁剪为正方形并压缩
+/// 必须是顶层函数才能在 Isolate 中运行
+Uint8List _processImageInBackground(Uint8List bytes) {
+  final decoded = img.decodeImage(bytes);
+  if (decoded == null) return bytes;
+  // 裁剪为正方形并调整大小至 512x512
+  final processed = img.copyResizeCropSquare(decoded, size: 512);
+  return Uint8List.fromList(img.encodeJpg(processed, quality: 85));
+}
 
 /// 头像选择器组件
 ///
@@ -46,10 +60,32 @@ class _AvatarPickerState extends State<AvatarPicker> {
         _avatarIndex = int.tryParse(widget.initialAvatar!.split(':')[1]) ?? 0;
         _avatarFile = null;
       } else {
-        _avatarFile = File(widget.initialAvatar!);
+        // 处理文件路径 (可能是绝对路径或相对路径)
+        _resolveAvatarPath(widget.initialAvatar!);
       }
     } else {
       _avatarIndex = Random().nextInt(AvatarData.builtInSvgs.length);
+    }
+  }
+
+  Future<void> _resolveAvatarPath(String pathStr) async {
+    try {
+      String resolvedPath;
+      if (pathStr.startsWith('/')) {
+        // 绝对路径 - 验证在沙箱内
+        resolvedPath = path.normalize(pathStr);
+        final sandboxPath = FileStorageService.legacyBasePath;
+        if (!resolvedPath.startsWith(sandboxPath)) {
+          logError('路径遍历攻击被阻止: $pathStr', tag: 'AvatarPicker');
+          return;
+        }
+      } else {
+        // 相对路径 - 使用 FileStorageService 解析
+        resolvedPath = FileStorageService.getAbsolutePath(pathStr);
+      }
+      setState(() => _avatarFile = File(resolvedPath));
+    } catch (e) {
+      logError('解析头像路径失败', tag: 'AvatarPicker', error: e);
     }
   }
 
@@ -74,7 +110,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
               width: 40, height: 4,
               margin: const EdgeInsets.only(bottom: 24),
               decoration: BoxDecoration(
-                color: AppColors.textSecondary.withOpacity(0.2),
+                color: AppColors.textSecondary.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -113,12 +149,39 @@ class _AvatarPickerState extends State<AvatarPicker> {
     if (source == null) return;
 
     try {
-      final XFile? image = await _picker.pickImage(source: source);
+      final XFile? image = await _picker.pickImage(
+        source: source,
+        maxWidth: 1024, // 初步限制选择图片的最大宽度
+        maxHeight: 1024,
+      );
+      
       if (image != null) {
+        File fileToSave = File(image.path);
+
+        // 在后台 Isolate 中压缩和裁剪图片
+        try {
+          final bytes = await fileToSave.readAsBytes();
+          final processedBytes = await compute(_processImageInBackground, bytes);
+          await fileToSave.writeAsBytes(processedBytes);
+        } catch (e) {
+          logError('图片压缩失败，将使用原图', tag: 'AvatarPicker', error: e);
+          // 压缩失败则继续使用原图
+        }
+
+        // 使用 FileStorageService 保存文件
+        final fileName = 'avatar_${DateTime.now().millisecondsSinceEpoch}.jpg';
+        final relativePath = await FileStorageService.saveFile(
+          fileToSave,
+          StorageModule.children,
+          fileName: fileName,
+        );
+
         setState(() {
-          _avatarFile = File(image.path);
+          _avatarFile = File(FileStorageService.getAbsolutePath(relativePath));
         });
-        widget.onAvatarChanged(image.path);
+
+        // 传递相对路径给上层
+        widget.onAvatarChanged(relativePath);
       }
     } catch (e, stackTrace) {
       logError('选择图片失败', tag: 'AvatarPicker', error: e, stackTrace: stackTrace);
@@ -139,7 +202,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
           decoration: BoxDecoration(
             color: AppColors.background,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: AppColors.primary.withOpacity(0.1)),
+            border: Border.all(color: AppColors.primary.withValues(alpha: 0.1)),
           ),
           child: Column(
             children: [
@@ -190,7 +253,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
                     shape: BoxShape.circle,
                     border: Border.all(color: AppColors.primary, width: 4),
                     boxShadow: [
-                      BoxShadow(color: AppColors.primary.withOpacity(0.15), offset: const Offset(0, 4), blurRadius: 16),
+                      BoxShadow(color: AppColors.primary.withValues(alpha: 0.15), offset: const Offset(0, 4), blurRadius: 16),
                     ],
                     image: _avatarFile != null
                         ? DecorationImage(image: FileImage(_avatarFile!), fit: BoxFit.cover)
@@ -216,7 +279,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
-                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 6)],
+                      boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 6)],
                     ),
                     child: const Icon(Icons.refresh, color: AppColors.primary, size: 16),
                   ),

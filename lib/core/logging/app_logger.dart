@@ -83,8 +83,10 @@ class AppLogger {
     _initialized = true;
     _startFlushTimer();
 
-    // 启动时清理过期日志
-    _cleanOldLogsAsync();
+    // 延迟清理过期日志，避免占用启动资源
+    Future.delayed(const Duration(seconds: 5), () {
+      _cleanOldLogsAsync();
+    });
   }
 
   /// 启动定时刷新
@@ -139,10 +141,24 @@ class AppLogger {
     final levelStr = entry.level.displayName.padRight(5);
     final tagStr = '[${entry.tag}]';
 
-    debugPrint('$timestamp $levelStr $tagStr ${entry.message}');
+    // 使用简单的带级标输出，方便在 IDE 中快速识别
+    String prefix = '';
+    switch (entry.level) {
+      case LogLevel.debug: prefix = '🔍'; break;
+      case LogLevel.info: prefix = 'ℹ️'; break;
+      case LogLevel.warning: prefix = '⚠️'; break;
+      case LogLevel.error: prefix = '❌'; break;
+      case LogLevel.none: prefix = ''; break;
+    }
 
-    if (entry.stackTrace != null) {
-      debugPrint(entry.stackTrace!);
+    debugPrint('$prefix $timestamp $levelStr $tagStr ${entry.message}');
+
+    if (entry.stackTrace != null && entry.level == LogLevel.error) {
+      debugPrint('Stack Trace:\n${entry.stackTrace}');
+    }
+    
+    if (entry.extra != null) {
+      debugPrint('Extra: ${entry.extra}');
     }
   }
 

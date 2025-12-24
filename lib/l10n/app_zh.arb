@@ -65,7 +65,7 @@
   "addRecordConfirmTitle": "添加记录？",
   "addRecordConfirmMessage": "确认添加此记录？",
   "manageRules": "规则管理",
-  "rules": "规则",
+  "rules": "奖惩规则",
   "deleteRuleTitle": "删除规则？",
   "deleteRuleConfirm": "确定要删除 \"{name}\" 吗？",
   "newRule": "新建规则",
@@ -97,6 +97,14 @@
   "outOfStock": "库存不足",
   "redeemNow": "立即兑换",
   "needMoreStars": "星星不足",
+  "insufficientPoints": "还差 {diff} 颗星星",
+  "@insufficientPoints": {
+    "placeholders": {
+      "diff": {
+        "type": "int"
+      }
+    }
+  },
   "deleteRewardTitle": "删除奖励？",
   "deleteRewardConfirm": "确定要删除 \"{name}\" 吗？",
   "settings": "设置",
@@ -129,6 +137,8 @@
   "invalidNumber": "请输入数字",
   "numberMustBePositive": "须大于0",
   "nameRequired": "请填写名称",
+  "nameTooLong": "名称不能超过20个字符",
+  "operationFailed": "操作失败，请重试",
   "priceRequired": "请填写价格",
   "stockRequired": "请填写库存",
   "gotIt": "知道了",
@@ -157,6 +167,38 @@
   "growthBadges": "成长徽章",
   "viewAchievements": "查看成就徽章",
   "acceptRewards": "开心收下",
+  "idiomGame": "成语接龙",
+  "idiomGameDesc": "挑战成语接龙，锻炼词汇量",
+  "yourTurn": "你的回合",
+  "aiTurn": "AI 回合",
+  "chainLength": "接龙长度",
+  "starsEarned": "获得星星",
+  "gameOver": "游戏结束",
+  "playAgain": "再来一局",
+  "backToHome": "返回首页",
+  "failureNextTip": "原本可以接：",
+  "learnMore": "了解更多",
+  "errorTitle": "出错了",
+  "retry": "重试",
+  "errorDetails": "错误详情",
+  "gameHall": "游戏大厅",
+  "mainQuest": "主线任务",
+  "specialTraining": "专项训练",
+  "idiomChainChallenge": "成语接龙 · 闯关",
+  "idiomCompletion": "成语补全",
+  "completeMissingCharacters": "补全缺失的汉字",
+  "guessIdiomByMeaning": "看意猜词",
+  "guessIdiomFromMeaning": "根据释义猜成语",
+  "myMistakeBook": "我的错题本",
+  "reviewAndLearn": "温故而知新",
+  "ageYears": "{age}岁",
+  "@ageYears": {
+    "placeholders": {
+      "age": {
+        "type": "int"
+      }
+    }
+  },
   "@consecutiveCheckin": {
     "placeholders": {
       "days": {

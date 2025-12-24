@@ -5109,6 +5109,4413 @@ class CheckinRecordsCompanion extends UpdateCompanion<CheckinRecord> {
   }
 }
 
+class $IdiomsTable extends Idioms with TableInfo<$IdiomsTable, Idiom> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $IdiomsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _wordMeta = const VerificationMeta('word');
+  @override
+  late final GeneratedColumn<String> word = GeneratedColumn<String>(
+      'word', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 2, maxTextLength: 12),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _pinyinMeta = const VerificationMeta('pinyin');
+  @override
+  late final GeneratedColumn<String> pinyin = GeneratedColumn<String>(
+      'pinyin', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _firstPinyinNoToneMeta =
+      const VerificationMeta('firstPinyinNoTone');
+  @override
+  late final GeneratedColumn<String> firstPinyinNoTone =
+      GeneratedColumn<String>('first_pinyin_no_tone', aliasedName, false,
+          additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 30),
+          type: DriftSqlType.string,
+          requiredDuringInsert: true);
+  static const VerificationMeta _lastPinyinNoToneMeta =
+      const VerificationMeta('lastPinyinNoTone');
+  @override
+  late final GeneratedColumn<String> lastPinyinNoTone = GeneratedColumn<String>(
+      'last_pinyin_no_tone', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 30),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _firstPinyinMeta =
+      const VerificationMeta('firstPinyin');
+  @override
+  late final GeneratedColumn<String> firstPinyin = GeneratedColumn<String>(
+      'first_pinyin', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 10),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(''));
+  static const VerificationMeta _lastPinyinMeta =
+      const VerificationMeta('lastPinyin');
+  @override
+  late final GeneratedColumn<String> lastPinyin = GeneratedColumn<String>(
+      'last_pinyin', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 10),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(''));
+  static const VerificationMeta _firstCharMeta =
+      const VerificationMeta('firstChar');
+  @override
+  late final GeneratedColumn<String> firstChar = GeneratedColumn<String>(
+      'first_char', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 4),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _lastCharMeta =
+      const VerificationMeta('lastChar');
+  @override
+  late final GeneratedColumn<String> lastChar = GeneratedColumn<String>(
+      'last_char', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 4),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _explanationMeta =
+      const VerificationMeta('explanation');
+  @override
+  late final GeneratedColumn<String> explanation = GeneratedColumn<String>(
+      'explanation', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+      'source', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _exampleMeta =
+      const VerificationMeta('example');
+  @override
+  late final GeneratedColumn<String> example = GeneratedColumn<String>(
+      'example', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _gradeLevelMeta =
+      const VerificationMeta('gradeLevel');
+  @override
+  late final GeneratedColumn<int> gradeLevel = GeneratedColumn<int>(
+      'grade_level', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(1));
+  static const VerificationMeta _frequencyMeta =
+      const VerificationMeta('frequency');
+  @override
+  late final GeneratedColumn<int> frequency = GeneratedColumn<int>(
+      'frequency', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(50));
+  static const VerificationMeta _isRareMeta = const VerificationMeta('isRare');
+  @override
+  late final GeneratedColumn<bool> isRare = GeneratedColumn<bool>(
+      'is_rare', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_rare" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _isDeletedMeta =
+      const VerificationMeta('isDeleted');
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+      'is_deleted', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_deleted" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        word,
+        pinyin,
+        firstPinyinNoTone,
+        lastPinyinNoTone,
+        firstPinyin,
+        lastPinyin,
+        firstChar,
+        lastChar,
+        explanation,
+        source,
+        example,
+        gradeLevel,
+        frequency,
+        isRare,
+        isDeleted,
+        createdAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'idioms';
+  @override
+  VerificationContext validateIntegrity(Insertable<Idiom> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('word')) {
+      context.handle(
+          _wordMeta, word.isAcceptableOrUnknown(data['word']!, _wordMeta));
+    } else if (isInserting) {
+      context.missing(_wordMeta);
+    }
+    if (data.containsKey('pinyin')) {
+      context.handle(_pinyinMeta,
+          pinyin.isAcceptableOrUnknown(data['pinyin']!, _pinyinMeta));
+    } else if (isInserting) {
+      context.missing(_pinyinMeta);
+    }
+    if (data.containsKey('first_pinyin_no_tone')) {
+      context.handle(
+          _firstPinyinNoToneMeta,
+          firstPinyinNoTone.isAcceptableOrUnknown(
+              data['first_pinyin_no_tone']!, _firstPinyinNoToneMeta));
+    } else if (isInserting) {
+      context.missing(_firstPinyinNoToneMeta);
+    }
+    if (data.containsKey('last_pinyin_no_tone')) {
+      context.handle(
+          _lastPinyinNoToneMeta,
+          lastPinyinNoTone.isAcceptableOrUnknown(
+              data['last_pinyin_no_tone']!, _lastPinyinNoToneMeta));
+    } else if (isInserting) {
+      context.missing(_lastPinyinNoToneMeta);
+    }
+    if (data.containsKey('first_pinyin')) {
+      context.handle(
+          _firstPinyinMeta,
+          firstPinyin.isAcceptableOrUnknown(
+              data['first_pinyin']!, _firstPinyinMeta));
+    }
+    if (data.containsKey('last_pinyin')) {
+      context.handle(
+          _lastPinyinMeta,
+          lastPinyin.isAcceptableOrUnknown(
+              data['last_pinyin']!, _lastPinyinMeta));
+    }
+    if (data.containsKey('first_char')) {
+      context.handle(_firstCharMeta,
+          firstChar.isAcceptableOrUnknown(data['first_char']!, _firstCharMeta));
+    } else if (isInserting) {
+      context.missing(_firstCharMeta);
+    }
+    if (data.containsKey('last_char')) {
+      context.handle(_lastCharMeta,
+          lastChar.isAcceptableOrUnknown(data['last_char']!, _lastCharMeta));
+    } else if (isInserting) {
+      context.missing(_lastCharMeta);
+    }
+    if (data.containsKey('explanation')) {
+      context.handle(
+          _explanationMeta,
+          explanation.isAcceptableOrUnknown(
+              data['explanation']!, _explanationMeta));
+    }
+    if (data.containsKey('source')) {
+      context.handle(_sourceMeta,
+          source.isAcceptableOrUnknown(data['source']!, _sourceMeta));
+    }
+    if (data.containsKey('example')) {
+      context.handle(_exampleMeta,
+          example.isAcceptableOrUnknown(data['example']!, _exampleMeta));
+    }
+    if (data.containsKey('grade_level')) {
+      context.handle(
+          _gradeLevelMeta,
+          gradeLevel.isAcceptableOrUnknown(
+              data['grade_level']!, _gradeLevelMeta));
+    }
+    if (data.containsKey('frequency')) {
+      context.handle(_frequencyMeta,
+          frequency.isAcceptableOrUnknown(data['frequency']!, _frequencyMeta));
+    }
+    if (data.containsKey('is_rare')) {
+      context.handle(_isRareMeta,
+          isRare.isAcceptableOrUnknown(data['is_rare']!, _isRareMeta));
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(_isDeletedMeta,
+          isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+        {word},
+      ];
+  @override
+  Idiom map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Idiom(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      word: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}word'])!,
+      pinyin: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}pinyin'])!,
+      firstPinyinNoTone: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}first_pinyin_no_tone'])!,
+      lastPinyinNoTone: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}last_pinyin_no_tone'])!,
+      firstPinyin: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}first_pinyin'])!,
+      lastPinyin: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}last_pinyin'])!,
+      firstChar: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}first_char'])!,
+      lastChar: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}last_char'])!,
+      explanation: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}explanation']),
+      source: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}source']),
+      example: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}example']),
+      gradeLevel: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}grade_level'])!,
+      frequency: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}frequency'])!,
+      isRare: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_rare'])!,
+      isDeleted: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_deleted'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $IdiomsTable createAlias(String alias) {
+    return $IdiomsTable(attachedDatabase, alias);
+  }
+}
+
+class Idiom extends DataClass implements Insertable<Idiom> {
+  final int id;
+  final String word;
+  final String pinyin;
+  final String firstPinyinNoTone;
+  final String lastPinyinNoTone;
+  final String firstPinyin;
+  final String lastPinyin;
+  final String firstChar;
+  final String lastChar;
+  final String? explanation;
+  final String? source;
+  final String? example;
+  final int gradeLevel;
+  final int frequency;
+  final bool isRare;
+  final bool isDeleted;
+  final DateTime createdAt;
+  const Idiom(
+      {required this.id,
+      required this.word,
+      required this.pinyin,
+      required this.firstPinyinNoTone,
+      required this.lastPinyinNoTone,
+      required this.firstPinyin,
+      required this.lastPinyin,
+      required this.firstChar,
+      required this.lastChar,
+      this.explanation,
+      this.source,
+      this.example,
+      required this.gradeLevel,
+      required this.frequency,
+      required this.isRare,
+      required this.isDeleted,
+      required this.createdAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['word'] = Variable<String>(word);
+    map['pinyin'] = Variable<String>(pinyin);
+    map['first_pinyin_no_tone'] = Variable<String>(firstPinyinNoTone);
+    map['last_pinyin_no_tone'] = Variable<String>(lastPinyinNoTone);
+    map['first_pinyin'] = Variable<String>(firstPinyin);
+    map['last_pinyin'] = Variable<String>(lastPinyin);
+    map['first_char'] = Variable<String>(firstChar);
+    map['last_char'] = Variable<String>(lastChar);
+    if (!nullToAbsent || explanation != null) {
+      map['explanation'] = Variable<String>(explanation);
+    }
+    if (!nullToAbsent || source != null) {
+      map['source'] = Variable<String>(source);
+    }
+    if (!nullToAbsent || example != null) {
+      map['example'] = Variable<String>(example);
+    }
+    map['grade_level'] = Variable<int>(gradeLevel);
+    map['frequency'] = Variable<int>(frequency);
+    map['is_rare'] = Variable<bool>(isRare);
+    map['is_deleted'] = Variable<bool>(isDeleted);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  IdiomsCompanion toCompanion(bool nullToAbsent) {
+    return IdiomsCompanion(
+      id: Value(id),
+      word: Value(word),
+      pinyin: Value(pinyin),
+      firstPinyinNoTone: Value(firstPinyinNoTone),
+      lastPinyinNoTone: Value(lastPinyinNoTone),
+      firstPinyin: Value(firstPinyin),
+      lastPinyin: Value(lastPinyin),
+      firstChar: Value(firstChar),
+      lastChar: Value(lastChar),
+      explanation: explanation == null && nullToAbsent
+          ? const Value.absent()
+          : Value(explanation),
+      source:
+          source == null && nullToAbsent ? const Value.absent() : Value(source),
+      example: example == null && nullToAbsent
+          ? const Value.absent()
+          : Value(example),
+      gradeLevel: Value(gradeLevel),
+      frequency: Value(frequency),
+      isRare: Value(isRare),
+      isDeleted: Value(isDeleted),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory Idiom.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Idiom(
+      id: serializer.fromJson<int>(json['id']),
+      word: serializer.fromJson<String>(json['word']),
+      pinyin: serializer.fromJson<String>(json['pinyin']),
+      firstPinyinNoTone: serializer.fromJson<String>(json['firstPinyinNoTone']),
+      lastPinyinNoTone: serializer.fromJson<String>(json['lastPinyinNoTone']),
+      firstPinyin: serializer.fromJson<String>(json['firstPinyin']),
+      lastPinyin: serializer.fromJson<String>(json['lastPinyin']),
+      firstChar: serializer.fromJson<String>(json['firstChar']),
+      lastChar: serializer.fromJson<String>(json['lastChar']),
+      explanation: serializer.fromJson<String?>(json['explanation']),
+      source: serializer.fromJson<String?>(json['source']),
+      example: serializer.fromJson<String?>(json['example']),
+      gradeLevel: serializer.fromJson<int>(json['gradeLevel']),
+      frequency: serializer.fromJson<int>(json['frequency']),
+      isRare: serializer.fromJson<bool>(json['isRare']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'word': serializer.toJson<String>(word),
+      'pinyin': serializer.toJson<String>(pinyin),
+      'firstPinyinNoTone': serializer.toJson<String>(firstPinyinNoTone),
+      'lastPinyinNoTone': serializer.toJson<String>(lastPinyinNoTone),
+      'firstPinyin': serializer.toJson<String>(firstPinyin),
+      'lastPinyin': serializer.toJson<String>(lastPinyin),
+      'firstChar': serializer.toJson<String>(firstChar),
+      'lastChar': serializer.toJson<String>(lastChar),
+      'explanation': serializer.toJson<String?>(explanation),
+      'source': serializer.toJson<String?>(source),
+      'example': serializer.toJson<String?>(example),
+      'gradeLevel': serializer.toJson<int>(gradeLevel),
+      'frequency': serializer.toJson<int>(frequency),
+      'isRare': serializer.toJson<bool>(isRare),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  Idiom copyWith(
+          {int? id,
+          String? word,
+          String? pinyin,
+          String? firstPinyinNoTone,
+          String? lastPinyinNoTone,
+          String? firstPinyin,
+          String? lastPinyin,
+          String? firstChar,
+          String? lastChar,
+          Value<String?> explanation = const Value.absent(),
+          Value<String?> source = const Value.absent(),
+          Value<String?> example = const Value.absent(),
+          int? gradeLevel,
+          int? frequency,
+          bool? isRare,
+          bool? isDeleted,
+          DateTime? createdAt}) =>
+      Idiom(
+        id: id ?? this.id,
+        word: word ?? this.word,
+        pinyin: pinyin ?? this.pinyin,
+        firstPinyinNoTone: firstPinyinNoTone ?? this.firstPinyinNoTone,
+        lastPinyinNoTone: lastPinyinNoTone ?? this.lastPinyinNoTone,
+        firstPinyin: firstPinyin ?? this.firstPinyin,
+        lastPinyin: lastPinyin ?? this.lastPinyin,
+        firstChar: firstChar ?? this.firstChar,
+        lastChar: lastChar ?? this.lastChar,
+        explanation: explanation.present ? explanation.value : this.explanation,
+        source: source.present ? source.value : this.source,
+        example: example.present ? example.value : this.example,
+        gradeLevel: gradeLevel ?? this.gradeLevel,
+        frequency: frequency ?? this.frequency,
+        isRare: isRare ?? this.isRare,
+        isDeleted: isDeleted ?? this.isDeleted,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  Idiom copyWithCompanion(IdiomsCompanion data) {
+    return Idiom(
+      id: data.id.present ? data.id.value : this.id,
+      word: data.word.present ? data.word.value : this.word,
+      pinyin: data.pinyin.present ? data.pinyin.value : this.pinyin,
+      firstPinyinNoTone: data.firstPinyinNoTone.present
+          ? data.firstPinyinNoTone.value
+          : this.firstPinyinNoTone,
+      lastPinyinNoTone: data.lastPinyinNoTone.present
+          ? data.lastPinyinNoTone.value
+          : this.lastPinyinNoTone,
+      firstPinyin:
+          data.firstPinyin.present ? data.firstPinyin.value : this.firstPinyin,
+      lastPinyin:
+          data.lastPinyin.present ? data.lastPinyin.value : this.lastPinyin,
+      firstChar: data.firstChar.present ? data.firstChar.value : this.firstChar,
+      lastChar: data.lastChar.present ? data.lastChar.value : this.lastChar,
+      explanation:
+          data.explanation.present ? data.explanation.value : this.explanation,
+      source: data.source.present ? data.source.value : this.source,
+      example: data.example.present ? data.example.value : this.example,
+      gradeLevel:
+          data.gradeLevel.present ? data.gradeLevel.value : this.gradeLevel,
+      frequency: data.frequency.present ? data.frequency.value : this.frequency,
+      isRare: data.isRare.present ? data.isRare.value : this.isRare,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Idiom(')
+          ..write('id: $id, ')
+          ..write('word: $word, ')
+          ..write('pinyin: $pinyin, ')
+          ..write('firstPinyinNoTone: $firstPinyinNoTone, ')
+          ..write('lastPinyinNoTone: $lastPinyinNoTone, ')
+          ..write('firstPinyin: $firstPinyin, ')
+          ..write('lastPinyin: $lastPinyin, ')
+          ..write('firstChar: $firstChar, ')
+          ..write('lastChar: $lastChar, ')
+          ..write('explanation: $explanation, ')
+          ..write('source: $source, ')
+          ..write('example: $example, ')
+          ..write('gradeLevel: $gradeLevel, ')
+          ..write('frequency: $frequency, ')
+          ..write('isRare: $isRare, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      word,
+      pinyin,
+      firstPinyinNoTone,
+      lastPinyinNoTone,
+      firstPinyin,
+      lastPinyin,
+      firstChar,
+      lastChar,
+      explanation,
+      source,
+      example,
+      gradeLevel,
+      frequency,
+      isRare,
+      isDeleted,
+      createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Idiom &&
+          other.id == this.id &&
+          other.word == this.word &&
+          other.pinyin == this.pinyin &&
+          other.firstPinyinNoTone == this.firstPinyinNoTone &&
+          other.lastPinyinNoTone == this.lastPinyinNoTone &&
+          other.firstPinyin == this.firstPinyin &&
+          other.lastPinyin == this.lastPinyin &&
+          other.firstChar == this.firstChar &&
+          other.lastChar == this.lastChar &&
+          other.explanation == this.explanation &&
+          other.source == this.source &&
+          other.example == this.example &&
+          other.gradeLevel == this.gradeLevel &&
+          other.frequency == this.frequency &&
+          other.isRare == this.isRare &&
+          other.isDeleted == this.isDeleted &&
+          other.createdAt == this.createdAt);
+}
+
+class IdiomsCompanion extends UpdateCompanion<Idiom> {
+  final Value<int> id;
+  final Value<String> word;
+  final Value<String> pinyin;
+  final Value<String> firstPinyinNoTone;
+  final Value<String> lastPinyinNoTone;
+  final Value<String> firstPinyin;
+  final Value<String> lastPinyin;
+  final Value<String> firstChar;
+  final Value<String> lastChar;
+  final Value<String?> explanation;
+  final Value<String?> source;
+  final Value<String?> example;
+  final Value<int> gradeLevel;
+  final Value<int> frequency;
+  final Value<bool> isRare;
+  final Value<bool> isDeleted;
+  final Value<DateTime> createdAt;
+  const IdiomsCompanion({
+    this.id = const Value.absent(),
+    this.word = const Value.absent(),
+    this.pinyin = const Value.absent(),
+    this.firstPinyinNoTone = const Value.absent(),
+    this.lastPinyinNoTone = const Value.absent(),
+    this.firstPinyin = const Value.absent(),
+    this.lastPinyin = const Value.absent(),
+    this.firstChar = const Value.absent(),
+    this.lastChar = const Value.absent(),
+    this.explanation = const Value.absent(),
+    this.source = const Value.absent(),
+    this.example = const Value.absent(),
+    this.gradeLevel = const Value.absent(),
+    this.frequency = const Value.absent(),
+    this.isRare = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  IdiomsCompanion.insert({
+    this.id = const Value.absent(),
+    required String word,
+    required String pinyin,
+    required String firstPinyinNoTone,
+    required String lastPinyinNoTone,
+    this.firstPinyin = const Value.absent(),
+    this.lastPinyin = const Value.absent(),
+    required String firstChar,
+    required String lastChar,
+    this.explanation = const Value.absent(),
+    this.source = const Value.absent(),
+    this.example = const Value.absent(),
+    this.gradeLevel = const Value.absent(),
+    this.frequency = const Value.absent(),
+    this.isRare = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    required DateTime createdAt,
+  })  : word = Value(word),
+        pinyin = Value(pinyin),
+        firstPinyinNoTone = Value(firstPinyinNoTone),
+        lastPinyinNoTone = Value(lastPinyinNoTone),
+        firstChar = Value(firstChar),
+        lastChar = Value(lastChar),
+        createdAt = Value(createdAt);
+  static Insertable<Idiom> custom({
+    Expression<int>? id,
+    Expression<String>? word,
+    Expression<String>? pinyin,
+    Expression<String>? firstPinyinNoTone,
+    Expression<String>? lastPinyinNoTone,
+    Expression<String>? firstPinyin,
+    Expression<String>? lastPinyin,
+    Expression<String>? firstChar,
+    Expression<String>? lastChar,
+    Expression<String>? explanation,
+    Expression<String>? source,
+    Expression<String>? example,
+    Expression<int>? gradeLevel,
+    Expression<int>? frequency,
+    Expression<bool>? isRare,
+    Expression<bool>? isDeleted,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (word != null) 'word': word,
+      if (pinyin != null) 'pinyin': pinyin,
+      if (firstPinyinNoTone != null) 'first_pinyin_no_tone': firstPinyinNoTone,
+      if (lastPinyinNoTone != null) 'last_pinyin_no_tone': lastPinyinNoTone,
+      if (firstPinyin != null) 'first_pinyin': firstPinyin,
+      if (lastPinyin != null) 'last_pinyin': lastPinyin,
+      if (firstChar != null) 'first_char': firstChar,
+      if (lastChar != null) 'last_char': lastChar,
+      if (explanation != null) 'explanation': explanation,
+      if (source != null) 'source': source,
+      if (example != null) 'example': example,
+      if (gradeLevel != null) 'grade_level': gradeLevel,
+      if (frequency != null) 'frequency': frequency,
+      if (isRare != null) 'is_rare': isRare,
+      if (isDeleted != null) 'is_deleted': isDeleted,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  IdiomsCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? word,
+      Value<String>? pinyin,
+      Value<String>? firstPinyinNoTone,
+      Value<String>? lastPinyinNoTone,
+      Value<String>? firstPinyin,
+      Value<String>? lastPinyin,
+      Value<String>? firstChar,
+      Value<String>? lastChar,
+      Value<String?>? explanation,
+      Value<String?>? source,
+      Value<String?>? example,
+      Value<int>? gradeLevel,
+      Value<int>? frequency,
+      Value<bool>? isRare,
+      Value<bool>? isDeleted,
+      Value<DateTime>? createdAt}) {
+    return IdiomsCompanion(
+      id: id ?? this.id,
+      word: word ?? this.word,
+      pinyin: pinyin ?? this.pinyin,
+      firstPinyinNoTone: firstPinyinNoTone ?? this.firstPinyinNoTone,
+      lastPinyinNoTone: lastPinyinNoTone ?? this.lastPinyinNoTone,
+      firstPinyin: firstPinyin ?? this.firstPinyin,
+      lastPinyin: lastPinyin ?? this.lastPinyin,
+      firstChar: firstChar ?? this.firstChar,
+      lastChar: lastChar ?? this.lastChar,
+      explanation: explanation ?? this.explanation,
+      source: source ?? this.source,
+      example: example ?? this.example,
+      gradeLevel: gradeLevel ?? this.gradeLevel,
+      frequency: frequency ?? this.frequency,
+      isRare: isRare ?? this.isRare,
+      isDeleted: isDeleted ?? this.isDeleted,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (word.present) {
+      map['word'] = Variable<String>(word.value);
+    }
+    if (pinyin.present) {
+      map['pinyin'] = Variable<String>(pinyin.value);
+    }
+    if (firstPinyinNoTone.present) {
+      map['first_pinyin_no_tone'] = Variable<String>(firstPinyinNoTone.value);
+    }
+    if (lastPinyinNoTone.present) {
+      map['last_pinyin_no_tone'] = Variable<String>(lastPinyinNoTone.value);
+    }
+    if (firstPinyin.present) {
+      map['first_pinyin'] = Variable<String>(firstPinyin.value);
+    }
+    if (lastPinyin.present) {
+      map['last_pinyin'] = Variable<String>(lastPinyin.value);
+    }
+    if (firstChar.present) {
+      map['first_char'] = Variable<String>(firstChar.value);
+    }
+    if (lastChar.present) {
+      map['last_char'] = Variable<String>(lastChar.value);
+    }
+    if (explanation.present) {
+      map['explanation'] = Variable<String>(explanation.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (example.present) {
+      map['example'] = Variable<String>(example.value);
+    }
+    if (gradeLevel.present) {
+      map['grade_level'] = Variable<int>(gradeLevel.value);
+    }
+    if (frequency.present) {
+      map['frequency'] = Variable<int>(frequency.value);
+    }
+    if (isRare.present) {
+      map['is_rare'] = Variable<bool>(isRare.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IdiomsCompanion(')
+          ..write('id: $id, ')
+          ..write('word: $word, ')
+          ..write('pinyin: $pinyin, ')
+          ..write('firstPinyinNoTone: $firstPinyinNoTone, ')
+          ..write('lastPinyinNoTone: $lastPinyinNoTone, ')
+          ..write('firstPinyin: $firstPinyin, ')
+          ..write('lastPinyin: $lastPinyin, ')
+          ..write('firstChar: $firstChar, ')
+          ..write('lastChar: $lastChar, ')
+          ..write('explanation: $explanation, ')
+          ..write('source: $source, ')
+          ..write('example: $example, ')
+          ..write('gradeLevel: $gradeLevel, ')
+          ..write('frequency: $frequency, ')
+          ..write('isRare: $isRare, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $IdiomGameSettingsTable extends IdiomGameSettings
+    with TableInfo<$IdiomGameSettingsTable, IdiomGameSetting> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $IdiomGameSettingsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _childIdMeta =
+      const VerificationMeta('childId');
+  @override
+  late final GeneratedColumn<int> childId = GeneratedColumn<int>(
+      'child_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES children (id)'));
+  static const VerificationMeta _currentGradeMeta =
+      const VerificationMeta('currentGrade');
+  @override
+  late final GeneratedColumn<int> currentGrade = GeneratedColumn<int>(
+      'current_grade', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(1));
+  static const VerificationMeta _customCountdownMeta =
+      const VerificationMeta('customCountdown');
+  @override
+  late final GeneratedColumn<int> customCountdown = GeneratedColumn<int>(
+      'custom_countdown', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _customFreeHintsMeta =
+      const VerificationMeta('customFreeHints');
+  @override
+  late final GeneratedColumn<int> customFreeHints = GeneratedColumn<int>(
+      'custom_free_hints', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _matchModeMeta =
+      const VerificationMeta('matchMode');
+  @override
+  late final GeneratedColumn<int> matchMode = GeneratedColumn<int>(
+      'match_mode', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _soundEnabledMeta =
+      const VerificationMeta('soundEnabled');
+  @override
+  late final GeneratedColumn<bool> soundEnabled = GeneratedColumn<bool>(
+      'sound_enabled', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("sound_enabled" IN (0, 1))'),
+      defaultValue: const Constant(true));
+  static const VerificationMeta _includeRareIdiomsMeta =
+      const VerificationMeta('includeRareIdioms');
+  @override
+  late final GeneratedColumn<bool> includeRareIdioms = GeneratedColumn<bool>(
+      'include_rare_idioms', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("include_rare_idioms" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _isDeletedMeta =
+      const VerificationMeta('isDeleted');
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+      'is_deleted', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_deleted" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        childId,
+        currentGrade,
+        customCountdown,
+        customFreeHints,
+        matchMode,
+        soundEnabled,
+        includeRareIdioms,
+        isDeleted,
+        createdAt,
+        updatedAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'idiom_game_settings';
+  @override
+  VerificationContext validateIntegrity(Insertable<IdiomGameSetting> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('child_id')) {
+      context.handle(_childIdMeta,
+          childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta));
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    if (data.containsKey('current_grade')) {
+      context.handle(
+          _currentGradeMeta,
+          currentGrade.isAcceptableOrUnknown(
+              data['current_grade']!, _currentGradeMeta));
+    }
+    if (data.containsKey('custom_countdown')) {
+      context.handle(
+          _customCountdownMeta,
+          customCountdown.isAcceptableOrUnknown(
+              data['custom_countdown']!, _customCountdownMeta));
+    }
+    if (data.containsKey('custom_free_hints')) {
+      context.handle(
+          _customFreeHintsMeta,
+          customFreeHints.isAcceptableOrUnknown(
+              data['custom_free_hints']!, _customFreeHintsMeta));
+    }
+    if (data.containsKey('match_mode')) {
+      context.handle(_matchModeMeta,
+          matchMode.isAcceptableOrUnknown(data['match_mode']!, _matchModeMeta));
+    }
+    if (data.containsKey('sound_enabled')) {
+      context.handle(
+          _soundEnabledMeta,
+          soundEnabled.isAcceptableOrUnknown(
+              data['sound_enabled']!, _soundEnabledMeta));
+    }
+    if (data.containsKey('include_rare_idioms')) {
+      context.handle(
+          _includeRareIdiomsMeta,
+          includeRareIdioms.isAcceptableOrUnknown(
+              data['include_rare_idioms']!, _includeRareIdiomsMeta));
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(_isDeletedMeta,
+          isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  IdiomGameSetting map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return IdiomGameSetting(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      childId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}child_id'])!,
+      currentGrade: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}current_grade'])!,
+      customCountdown: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}custom_countdown']),
+      customFreeHints: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}custom_free_hints']),
+      matchMode: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}match_mode'])!,
+      soundEnabled: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}sound_enabled'])!,
+      includeRareIdioms: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}include_rare_idioms'])!,
+      isDeleted: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_deleted'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
+    );
+  }
+
+  @override
+  $IdiomGameSettingsTable createAlias(String alias) {
+    return $IdiomGameSettingsTable(attachedDatabase, alias);
+  }
+}
+
+class IdiomGameSetting extends DataClass
+    implements Insertable<IdiomGameSetting> {
+  final int id;
+  final int childId;
+  final int currentGrade;
+  final int? customCountdown;
+  final int? customFreeHints;
+
+  /// 接龙匹配模式: 0=正常接龙(首字=尾字), 1=包含尾字, 2=同音接龙(声调一致)
+  final int matchMode;
+  final bool soundEnabled;
+  final bool includeRareIdioms;
+  final bool isDeleted;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  const IdiomGameSetting(
+      {required this.id,
+      required this.childId,
+      required this.currentGrade,
+      this.customCountdown,
+      this.customFreeHints,
+      required this.matchMode,
+      required this.soundEnabled,
+      required this.includeRareIdioms,
+      required this.isDeleted,
+      required this.createdAt,
+      this.updatedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['child_id'] = Variable<int>(childId);
+    map['current_grade'] = Variable<int>(currentGrade);
+    if (!nullToAbsent || customCountdown != null) {
+      map['custom_countdown'] = Variable<int>(customCountdown);
+    }
+    if (!nullToAbsent || customFreeHints != null) {
+      map['custom_free_hints'] = Variable<int>(customFreeHints);
+    }
+    map['match_mode'] = Variable<int>(matchMode);
+    map['sound_enabled'] = Variable<bool>(soundEnabled);
+    map['include_rare_idioms'] = Variable<bool>(includeRareIdioms);
+    map['is_deleted'] = Variable<bool>(isDeleted);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
+    return map;
+  }
+
+  IdiomGameSettingsCompanion toCompanion(bool nullToAbsent) {
+    return IdiomGameSettingsCompanion(
+      id: Value(id),
+      childId: Value(childId),
+      currentGrade: Value(currentGrade),
+      customCountdown: customCountdown == null && nullToAbsent
+          ? const Value.absent()
+          : Value(customCountdown),
+      customFreeHints: customFreeHints == null && nullToAbsent
+          ? const Value.absent()
+          : Value(customFreeHints),
+      matchMode: Value(matchMode),
+      soundEnabled: Value(soundEnabled),
+      includeRareIdioms: Value(includeRareIdioms),
+      isDeleted: Value(isDeleted),
+      createdAt: Value(createdAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+    );
+  }
+
+  factory IdiomGameSetting.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return IdiomGameSetting(
+      id: serializer.fromJson<int>(json['id']),
+      childId: serializer.fromJson<int>(json['childId']),
+      currentGrade: serializer.fromJson<int>(json['currentGrade']),
+      customCountdown: serializer.fromJson<int?>(json['customCountdown']),
+      customFreeHints: serializer.fromJson<int?>(json['customFreeHints']),
+      matchMode: serializer.fromJson<int>(json['matchMode']),
+      soundEnabled: serializer.fromJson<bool>(json['soundEnabled']),
+      includeRareIdioms: serializer.fromJson<bool>(json['includeRareIdioms']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'childId': serializer.toJson<int>(childId),
+      'currentGrade': serializer.toJson<int>(currentGrade),
+      'customCountdown': serializer.toJson<int?>(customCountdown),
+      'customFreeHints': serializer.toJson<int?>(customFreeHints),
+      'matchMode': serializer.toJson<int>(matchMode),
+      'soundEnabled': serializer.toJson<bool>(soundEnabled),
+      'includeRareIdioms': serializer.toJson<bool>(includeRareIdioms),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
+    };
+  }
+
+  IdiomGameSetting copyWith(
+          {int? id,
+          int? childId,
+          int? currentGrade,
+          Value<int?> customCountdown = const Value.absent(),
+          Value<int?> customFreeHints = const Value.absent(),
+          int? matchMode,
+          bool? soundEnabled,
+          bool? includeRareIdioms,
+          bool? isDeleted,
+          DateTime? createdAt,
+          Value<DateTime?> updatedAt = const Value.absent()}) =>
+      IdiomGameSetting(
+        id: id ?? this.id,
+        childId: childId ?? this.childId,
+        currentGrade: currentGrade ?? this.currentGrade,
+        customCountdown: customCountdown.present
+            ? customCountdown.value
+            : this.customCountdown,
+        customFreeHints: customFreeHints.present
+            ? customFreeHints.value
+            : this.customFreeHints,
+        matchMode: matchMode ?? this.matchMode,
+        soundEnabled: soundEnabled ?? this.soundEnabled,
+        includeRareIdioms: includeRareIdioms ?? this.includeRareIdioms,
+        isDeleted: isDeleted ?? this.isDeleted,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+      );
+  IdiomGameSetting copyWithCompanion(IdiomGameSettingsCompanion data) {
+    return IdiomGameSetting(
+      id: data.id.present ? data.id.value : this.id,
+      childId: data.childId.present ? data.childId.value : this.childId,
+      currentGrade: data.currentGrade.present
+          ? data.currentGrade.value
+          : this.currentGrade,
+      customCountdown: data.customCountdown.present
+          ? data.customCountdown.value
+          : this.customCountdown,
+      customFreeHints: data.customFreeHints.present
+          ? data.customFreeHints.value
+          : this.customFreeHints,
+      matchMode: data.matchMode.present ? data.matchMode.value : this.matchMode,
+      soundEnabled: data.soundEnabled.present
+          ? data.soundEnabled.value
+          : this.soundEnabled,
+      includeRareIdioms: data.includeRareIdioms.present
+          ? data.includeRareIdioms.value
+          : this.includeRareIdioms,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IdiomGameSetting(')
+          ..write('id: $id, ')
+          ..write('childId: $childId, ')
+          ..write('currentGrade: $currentGrade, ')
+          ..write('customCountdown: $customCountdown, ')
+          ..write('customFreeHints: $customFreeHints, ')
+          ..write('matchMode: $matchMode, ')
+          ..write('soundEnabled: $soundEnabled, ')
+          ..write('includeRareIdioms: $includeRareIdioms, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      childId,
+      currentGrade,
+      customCountdown,
+      customFreeHints,
+      matchMode,
+      soundEnabled,
+      includeRareIdioms,
+      isDeleted,
+      createdAt,
+      updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is IdiomGameSetting &&
+          other.id == this.id &&
+          other.childId == this.childId &&
+          other.currentGrade == this.currentGrade &&
+          other.customCountdown == this.customCountdown &&
+          other.customFreeHints == this.customFreeHints &&
+          other.matchMode == this.matchMode &&
+          other.soundEnabled == this.soundEnabled &&
+          other.includeRareIdioms == this.includeRareIdioms &&
+          other.isDeleted == this.isDeleted &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class IdiomGameSettingsCompanion extends UpdateCompanion<IdiomGameSetting> {
+  final Value<int> id;
+  final Value<int> childId;
+  final Value<int> currentGrade;
+  final Value<int?> customCountdown;
+  final Value<int?> customFreeHints;
+  final Value<int> matchMode;
+  final Value<bool> soundEnabled;
+  final Value<bool> includeRareIdioms;
+  final Value<bool> isDeleted;
+  final Value<DateTime> createdAt;
+  final Value<DateTime?> updatedAt;
+  const IdiomGameSettingsCompanion({
+    this.id = const Value.absent(),
+    this.childId = const Value.absent(),
+    this.currentGrade = const Value.absent(),
+    this.customCountdown = const Value.absent(),
+    this.customFreeHints = const Value.absent(),
+    this.matchMode = const Value.absent(),
+    this.soundEnabled = const Value.absent(),
+    this.includeRareIdioms = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  IdiomGameSettingsCompanion.insert({
+    this.id = const Value.absent(),
+    required int childId,
+    this.currentGrade = const Value.absent(),
+    this.customCountdown = const Value.absent(),
+    this.customFreeHints = const Value.absent(),
+    this.matchMode = const Value.absent(),
+    this.soundEnabled = const Value.absent(),
+    this.includeRareIdioms = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    required DateTime createdAt,
+    this.updatedAt = const Value.absent(),
+  })  : childId = Value(childId),
+        createdAt = Value(createdAt);
+  static Insertable<IdiomGameSetting> custom({
+    Expression<int>? id,
+    Expression<int>? childId,
+    Expression<int>? currentGrade,
+    Expression<int>? customCountdown,
+    Expression<int>? customFreeHints,
+    Expression<int>? matchMode,
+    Expression<bool>? soundEnabled,
+    Expression<bool>? includeRareIdioms,
+    Expression<bool>? isDeleted,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (childId != null) 'child_id': childId,
+      if (currentGrade != null) 'current_grade': currentGrade,
+      if (customCountdown != null) 'custom_countdown': customCountdown,
+      if (customFreeHints != null) 'custom_free_hints': customFreeHints,
+      if (matchMode != null) 'match_mode': matchMode,
+      if (soundEnabled != null) 'sound_enabled': soundEnabled,
+      if (includeRareIdioms != null) 'include_rare_idioms': includeRareIdioms,
+      if (isDeleted != null) 'is_deleted': isDeleted,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    });
+  }
+
+  IdiomGameSettingsCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? childId,
+      Value<int>? currentGrade,
+      Value<int?>? customCountdown,
+      Value<int?>? customFreeHints,
+      Value<int>? matchMode,
+      Value<bool>? soundEnabled,
+      Value<bool>? includeRareIdioms,
+      Value<bool>? isDeleted,
+      Value<DateTime>? createdAt,
+      Value<DateTime?>? updatedAt}) {
+    return IdiomGameSettingsCompanion(
+      id: id ?? this.id,
+      childId: childId ?? this.childId,
+      currentGrade: currentGrade ?? this.currentGrade,
+      customCountdown: customCountdown ?? this.customCountdown,
+      customFreeHints: customFreeHints ?? this.customFreeHints,
+      matchMode: matchMode ?? this.matchMode,
+      soundEnabled: soundEnabled ?? this.soundEnabled,
+      includeRareIdioms: includeRareIdioms ?? this.includeRareIdioms,
+      isDeleted: isDeleted ?? this.isDeleted,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (childId.present) {
+      map['child_id'] = Variable<int>(childId.value);
+    }
+    if (currentGrade.present) {
+      map['current_grade'] = Variable<int>(currentGrade.value);
+    }
+    if (customCountdown.present) {
+      map['custom_countdown'] = Variable<int>(customCountdown.value);
+    }
+    if (customFreeHints.present) {
+      map['custom_free_hints'] = Variable<int>(customFreeHints.value);
+    }
+    if (matchMode.present) {
+      map['match_mode'] = Variable<int>(matchMode.value);
+    }
+    if (soundEnabled.present) {
+      map['sound_enabled'] = Variable<bool>(soundEnabled.value);
+    }
+    if (includeRareIdioms.present) {
+      map['include_rare_idioms'] = Variable<bool>(includeRareIdioms.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IdiomGameSettingsCompanion(')
+          ..write('id: $id, ')
+          ..write('childId: $childId, ')
+          ..write('currentGrade: $currentGrade, ')
+          ..write('customCountdown: $customCountdown, ')
+          ..write('customFreeHints: $customFreeHints, ')
+          ..write('matchMode: $matchMode, ')
+          ..write('soundEnabled: $soundEnabled, ')
+          ..write('includeRareIdioms: $includeRareIdioms, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $IdiomGameRecordsTable extends IdiomGameRecords
+    with TableInfo<$IdiomGameRecordsTable, IdiomGameRecord> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $IdiomGameRecordsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _childIdMeta =
+      const VerificationMeta('childId');
+  @override
+  late final GeneratedColumn<int> childId = GeneratedColumn<int>(
+      'child_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES children (id)'));
+  static const VerificationMeta _gradeMeta = const VerificationMeta('grade');
+  @override
+  late final GeneratedColumn<int> grade = GeneratedColumn<int>(
+      'grade', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _scoreMeta = const VerificationMeta('score');
+  @override
+  late final GeneratedColumn<int> score = GeneratedColumn<int>(
+      'score', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _chainLengthMeta =
+      const VerificationMeta('chainLength');
+  @override
+  late final GeneratedColumn<int> chainLength = GeneratedColumn<int>(
+      'chain_length', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _durationMeta =
+      const VerificationMeta('duration');
+  @override
+  late final GeneratedColumn<int> duration = GeneratedColumn<int>(
+      'duration', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _hintsUsedMeta =
+      const VerificationMeta('hintsUsed');
+  @override
+  late final GeneratedColumn<int> hintsUsed = GeneratedColumn<int>(
+      'hints_used', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _fastAnswerCountMeta =
+      const VerificationMeta('fastAnswerCount');
+  @override
+  late final GeneratedColumn<int> fastAnswerCount = GeneratedColumn<int>(
+      'fast_answer_count', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _rareIdiomCountMeta =
+      const VerificationMeta('rareIdiomCount');
+  @override
+  late final GeneratedColumn<int> rareIdiomCount = GeneratedColumn<int>(
+      'rare_idiom_count', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _playerTurnsMeta =
+      const VerificationMeta('playerTurns');
+  @override
+  late final GeneratedColumn<int> playerTurns = GeneratedColumn<int>(
+      'player_turns', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _timeoutWarningCountMeta =
+      const VerificationMeta('timeoutWarningCount');
+  @override
+  late final GeneratedColumn<int> timeoutWarningCount = GeneratedColumn<int>(
+      'timeout_warning_count', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _isAiSurrenderMeta =
+      const VerificationMeta('isAiSurrender');
+  @override
+  late final GeneratedColumn<bool> isAiSurrender = GeneratedColumn<bool>(
+      'is_ai_surrender', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_ai_surrender" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _comboMaxMeta =
+      const VerificationMeta('comboMax');
+  @override
+  late final GeneratedColumn<int> comboMax = GeneratedColumn<int>(
+      'combo_max', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _starsEarnedMeta =
+      const VerificationMeta('starsEarned');
+  @override
+  late final GeneratedColumn<int> starsEarned = GeneratedColumn<int>(
+      'stars_earned', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _starRatingMeta =
+      const VerificationMeta('starRating');
+  @override
+  late final GeneratedColumn<int> starRating = GeneratedColumn<int>(
+      'star_rating', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _idiomChainMeta =
+      const VerificationMeta('idiomChain');
+  @override
+  late final GeneratedColumn<String> idiomChain = GeneratedColumn<String>(
+      'idiom_chain', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _isDeletedMeta =
+      const VerificationMeta('isDeleted');
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+      'is_deleted', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_deleted" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _playedAtMeta =
+      const VerificationMeta('playedAt');
+  @override
+  late final GeneratedColumn<DateTime> playedAt = GeneratedColumn<DateTime>(
+      'played_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        childId,
+        grade,
+        score,
+        chainLength,
+        duration,
+        hintsUsed,
+        fastAnswerCount,
+        rareIdiomCount,
+        playerTurns,
+        timeoutWarningCount,
+        isAiSurrender,
+        comboMax,
+        starsEarned,
+        starRating,
+        idiomChain,
+        isDeleted,
+        playedAt,
+        createdAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'idiom_game_records';
+  @override
+  VerificationContext validateIntegrity(Insertable<IdiomGameRecord> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('child_id')) {
+      context.handle(_childIdMeta,
+          childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta));
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    if (data.containsKey('grade')) {
+      context.handle(
+          _gradeMeta, grade.isAcceptableOrUnknown(data['grade']!, _gradeMeta));
+    } else if (isInserting) {
+      context.missing(_gradeMeta);
+    }
+    if (data.containsKey('score')) {
+      context.handle(
+          _scoreMeta, score.isAcceptableOrUnknown(data['score']!, _scoreMeta));
+    } else if (isInserting) {
+      context.missing(_scoreMeta);
+    }
+    if (data.containsKey('chain_length')) {
+      context.handle(
+          _chainLengthMeta,
+          chainLength.isAcceptableOrUnknown(
+              data['chain_length']!, _chainLengthMeta));
+    } else if (isInserting) {
+      context.missing(_chainLengthMeta);
+    }
+    if (data.containsKey('duration')) {
+      context.handle(_durationMeta,
+          duration.isAcceptableOrUnknown(data['duration']!, _durationMeta));
+    } else if (isInserting) {
+      context.missing(_durationMeta);
+    }
+    if (data.containsKey('hints_used')) {
+      context.handle(_hintsUsedMeta,
+          hintsUsed.isAcceptableOrUnknown(data['hints_used']!, _hintsUsedMeta));
+    }
+    if (data.containsKey('fast_answer_count')) {
+      context.handle(
+          _fastAnswerCountMeta,
+          fastAnswerCount.isAcceptableOrUnknown(
+              data['fast_answer_count']!, _fastAnswerCountMeta));
+    }
+    if (data.containsKey('rare_idiom_count')) {
+      context.handle(
+          _rareIdiomCountMeta,
+          rareIdiomCount.isAcceptableOrUnknown(
+              data['rare_idiom_count']!, _rareIdiomCountMeta));
+    }
+    if (data.containsKey('player_turns')) {
+      context.handle(
+          _playerTurnsMeta,
+          playerTurns.isAcceptableOrUnknown(
+              data['player_turns']!, _playerTurnsMeta));
+    }
+    if (data.containsKey('timeout_warning_count')) {
+      context.handle(
+          _timeoutWarningCountMeta,
+          timeoutWarningCount.isAcceptableOrUnknown(
+              data['timeout_warning_count']!, _timeoutWarningCountMeta));
+    }
+    if (data.containsKey('is_ai_surrender')) {
+      context.handle(
+          _isAiSurrenderMeta,
+          isAiSurrender.isAcceptableOrUnknown(
+              data['is_ai_surrender']!, _isAiSurrenderMeta));
+    }
+    if (data.containsKey('combo_max')) {
+      context.handle(_comboMaxMeta,
+          comboMax.isAcceptableOrUnknown(data['combo_max']!, _comboMaxMeta));
+    }
+    if (data.containsKey('stars_earned')) {
+      context.handle(
+          _starsEarnedMeta,
+          starsEarned.isAcceptableOrUnknown(
+              data['stars_earned']!, _starsEarnedMeta));
+    }
+    if (data.containsKey('star_rating')) {
+      context.handle(
+          _starRatingMeta,
+          starRating.isAcceptableOrUnknown(
+              data['star_rating']!, _starRatingMeta));
+    }
+    if (data.containsKey('idiom_chain')) {
+      context.handle(
+          _idiomChainMeta,
+          idiomChain.isAcceptableOrUnknown(
+              data['idiom_chain']!, _idiomChainMeta));
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(_isDeletedMeta,
+          isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta));
+    }
+    if (data.containsKey('played_at')) {
+      context.handle(_playedAtMeta,
+          playedAt.isAcceptableOrUnknown(data['played_at']!, _playedAtMeta));
+    } else if (isInserting) {
+      context.missing(_playedAtMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  IdiomGameRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return IdiomGameRecord(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      childId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}child_id'])!,
+      grade: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}grade'])!,
+      score: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}score'])!,
+      chainLength: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}chain_length'])!,
+      duration: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}duration'])!,
+      hintsUsed: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}hints_used'])!,
+      fastAnswerCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}fast_answer_count'])!,
+      rareIdiomCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}rare_idiom_count'])!,
+      playerTurns: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}player_turns'])!,
+      timeoutWarningCount: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}timeout_warning_count'])!,
+      isAiSurrender: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_ai_surrender'])!,
+      comboMax: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}combo_max'])!,
+      starsEarned: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}stars_earned'])!,
+      starRating: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}star_rating'])!,
+      idiomChain: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}idiom_chain']),
+      isDeleted: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_deleted'])!,
+      playedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}played_at'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $IdiomGameRecordsTable createAlias(String alias) {
+    return $IdiomGameRecordsTable(attachedDatabase, alias);
+  }
+}
+
+class IdiomGameRecord extends DataClass implements Insertable<IdiomGameRecord> {
+  final int id;
+  final int childId;
+  final int grade;
+  final int score;
+  final int chainLength;
+  final int duration;
+  final int hintsUsed;
+  final int fastAnswerCount;
+  final int rareIdiomCount;
+  final int playerTurns;
+  final int timeoutWarningCount;
+  final bool isAiSurrender;
+  final int comboMax;
+  final int starsEarned;
+  final int starRating;
+  final String? idiomChain;
+  final bool isDeleted;
+  final DateTime playedAt;
+  final DateTime createdAt;
+  const IdiomGameRecord(
+      {required this.id,
+      required this.childId,
+      required this.grade,
+      required this.score,
+      required this.chainLength,
+      required this.duration,
+      required this.hintsUsed,
+      required this.fastAnswerCount,
+      required this.rareIdiomCount,
+      required this.playerTurns,
+      required this.timeoutWarningCount,
+      required this.isAiSurrender,
+      required this.comboMax,
+      required this.starsEarned,
+      required this.starRating,
+      this.idiomChain,
+      required this.isDeleted,
+      required this.playedAt,
+      required this.createdAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['child_id'] = Variable<int>(childId);
+    map['grade'] = Variable<int>(grade);
+    map['score'] = Variable<int>(score);
+    map['chain_length'] = Variable<int>(chainLength);
+    map['duration'] = Variable<int>(duration);
+    map['hints_used'] = Variable<int>(hintsUsed);
+    map['fast_answer_count'] = Variable<int>(fastAnswerCount);
+    map['rare_idiom_count'] = Variable<int>(rareIdiomCount);
+    map['player_turns'] = Variable<int>(playerTurns);
+    map['timeout_warning_count'] = Variable<int>(timeoutWarningCount);
+    map['is_ai_surrender'] = Variable<bool>(isAiSurrender);
+    map['combo_max'] = Variable<int>(comboMax);
+    map['stars_earned'] = Variable<int>(starsEarned);
+    map['star_rating'] = Variable<int>(starRating);
+    if (!nullToAbsent || idiomChain != null) {
+      map['idiom_chain'] = Variable<String>(idiomChain);
+    }
+    map['is_deleted'] = Variable<bool>(isDeleted);
+    map['played_at'] = Variable<DateTime>(playedAt);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  IdiomGameRecordsCompanion toCompanion(bool nullToAbsent) {
+    return IdiomGameRecordsCompanion(
+      id: Value(id),
+      childId: Value(childId),
+      grade: Value(grade),
+      score: Value(score),
+      chainLength: Value(chainLength),
+      duration: Value(duration),
+      hintsUsed: Value(hintsUsed),
+      fastAnswerCount: Value(fastAnswerCount),
+      rareIdiomCount: Value(rareIdiomCount),
+      playerTurns: Value(playerTurns),
+      timeoutWarningCount: Value(timeoutWarningCount),
+      isAiSurrender: Value(isAiSurrender),
+      comboMax: Value(comboMax),
+      starsEarned: Value(starsEarned),
+      starRating: Value(starRating),
+      idiomChain: idiomChain == null && nullToAbsent
+          ? const Value.absent()
+          : Value(idiomChain),
+      isDeleted: Value(isDeleted),
+      playedAt: Value(playedAt),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory IdiomGameRecord.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return IdiomGameRecord(
+      id: serializer.fromJson<int>(json['id']),
+      childId: serializer.fromJson<int>(json['childId']),
+      grade: serializer.fromJson<int>(json['grade']),
+      score: serializer.fromJson<int>(json['score']),
+      chainLength: serializer.fromJson<int>(json['chainLength']),
+      duration: serializer.fromJson<int>(json['duration']),
+      hintsUsed: serializer.fromJson<int>(json['hintsUsed']),
+      fastAnswerCount: serializer.fromJson<int>(json['fastAnswerCount']),
+      rareIdiomCount: serializer.fromJson<int>(json['rareIdiomCount']),
+      playerTurns: serializer.fromJson<int>(json['playerTurns']),
+      timeoutWarningCount:
+          serializer.fromJson<int>(json['timeoutWarningCount']),
+      isAiSurrender: serializer.fromJson<bool>(json['isAiSurrender']),
+      comboMax: serializer.fromJson<int>(json['comboMax']),
+      starsEarned: serializer.fromJson<int>(json['starsEarned']),
+      starRating: serializer.fromJson<int>(json['starRating']),
+      idiomChain: serializer.fromJson<String?>(json['idiomChain']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
+      playedAt: serializer.fromJson<DateTime>(json['playedAt']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'childId': serializer.toJson<int>(childId),
+      'grade': serializer.toJson<int>(grade),
+      'score': serializer.toJson<int>(score),
+      'chainLength': serializer.toJson<int>(chainLength),
+      'duration': serializer.toJson<int>(duration),
+      'hintsUsed': serializer.toJson<int>(hintsUsed),
+      'fastAnswerCount': serializer.toJson<int>(fastAnswerCount),
+      'rareIdiomCount': serializer.toJson<int>(rareIdiomCount),
+      'playerTurns': serializer.toJson<int>(playerTurns),
+      'timeoutWarningCount': serializer.toJson<int>(timeoutWarningCount),
+      'isAiSurrender': serializer.toJson<bool>(isAiSurrender),
+      'comboMax': serializer.toJson<int>(comboMax),
+      'starsEarned': serializer.toJson<int>(starsEarned),
+      'starRating': serializer.toJson<int>(starRating),
+      'idiomChain': serializer.toJson<String?>(idiomChain),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
+      'playedAt': serializer.toJson<DateTime>(playedAt),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  IdiomGameRecord copyWith(
+          {int? id,
+          int? childId,
+          int? grade,
+          int? score,
+          int? chainLength,
+          int? duration,
+          int? hintsUsed,
+          int? fastAnswerCount,
+          int? rareIdiomCount,
+          int? playerTurns,
+          int? timeoutWarningCount,
+          bool? isAiSurrender,
+          int? comboMax,
+          int? starsEarned,
+          int? starRating,
+          Value<String?> idiomChain = const Value.absent(),
+          bool? isDeleted,
+          DateTime? playedAt,
+          DateTime? createdAt}) =>
+      IdiomGameRecord(
+        id: id ?? this.id,
+        childId: childId ?? this.childId,
+        grade: grade ?? this.grade,
+        score: score ?? this.score,
+        chainLength: chainLength ?? this.chainLength,
+        duration: duration ?? this.duration,
+        hintsUsed: hintsUsed ?? this.hintsUsed,
+        fastAnswerCount: fastAnswerCount ?? this.fastAnswerCount,
+        rareIdiomCount: rareIdiomCount ?? this.rareIdiomCount,
+        playerTurns: playerTurns ?? this.playerTurns,
+        timeoutWarningCount: timeoutWarningCount ?? this.timeoutWarningCount,
+        isAiSurrender: isAiSurrender ?? this.isAiSurrender,
+        comboMax: comboMax ?? this.comboMax,
+        starsEarned: starsEarned ?? this.starsEarned,
+        starRating: starRating ?? this.starRating,
+        idiomChain: idiomChain.present ? idiomChain.value : this.idiomChain,
+        isDeleted: isDeleted ?? this.isDeleted,
+        playedAt: playedAt ?? this.playedAt,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  IdiomGameRecord copyWithCompanion(IdiomGameRecordsCompanion data) {
+    return IdiomGameRecord(
+      id: data.id.present ? data.id.value : this.id,
+      childId: data.childId.present ? data.childId.value : this.childId,
+      grade: data.grade.present ? data.grade.value : this.grade,
+      score: data.score.present ? data.score.value : this.score,
+      chainLength:
+          data.chainLength.present ? data.chainLength.value : this.chainLength,
+      duration: data.duration.present ? data.duration.value : this.duration,
+      hintsUsed: data.hintsUsed.present ? data.hintsUsed.value : this.hintsUsed,
+      fastAnswerCount: data.fastAnswerCount.present
+          ? data.fastAnswerCount.value
+          : this.fastAnswerCount,
+      rareIdiomCount: data.rareIdiomCount.present
+          ? data.rareIdiomCount.value
+          : this.rareIdiomCount,
+      playerTurns:
+          data.playerTurns.present ? data.playerTurns.value : this.playerTurns,
+      timeoutWarningCount: data.timeoutWarningCount.present
+          ? data.timeoutWarningCount.value
+          : this.timeoutWarningCount,
+      isAiSurrender: data.isAiSurrender.present
+          ? data.isAiSurrender.value
+          : this.isAiSurrender,
+      comboMax: data.comboMax.present ? data.comboMax.value : this.comboMax,
+      starsEarned:
+          data.starsEarned.present ? data.starsEarned.value : this.starsEarned,
+      starRating:
+          data.starRating.present ? data.starRating.value : this.starRating,
+      idiomChain:
+          data.idiomChain.present ? data.idiomChain.value : this.idiomChain,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
+      playedAt: data.playedAt.present ? data.playedAt.value : this.playedAt,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IdiomGameRecord(')
+          ..write('id: $id, ')
+          ..write('childId: $childId, ')
+          ..write('grade: $grade, ')
+          ..write('score: $score, ')
+          ..write('chainLength: $chainLength, ')
+          ..write('duration: $duration, ')
+          ..write('hintsUsed: $hintsUsed, ')
+          ..write('fastAnswerCount: $fastAnswerCount, ')
+          ..write('rareIdiomCount: $rareIdiomCount, ')
+          ..write('playerTurns: $playerTurns, ')
+          ..write('timeoutWarningCount: $timeoutWarningCount, ')
+          ..write('isAiSurrender: $isAiSurrender, ')
+          ..write('comboMax: $comboMax, ')
+          ..write('starsEarned: $starsEarned, ')
+          ..write('starRating: $starRating, ')
+          ..write('idiomChain: $idiomChain, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('playedAt: $playedAt, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      childId,
+      grade,
+      score,
+      chainLength,
+      duration,
+      hintsUsed,
+      fastAnswerCount,
+      rareIdiomCount,
+      playerTurns,
+      timeoutWarningCount,
+      isAiSurrender,
+      comboMax,
+      starsEarned,
+      starRating,
+      idiomChain,
+      isDeleted,
+      playedAt,
+      createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is IdiomGameRecord &&
+          other.id == this.id &&
+          other.childId == this.childId &&
+          other.grade == this.grade &&
+          other.score == this.score &&
+          other.chainLength == this.chainLength &&
+          other.duration == this.duration &&
+          other.hintsUsed == this.hintsUsed &&
+          other.fastAnswerCount == this.fastAnswerCount &&
+          other.rareIdiomCount == this.rareIdiomCount &&
+          other.playerTurns == this.playerTurns &&
+          other.timeoutWarningCount == this.timeoutWarningCount &&
+          other.isAiSurrender == this.isAiSurrender &&
+          other.comboMax == this.comboMax &&
+          other.starsEarned == this.starsEarned &&
+          other.starRating == this.starRating &&
+          other.idiomChain == this.idiomChain &&
+          other.isDeleted == this.isDeleted &&
+          other.playedAt == this.playedAt &&
+          other.createdAt == this.createdAt);
+}
+
+class IdiomGameRecordsCompanion extends UpdateCompanion<IdiomGameRecord> {
+  final Value<int> id;
+  final Value<int> childId;
+  final Value<int> grade;
+  final Value<int> score;
+  final Value<int> chainLength;
+  final Value<int> duration;
+  final Value<int> hintsUsed;
+  final Value<int> fastAnswerCount;
+  final Value<int> rareIdiomCount;
+  final Value<int> playerTurns;
+  final Value<int> timeoutWarningCount;
+  final Value<bool> isAiSurrender;
+  final Value<int> comboMax;
+  final Value<int> starsEarned;
+  final Value<int> starRating;
+  final Value<String?> idiomChain;
+  final Value<bool> isDeleted;
+  final Value<DateTime> playedAt;
+  final Value<DateTime> createdAt;
+  const IdiomGameRecordsCompanion({
+    this.id = const Value.absent(),
+    this.childId = const Value.absent(),
+    this.grade = const Value.absent(),
+    this.score = const Value.absent(),
+    this.chainLength = const Value.absent(),
+    this.duration = const Value.absent(),
+    this.hintsUsed = const Value.absent(),
+    this.fastAnswerCount = const Value.absent(),
+    this.rareIdiomCount = const Value.absent(),
+    this.playerTurns = const Value.absent(),
+    this.timeoutWarningCount = const Value.absent(),
+    this.isAiSurrender = const Value.absent(),
+    this.comboMax = const Value.absent(),
+    this.starsEarned = const Value.absent(),
+    this.starRating = const Value.absent(),
+    this.idiomChain = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.playedAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  IdiomGameRecordsCompanion.insert({
+    this.id = const Value.absent(),
+    required int childId,
+    required int grade,
+    required int score,
+    required int chainLength,
+    required int duration,
+    this.hintsUsed = const Value.absent(),
+    this.fastAnswerCount = const Value.absent(),
+    this.rareIdiomCount = const Value.absent(),
+    this.playerTurns = const Value.absent(),
+    this.timeoutWarningCount = const Value.absent(),
+    this.isAiSurrender = const Value.absent(),
+    this.comboMax = const Value.absent(),
+    this.starsEarned = const Value.absent(),
+    this.starRating = const Value.absent(),
+    this.idiomChain = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    required DateTime playedAt,
+    required DateTime createdAt,
+  })  : childId = Value(childId),
+        grade = Value(grade),
+        score = Value(score),
+        chainLength = Value(chainLength),
+        duration = Value(duration),
+        playedAt = Value(playedAt),
+        createdAt = Value(createdAt);
+  static Insertable<IdiomGameRecord> custom({
+    Expression<int>? id,
+    Expression<int>? childId,
+    Expression<int>? grade,
+    Expression<int>? score,
+    Expression<int>? chainLength,
+    Expression<int>? duration,
+    Expression<int>? hintsUsed,
+    Expression<int>? fastAnswerCount,
+    Expression<int>? rareIdiomCount,
+    Expression<int>? playerTurns,
+    Expression<int>? timeoutWarningCount,
+    Expression<bool>? isAiSurrender,
+    Expression<int>? comboMax,
+    Expression<int>? starsEarned,
+    Expression<int>? starRating,
+    Expression<String>? idiomChain,
+    Expression<bool>? isDeleted,
+    Expression<DateTime>? playedAt,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (childId != null) 'child_id': childId,
+      if (grade != null) 'grade': grade,
+      if (score != null) 'score': score,
+      if (chainLength != null) 'chain_length': chainLength,
+      if (duration != null) 'duration': duration,
+      if (hintsUsed != null) 'hints_used': hintsUsed,
+      if (fastAnswerCount != null) 'fast_answer_count': fastAnswerCount,
+      if (rareIdiomCount != null) 'rare_idiom_count': rareIdiomCount,
+      if (playerTurns != null) 'player_turns': playerTurns,
+      if (timeoutWarningCount != null)
+        'timeout_warning_count': timeoutWarningCount,
+      if (isAiSurrender != null) 'is_ai_surrender': isAiSurrender,
+      if (comboMax != null) 'combo_max': comboMax,
+      if (starsEarned != null) 'stars_earned': starsEarned,
+      if (starRating != null) 'star_rating': starRating,
+      if (idiomChain != null) 'idiom_chain': idiomChain,
+      if (isDeleted != null) 'is_deleted': isDeleted,
+      if (playedAt != null) 'played_at': playedAt,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  IdiomGameRecordsCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? childId,
+      Value<int>? grade,
+      Value<int>? score,
+      Value<int>? chainLength,
+      Value<int>? duration,
+      Value<int>? hintsUsed,
+      Value<int>? fastAnswerCount,
+      Value<int>? rareIdiomCount,
+      Value<int>? playerTurns,
+      Value<int>? timeoutWarningCount,
+      Value<bool>? isAiSurrender,
+      Value<int>? comboMax,
+      Value<int>? starsEarned,
+      Value<int>? starRating,
+      Value<String?>? idiomChain,
+      Value<bool>? isDeleted,
+      Value<DateTime>? playedAt,
+      Value<DateTime>? createdAt}) {
+    return IdiomGameRecordsCompanion(
+      id: id ?? this.id,
+      childId: childId ?? this.childId,
+      grade: grade ?? this.grade,
+      score: score ?? this.score,
+      chainLength: chainLength ?? this.chainLength,
+      duration: duration ?? this.duration,
+      hintsUsed: hintsUsed ?? this.hintsUsed,
+      fastAnswerCount: fastAnswerCount ?? this.fastAnswerCount,
+      rareIdiomCount: rareIdiomCount ?? this.rareIdiomCount,
+      playerTurns: playerTurns ?? this.playerTurns,
+      timeoutWarningCount: timeoutWarningCount ?? this.timeoutWarningCount,
+      isAiSurrender: isAiSurrender ?? this.isAiSurrender,
+      comboMax: comboMax ?? this.comboMax,
+      starsEarned: starsEarned ?? this.starsEarned,
+      starRating: starRating ?? this.starRating,
+      idiomChain: idiomChain ?? this.idiomChain,
+      isDeleted: isDeleted ?? this.isDeleted,
+      playedAt: playedAt ?? this.playedAt,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (childId.present) {
+      map['child_id'] = Variable<int>(childId.value);
+    }
+    if (grade.present) {
+      map['grade'] = Variable<int>(grade.value);
+    }
+    if (score.present) {
+      map['score'] = Variable<int>(score.value);
+    }
+    if (chainLength.present) {
+      map['chain_length'] = Variable<int>(chainLength.value);
+    }
+    if (duration.present) {
+      map['duration'] = Variable<int>(duration.value);
+    }
+    if (hintsUsed.present) {
+      map['hints_used'] = Variable<int>(hintsUsed.value);
+    }
+    if (fastAnswerCount.present) {
+      map['fast_answer_count'] = Variable<int>(fastAnswerCount.value);
+    }
+    if (rareIdiomCount.present) {
+      map['rare_idiom_count'] = Variable<int>(rareIdiomCount.value);
+    }
+    if (playerTurns.present) {
+      map['player_turns'] = Variable<int>(playerTurns.value);
+    }
+    if (timeoutWarningCount.present) {
+      map['timeout_warning_count'] = Variable<int>(timeoutWarningCount.value);
+    }
+    if (isAiSurrender.present) {
+      map['is_ai_surrender'] = Variable<bool>(isAiSurrender.value);
+    }
+    if (comboMax.present) {
+      map['combo_max'] = Variable<int>(comboMax.value);
+    }
+    if (starsEarned.present) {
+      map['stars_earned'] = Variable<int>(starsEarned.value);
+    }
+    if (starRating.present) {
+      map['star_rating'] = Variable<int>(starRating.value);
+    }
+    if (idiomChain.present) {
+      map['idiom_chain'] = Variable<String>(idiomChain.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
+    }
+    if (playedAt.present) {
+      map['played_at'] = Variable<DateTime>(playedAt.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IdiomGameRecordsCompanion(')
+          ..write('id: $id, ')
+          ..write('childId: $childId, ')
+          ..write('grade: $grade, ')
+          ..write('score: $score, ')
+          ..write('chainLength: $chainLength, ')
+          ..write('duration: $duration, ')
+          ..write('hintsUsed: $hintsUsed, ')
+          ..write('fastAnswerCount: $fastAnswerCount, ')
+          ..write('rareIdiomCount: $rareIdiomCount, ')
+          ..write('playerTurns: $playerTurns, ')
+          ..write('timeoutWarningCount: $timeoutWarningCount, ')
+          ..write('isAiSurrender: $isAiSurrender, ')
+          ..write('comboMax: $comboMax, ')
+          ..write('starsEarned: $starsEarned, ')
+          ..write('starRating: $starRating, ')
+          ..write('idiomChain: $idiomChain, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('playedAt: $playedAt, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $IdiomGradeProgressTable extends IdiomGradeProgress
+    with TableInfo<$IdiomGradeProgressTable, IdiomGradeProgressData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $IdiomGradeProgressTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _childIdMeta =
+      const VerificationMeta('childId');
+  @override
+  late final GeneratedColumn<int> childId = GeneratedColumn<int>(
+      'child_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES children (id)'));
+  static const VerificationMeta _gradeMeta = const VerificationMeta('grade');
+  @override
+  late final GeneratedColumn<int> grade = GeneratedColumn<int>(
+      'grade', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _highScoreMeta =
+      const VerificationMeta('highScore');
+  @override
+  late final GeneratedColumn<int> highScore = GeneratedColumn<int>(
+      'high_score', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _bestChainLengthMeta =
+      const VerificationMeta('bestChainLength');
+  @override
+  late final GeneratedColumn<int> bestChainLength = GeneratedColumn<int>(
+      'best_chain_length', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _starRatingMeta =
+      const VerificationMeta('starRating');
+  @override
+  late final GeneratedColumn<int> starRating = GeneratedColumn<int>(
+      'star_rating', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _playCountMeta =
+      const VerificationMeta('playCount');
+  @override
+  late final GeneratedColumn<int> playCount = GeneratedColumn<int>(
+      'play_count', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _isUnlockedMeta =
+      const VerificationMeta('isUnlocked');
+  @override
+  late final GeneratedColumn<bool> isUnlocked = GeneratedColumn<bool>(
+      'is_unlocked', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_unlocked" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _isDeletedMeta =
+      const VerificationMeta('isDeleted');
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+      'is_deleted', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_deleted" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        childId,
+        grade,
+        highScore,
+        bestChainLength,
+        starRating,
+        playCount,
+        isUnlocked,
+        isDeleted,
+        createdAt,
+        updatedAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'idiom_grade_progress';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<IdiomGradeProgressData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('child_id')) {
+      context.handle(_childIdMeta,
+          childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta));
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    if (data.containsKey('grade')) {
+      context.handle(
+          _gradeMeta, grade.isAcceptableOrUnknown(data['grade']!, _gradeMeta));
+    } else if (isInserting) {
+      context.missing(_gradeMeta);
+    }
+    if (data.containsKey('high_score')) {
+      context.handle(_highScoreMeta,
+          highScore.isAcceptableOrUnknown(data['high_score']!, _highScoreMeta));
+    }
+    if (data.containsKey('best_chain_length')) {
+      context.handle(
+          _bestChainLengthMeta,
+          bestChainLength.isAcceptableOrUnknown(
+              data['best_chain_length']!, _bestChainLengthMeta));
+    }
+    if (data.containsKey('star_rating')) {
+      context.handle(
+          _starRatingMeta,
+          starRating.isAcceptableOrUnknown(
+              data['star_rating']!, _starRatingMeta));
+    }
+    if (data.containsKey('play_count')) {
+      context.handle(_playCountMeta,
+          playCount.isAcceptableOrUnknown(data['play_count']!, _playCountMeta));
+    }
+    if (data.containsKey('is_unlocked')) {
+      context.handle(
+          _isUnlockedMeta,
+          isUnlocked.isAcceptableOrUnknown(
+              data['is_unlocked']!, _isUnlockedMeta));
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(_isDeletedMeta,
+          isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+        {childId, grade},
+      ];
+  @override
+  IdiomGradeProgressData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return IdiomGradeProgressData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      childId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}child_id'])!,
+      grade: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}grade'])!,
+      highScore: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}high_score'])!,
+      bestChainLength: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}best_chain_length'])!,
+      starRating: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}star_rating'])!,
+      playCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}play_count'])!,
+      isUnlocked: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_unlocked'])!,
+      isDeleted: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_deleted'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
+    );
+  }
+
+  @override
+  $IdiomGradeProgressTable createAlias(String alias) {
+    return $IdiomGradeProgressTable(attachedDatabase, alias);
+  }
+}
+
+class IdiomGradeProgressData extends DataClass
+    implements Insertable<IdiomGradeProgressData> {
+  final int id;
+  final int childId;
+  final int grade;
+  final int highScore;
+  final int bestChainLength;
+  final int starRating;
+  final int playCount;
+  final bool isUnlocked;
+  final bool isDeleted;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  const IdiomGradeProgressData(
+      {required this.id,
+      required this.childId,
+      required this.grade,
+      required this.highScore,
+      required this.bestChainLength,
+      required this.starRating,
+      required this.playCount,
+      required this.isUnlocked,
+      required this.isDeleted,
+      required this.createdAt,
+      this.updatedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['child_id'] = Variable<int>(childId);
+    map['grade'] = Variable<int>(grade);
+    map['high_score'] = Variable<int>(highScore);
+    map['best_chain_length'] = Variable<int>(bestChainLength);
+    map['star_rating'] = Variable<int>(starRating);
+    map['play_count'] = Variable<int>(playCount);
+    map['is_unlocked'] = Variable<bool>(isUnlocked);
+    map['is_deleted'] = Variable<bool>(isDeleted);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
+    return map;
+  }
+
+  IdiomGradeProgressCompanion toCompanion(bool nullToAbsent) {
+    return IdiomGradeProgressCompanion(
+      id: Value(id),
+      childId: Value(childId),
+      grade: Value(grade),
+      highScore: Value(highScore),
+      bestChainLength: Value(bestChainLength),
+      starRating: Value(starRating),
+      playCount: Value(playCount),
+      isUnlocked: Value(isUnlocked),
+      isDeleted: Value(isDeleted),
+      createdAt: Value(createdAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+    );
+  }
+
+  factory IdiomGradeProgressData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return IdiomGradeProgressData(
+      id: serializer.fromJson<int>(json['id']),
+      childId: serializer.fromJson<int>(json['childId']),
+      grade: serializer.fromJson<int>(json['grade']),
+      highScore: serializer.fromJson<int>(json['highScore']),
+      bestChainLength: serializer.fromJson<int>(json['bestChainLength']),
+      starRating: serializer.fromJson<int>(json['starRating']),
+      playCount: serializer.fromJson<int>(json['playCount']),
+      isUnlocked: serializer.fromJson<bool>(json['isUnlocked']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'childId': serializer.toJson<int>(childId),
+      'grade': serializer.toJson<int>(grade),
+      'highScore': serializer.toJson<int>(highScore),
+      'bestChainLength': serializer.toJson<int>(bestChainLength),
+      'starRating': serializer.toJson<int>(starRating),
+      'playCount': serializer.toJson<int>(playCount),
+      'isUnlocked': serializer.toJson<bool>(isUnlocked),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
+    };
+  }
+
+  IdiomGradeProgressData copyWith(
+          {int? id,
+          int? childId,
+          int? grade,
+          int? highScore,
+          int? bestChainLength,
+          int? starRating,
+          int? playCount,
+          bool? isUnlocked,
+          bool? isDeleted,
+          DateTime? createdAt,
+          Value<DateTime?> updatedAt = const Value.absent()}) =>
+      IdiomGradeProgressData(
+        id: id ?? this.id,
+        childId: childId ?? this.childId,
+        grade: grade ?? this.grade,
+        highScore: highScore ?? this.highScore,
+        bestChainLength: bestChainLength ?? this.bestChainLength,
+        starRating: starRating ?? this.starRating,
+        playCount: playCount ?? this.playCount,
+        isUnlocked: isUnlocked ?? this.isUnlocked,
+        isDeleted: isDeleted ?? this.isDeleted,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+      );
+  IdiomGradeProgressData copyWithCompanion(IdiomGradeProgressCompanion data) {
+    return IdiomGradeProgressData(
+      id: data.id.present ? data.id.value : this.id,
+      childId: data.childId.present ? data.childId.value : this.childId,
+      grade: data.grade.present ? data.grade.value : this.grade,
+      highScore: data.highScore.present ? data.highScore.value : this.highScore,
+      bestChainLength: data.bestChainLength.present
+          ? data.bestChainLength.value
+          : this.bestChainLength,
+      starRating:
+          data.starRating.present ? data.starRating.value : this.starRating,
+      playCount: data.playCount.present ? data.playCount.value : this.playCount,
+      isUnlocked:
+          data.isUnlocked.present ? data.isUnlocked.value : this.isUnlocked,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IdiomGradeProgressData(')
+          ..write('id: $id, ')
+          ..write('childId: $childId, ')
+          ..write('grade: $grade, ')
+          ..write('highScore: $highScore, ')
+          ..write('bestChainLength: $bestChainLength, ')
+          ..write('starRating: $starRating, ')
+          ..write('playCount: $playCount, ')
+          ..write('isUnlocked: $isUnlocked, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      childId,
+      grade,
+      highScore,
+      bestChainLength,
+      starRating,
+      playCount,
+      isUnlocked,
+      isDeleted,
+      createdAt,
+      updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is IdiomGradeProgressData &&
+          other.id == this.id &&
+          other.childId == this.childId &&
+          other.grade == this.grade &&
+          other.highScore == this.highScore &&
+          other.bestChainLength == this.bestChainLength &&
+          other.starRating == this.starRating &&
+          other.playCount == this.playCount &&
+          other.isUnlocked == this.isUnlocked &&
+          other.isDeleted == this.isDeleted &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class IdiomGradeProgressCompanion
+    extends UpdateCompanion<IdiomGradeProgressData> {
+  final Value<int> id;
+  final Value<int> childId;
+  final Value<int> grade;
+  final Value<int> highScore;
+  final Value<int> bestChainLength;
+  final Value<int> starRating;
+  final Value<int> playCount;
+  final Value<bool> isUnlocked;
+  final Value<bool> isDeleted;
+  final Value<DateTime> createdAt;
+  final Value<DateTime?> updatedAt;
+  const IdiomGradeProgressCompanion({
+    this.id = const Value.absent(),
+    this.childId = const Value.absent(),
+    this.grade = const Value.absent(),
+    this.highScore = const Value.absent(),
+    this.bestChainLength = const Value.absent(),
+    this.starRating = const Value.absent(),
+    this.playCount = const Value.absent(),
+    this.isUnlocked = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  IdiomGradeProgressCompanion.insert({
+    this.id = const Value.absent(),
+    required int childId,
+    required int grade,
+    this.highScore = const Value.absent(),
+    this.bestChainLength = const Value.absent(),
+    this.starRating = const Value.absent(),
+    this.playCount = const Value.absent(),
+    this.isUnlocked = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    required DateTime createdAt,
+    this.updatedAt = const Value.absent(),
+  })  : childId = Value(childId),
+        grade = Value(grade),
+        createdAt = Value(createdAt);
+  static Insertable<IdiomGradeProgressData> custom({
+    Expression<int>? id,
+    Expression<int>? childId,
+    Expression<int>? grade,
+    Expression<int>? highScore,
+    Expression<int>? bestChainLength,
+    Expression<int>? starRating,
+    Expression<int>? playCount,
+    Expression<bool>? isUnlocked,
+    Expression<bool>? isDeleted,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (childId != null) 'child_id': childId,
+      if (grade != null) 'grade': grade,
+      if (highScore != null) 'high_score': highScore,
+      if (bestChainLength != null) 'best_chain_length': bestChainLength,
+      if (starRating != null) 'star_rating': starRating,
+      if (playCount != null) 'play_count': playCount,
+      if (isUnlocked != null) 'is_unlocked': isUnlocked,
+      if (isDeleted != null) 'is_deleted': isDeleted,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    });
+  }
+
+  IdiomGradeProgressCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? childId,
+      Value<int>? grade,
+      Value<int>? highScore,
+      Value<int>? bestChainLength,
+      Value<int>? starRating,
+      Value<int>? playCount,
+      Value<bool>? isUnlocked,
+      Value<bool>? isDeleted,
+      Value<DateTime>? createdAt,
+      Value<DateTime?>? updatedAt}) {
+    return IdiomGradeProgressCompanion(
+      id: id ?? this.id,
+      childId: childId ?? this.childId,
+      grade: grade ?? this.grade,
+      highScore: highScore ?? this.highScore,
+      bestChainLength: bestChainLength ?? this.bestChainLength,
+      starRating: starRating ?? this.starRating,
+      playCount: playCount ?? this.playCount,
+      isUnlocked: isUnlocked ?? this.isUnlocked,
+      isDeleted: isDeleted ?? this.isDeleted,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (childId.present) {
+      map['child_id'] = Variable<int>(childId.value);
+    }
+    if (grade.present) {
+      map['grade'] = Variable<int>(grade.value);
+    }
+    if (highScore.present) {
+      map['high_score'] = Variable<int>(highScore.value);
+    }
+    if (bestChainLength.present) {
+      map['best_chain_length'] = Variable<int>(bestChainLength.value);
+    }
+    if (starRating.present) {
+      map['star_rating'] = Variable<int>(starRating.value);
+    }
+    if (playCount.present) {
+      map['play_count'] = Variable<int>(playCount.value);
+    }
+    if (isUnlocked.present) {
+      map['is_unlocked'] = Variable<bool>(isUnlocked.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IdiomGradeProgressCompanion(')
+          ..write('id: $id, ')
+          ..write('childId: $childId, ')
+          ..write('grade: $grade, ')
+          ..write('highScore: $highScore, ')
+          ..write('bestChainLength: $bestChainLength, ')
+          ..write('starRating: $starRating, ')
+          ..write('playCount: $playCount, ')
+          ..write('isUnlocked: $isUnlocked, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $IdiomFailureRecordsTable extends IdiomFailureRecords
+    with TableInfo<$IdiomFailureRecordsTable, IdiomFailureRecord> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $IdiomFailureRecordsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _childIdMeta =
+      const VerificationMeta('childId');
+  @override
+  late final GeneratedColumn<int> childId = GeneratedColumn<int>(
+      'child_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES children (id)'));
+  static const VerificationMeta _lastCharMeta =
+      const VerificationMeta('lastChar');
+  @override
+  late final GeneratedColumn<String> lastChar = GeneratedColumn<String>(
+      'last_char', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 4),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _failCountMeta =
+      const VerificationMeta('failCount');
+  @override
+  late final GeneratedColumn<int> failCount = GeneratedColumn<int>(
+      'fail_count', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(1));
+  static const VerificationMeta _successCountMeta =
+      const VerificationMeta('successCount');
+  @override
+  late final GeneratedColumn<int> successCount = GeneratedColumn<int>(
+      'success_count', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _lastFailedAtMeta =
+      const VerificationMeta('lastFailedAt');
+  @override
+  late final GeneratedColumn<DateTime> lastFailedAt = GeneratedColumn<DateTime>(
+      'last_failed_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _lastSuccessAtMeta =
+      const VerificationMeta('lastSuccessAt');
+  @override
+  late final GeneratedColumn<DateTime> lastSuccessAt =
+      GeneratedColumn<DateTime>('last_success_at', aliasedName, true,
+          type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        childId,
+        lastChar,
+        failCount,
+        successCount,
+        lastFailedAt,
+        lastSuccessAt,
+        createdAt,
+        updatedAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'idiom_failure_records';
+  @override
+  VerificationContext validateIntegrity(Insertable<IdiomFailureRecord> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('child_id')) {
+      context.handle(_childIdMeta,
+          childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta));
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    if (data.containsKey('last_char')) {
+      context.handle(_lastCharMeta,
+          lastChar.isAcceptableOrUnknown(data['last_char']!, _lastCharMeta));
+    } else if (isInserting) {
+      context.missing(_lastCharMeta);
+    }
+    if (data.containsKey('fail_count')) {
+      context.handle(_failCountMeta,
+          failCount.isAcceptableOrUnknown(data['fail_count']!, _failCountMeta));
+    }
+    if (data.containsKey('success_count')) {
+      context.handle(
+          _successCountMeta,
+          successCount.isAcceptableOrUnknown(
+              data['success_count']!, _successCountMeta));
+    }
+    if (data.containsKey('last_failed_at')) {
+      context.handle(
+          _lastFailedAtMeta,
+          lastFailedAt.isAcceptableOrUnknown(
+              data['last_failed_at']!, _lastFailedAtMeta));
+    } else if (isInserting) {
+      context.missing(_lastFailedAtMeta);
+    }
+    if (data.containsKey('last_success_at')) {
+      context.handle(
+          _lastSuccessAtMeta,
+          lastSuccessAt.isAcceptableOrUnknown(
+              data['last_success_at']!, _lastSuccessAtMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+        {childId, lastChar},
+      ];
+  @override
+  IdiomFailureRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return IdiomFailureRecord(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      childId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}child_id'])!,
+      lastChar: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}last_char'])!,
+      failCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}fail_count'])!,
+      successCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}success_count'])!,
+      lastFailedAt: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}last_failed_at'])!,
+      lastSuccessAt: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}last_success_at']),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
+    );
+  }
+
+  @override
+  $IdiomFailureRecordsTable createAlias(String alias) {
+    return $IdiomFailureRecordsTable(attachedDatabase, alias);
+  }
+}
+
+class IdiomFailureRecord extends DataClass
+    implements Insertable<IdiomFailureRecord> {
+  final int id;
+  final int childId;
+  final String lastChar;
+  final int failCount;
+  final int successCount;
+  final DateTime lastFailedAt;
+  final DateTime? lastSuccessAt;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  const IdiomFailureRecord(
+      {required this.id,
+      required this.childId,
+      required this.lastChar,
+      required this.failCount,
+      required this.successCount,
+      required this.lastFailedAt,
+      this.lastSuccessAt,
+      required this.createdAt,
+      this.updatedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['child_id'] = Variable<int>(childId);
+    map['last_char'] = Variable<String>(lastChar);
+    map['fail_count'] = Variable<int>(failCount);
+    map['success_count'] = Variable<int>(successCount);
+    map['last_failed_at'] = Variable<DateTime>(lastFailedAt);
+    if (!nullToAbsent || lastSuccessAt != null) {
+      map['last_success_at'] = Variable<DateTime>(lastSuccessAt);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
+    return map;
+  }
+
+  IdiomFailureRecordsCompanion toCompanion(bool nullToAbsent) {
+    return IdiomFailureRecordsCompanion(
+      id: Value(id),
+      childId: Value(childId),
+      lastChar: Value(lastChar),
+      failCount: Value(failCount),
+      successCount: Value(successCount),
+      lastFailedAt: Value(lastFailedAt),
+      lastSuccessAt: lastSuccessAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastSuccessAt),
+      createdAt: Value(createdAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+    );
+  }
+
+  factory IdiomFailureRecord.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return IdiomFailureRecord(
+      id: serializer.fromJson<int>(json['id']),
+      childId: serializer.fromJson<int>(json['childId']),
+      lastChar: serializer.fromJson<String>(json['lastChar']),
+      failCount: serializer.fromJson<int>(json['failCount']),
+      successCount: serializer.fromJson<int>(json['successCount']),
+      lastFailedAt: serializer.fromJson<DateTime>(json['lastFailedAt']),
+      lastSuccessAt: serializer.fromJson<DateTime?>(json['lastSuccessAt']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'childId': serializer.toJson<int>(childId),
+      'lastChar': serializer.toJson<String>(lastChar),
+      'failCount': serializer.toJson<int>(failCount),
+      'successCount': serializer.toJson<int>(successCount),
+      'lastFailedAt': serializer.toJson<DateTime>(lastFailedAt),
+      'lastSuccessAt': serializer.toJson<DateTime?>(lastSuccessAt),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
+    };
+  }
+
+  IdiomFailureRecord copyWith(
+          {int? id,
+          int? childId,
+          String? lastChar,
+          int? failCount,
+          int? successCount,
+          DateTime? lastFailedAt,
+          Value<DateTime?> lastSuccessAt = const Value.absent(),
+          DateTime? createdAt,
+          Value<DateTime?> updatedAt = const Value.absent()}) =>
+      IdiomFailureRecord(
+        id: id ?? this.id,
+        childId: childId ?? this.childId,
+        lastChar: lastChar ?? this.lastChar,
+        failCount: failCount ?? this.failCount,
+        successCount: successCount ?? this.successCount,
+        lastFailedAt: lastFailedAt ?? this.lastFailedAt,
+        lastSuccessAt:
+            lastSuccessAt.present ? lastSuccessAt.value : this.lastSuccessAt,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+      );
+  IdiomFailureRecord copyWithCompanion(IdiomFailureRecordsCompanion data) {
+    return IdiomFailureRecord(
+      id: data.id.present ? data.id.value : this.id,
+      childId: data.childId.present ? data.childId.value : this.childId,
+      lastChar: data.lastChar.present ? data.lastChar.value : this.lastChar,
+      failCount: data.failCount.present ? data.failCount.value : this.failCount,
+      successCount: data.successCount.present
+          ? data.successCount.value
+          : this.successCount,
+      lastFailedAt: data.lastFailedAt.present
+          ? data.lastFailedAt.value
+          : this.lastFailedAt,
+      lastSuccessAt: data.lastSuccessAt.present
+          ? data.lastSuccessAt.value
+          : this.lastSuccessAt,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IdiomFailureRecord(')
+          ..write('id: $id, ')
+          ..write('childId: $childId, ')
+          ..write('lastChar: $lastChar, ')
+          ..write('failCount: $failCount, ')
+          ..write('successCount: $successCount, ')
+          ..write('lastFailedAt: $lastFailedAt, ')
+          ..write('lastSuccessAt: $lastSuccessAt, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, childId, lastChar, failCount,
+      successCount, lastFailedAt, lastSuccessAt, createdAt, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is IdiomFailureRecord &&
+          other.id == this.id &&
+          other.childId == this.childId &&
+          other.lastChar == this.lastChar &&
+          other.failCount == this.failCount &&
+          other.successCount == this.successCount &&
+          other.lastFailedAt == this.lastFailedAt &&
+          other.lastSuccessAt == this.lastSuccessAt &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class IdiomFailureRecordsCompanion extends UpdateCompanion<IdiomFailureRecord> {
+  final Value<int> id;
+  final Value<int> childId;
+  final Value<String> lastChar;
+  final Value<int> failCount;
+  final Value<int> successCount;
+  final Value<DateTime> lastFailedAt;
+  final Value<DateTime?> lastSuccessAt;
+  final Value<DateTime> createdAt;
+  final Value<DateTime?> updatedAt;
+  const IdiomFailureRecordsCompanion({
+    this.id = const Value.absent(),
+    this.childId = const Value.absent(),
+    this.lastChar = const Value.absent(),
+    this.failCount = const Value.absent(),
+    this.successCount = const Value.absent(),
+    this.lastFailedAt = const Value.absent(),
+    this.lastSuccessAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  IdiomFailureRecordsCompanion.insert({
+    this.id = const Value.absent(),
+    required int childId,
+    required String lastChar,
+    this.failCount = const Value.absent(),
+    this.successCount = const Value.absent(),
+    required DateTime lastFailedAt,
+    this.lastSuccessAt = const Value.absent(),
+    required DateTime createdAt,
+    this.updatedAt = const Value.absent(),
+  })  : childId = Value(childId),
+        lastChar = Value(lastChar),
+        lastFailedAt = Value(lastFailedAt),
+        createdAt = Value(createdAt);
+  static Insertable<IdiomFailureRecord> custom({
+    Expression<int>? id,
+    Expression<int>? childId,
+    Expression<String>? lastChar,
+    Expression<int>? failCount,
+    Expression<int>? successCount,
+    Expression<DateTime>? lastFailedAt,
+    Expression<DateTime>? lastSuccessAt,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (childId != null) 'child_id': childId,
+      if (lastChar != null) 'last_char': lastChar,
+      if (failCount != null) 'fail_count': failCount,
+      if (successCount != null) 'success_count': successCount,
+      if (lastFailedAt != null) 'last_failed_at': lastFailedAt,
+      if (lastSuccessAt != null) 'last_success_at': lastSuccessAt,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    });
+  }
+
+  IdiomFailureRecordsCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? childId,
+      Value<String>? lastChar,
+      Value<int>? failCount,
+      Value<int>? successCount,
+      Value<DateTime>? lastFailedAt,
+      Value<DateTime?>? lastSuccessAt,
+      Value<DateTime>? createdAt,
+      Value<DateTime?>? updatedAt}) {
+    return IdiomFailureRecordsCompanion(
+      id: id ?? this.id,
+      childId: childId ?? this.childId,
+      lastChar: lastChar ?? this.lastChar,
+      failCount: failCount ?? this.failCount,
+      successCount: successCount ?? this.successCount,
+      lastFailedAt: lastFailedAt ?? this.lastFailedAt,
+      lastSuccessAt: lastSuccessAt ?? this.lastSuccessAt,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (childId.present) {
+      map['child_id'] = Variable<int>(childId.value);
+    }
+    if (lastChar.present) {
+      map['last_char'] = Variable<String>(lastChar.value);
+    }
+    if (failCount.present) {
+      map['fail_count'] = Variable<int>(failCount.value);
+    }
+    if (successCount.present) {
+      map['success_count'] = Variable<int>(successCount.value);
+    }
+    if (lastFailedAt.present) {
+      map['last_failed_at'] = Variable<DateTime>(lastFailedAt.value);
+    }
+    if (lastSuccessAt.present) {
+      map['last_success_at'] = Variable<DateTime>(lastSuccessAt.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IdiomFailureRecordsCompanion(')
+          ..write('id: $id, ')
+          ..write('childId: $childId, ')
+          ..write('lastChar: $lastChar, ')
+          ..write('failCount: $failCount, ')
+          ..write('successCount: $successCount, ')
+          ..write('lastFailedAt: $lastFailedAt, ')
+          ..write('lastSuccessAt: $lastSuccessAt, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $IdiomPuzzleRecordsTable extends IdiomPuzzleRecords
+    with TableInfo<$IdiomPuzzleRecordsTable, IdiomPuzzleRecord> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $IdiomPuzzleRecordsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _childIdMeta =
+      const VerificationMeta('childId');
+  @override
+  late final GeneratedColumn<int> childId = GeneratedColumn<int>(
+      'child_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES children (id)'));
+  static const VerificationMeta _gameModeMeta =
+      const VerificationMeta('gameMode');
+  @override
+  late final GeneratedColumn<String> gameMode = GeneratedColumn<String>(
+      'game_mode', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _gradeMeta = const VerificationMeta('grade');
+  @override
+  late final GeneratedColumn<int> grade = GeneratedColumn<int>(
+      'grade', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _correctCountMeta =
+      const VerificationMeta('correctCount');
+  @override
+  late final GeneratedColumn<int> correctCount = GeneratedColumn<int>(
+      'correct_count', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _totalCountMeta =
+      const VerificationMeta('totalCount');
+  @override
+  late final GeneratedColumn<int> totalCount = GeneratedColumn<int>(
+      'total_count', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _starsEarnedMeta =
+      const VerificationMeta('starsEarned');
+  @override
+  late final GeneratedColumn<int> starsEarned = GeneratedColumn<int>(
+      'stars_earned', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _timeTakenSecondsMeta =
+      const VerificationMeta('timeTakenSeconds');
+  @override
+  late final GeneratedColumn<int> timeTakenSeconds = GeneratedColumn<int>(
+      'time_taken_seconds', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _isDeletedMeta =
+      const VerificationMeta('isDeleted');
+  @override
+  late final GeneratedColumn<bool> isDeleted = GeneratedColumn<bool>(
+      'is_deleted', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_deleted" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _playedAtMeta =
+      const VerificationMeta('playedAt');
+  @override
+  late final GeneratedColumn<DateTime> playedAt = GeneratedColumn<DateTime>(
+      'played_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        childId,
+        gameMode,
+        grade,
+        correctCount,
+        totalCount,
+        starsEarned,
+        timeTakenSeconds,
+        isDeleted,
+        playedAt,
+        createdAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'idiom_puzzle_records';
+  @override
+  VerificationContext validateIntegrity(Insertable<IdiomPuzzleRecord> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('child_id')) {
+      context.handle(_childIdMeta,
+          childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta));
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    if (data.containsKey('game_mode')) {
+      context.handle(_gameModeMeta,
+          gameMode.isAcceptableOrUnknown(data['game_mode']!, _gameModeMeta));
+    } else if (isInserting) {
+      context.missing(_gameModeMeta);
+    }
+    if (data.containsKey('grade')) {
+      context.handle(
+          _gradeMeta, grade.isAcceptableOrUnknown(data['grade']!, _gradeMeta));
+    } else if (isInserting) {
+      context.missing(_gradeMeta);
+    }
+    if (data.containsKey('correct_count')) {
+      context.handle(
+          _correctCountMeta,
+          correctCount.isAcceptableOrUnknown(
+              data['correct_count']!, _correctCountMeta));
+    } else if (isInserting) {
+      context.missing(_correctCountMeta);
+    }
+    if (data.containsKey('total_count')) {
+      context.handle(
+          _totalCountMeta,
+          totalCount.isAcceptableOrUnknown(
+              data['total_count']!, _totalCountMeta));
+    } else if (isInserting) {
+      context.missing(_totalCountMeta);
+    }
+    if (data.containsKey('stars_earned')) {
+      context.handle(
+          _starsEarnedMeta,
+          starsEarned.isAcceptableOrUnknown(
+              data['stars_earned']!, _starsEarnedMeta));
+    } else if (isInserting) {
+      context.missing(_starsEarnedMeta);
+    }
+    if (data.containsKey('time_taken_seconds')) {
+      context.handle(
+          _timeTakenSecondsMeta,
+          timeTakenSeconds.isAcceptableOrUnknown(
+              data['time_taken_seconds']!, _timeTakenSecondsMeta));
+    } else if (isInserting) {
+      context.missing(_timeTakenSecondsMeta);
+    }
+    if (data.containsKey('is_deleted')) {
+      context.handle(_isDeletedMeta,
+          isDeleted.isAcceptableOrUnknown(data['is_deleted']!, _isDeletedMeta));
+    }
+    if (data.containsKey('played_at')) {
+      context.handle(_playedAtMeta,
+          playedAt.isAcceptableOrUnknown(data['played_at']!, _playedAtMeta));
+    } else if (isInserting) {
+      context.missing(_playedAtMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  IdiomPuzzleRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return IdiomPuzzleRecord(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      childId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}child_id'])!,
+      gameMode: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}game_mode'])!,
+      grade: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}grade'])!,
+      correctCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}correct_count'])!,
+      totalCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}total_count'])!,
+      starsEarned: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}stars_earned'])!,
+      timeTakenSeconds: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}time_taken_seconds'])!,
+      isDeleted: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_deleted'])!,
+      playedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}played_at'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $IdiomPuzzleRecordsTable createAlias(String alias) {
+    return $IdiomPuzzleRecordsTable(attachedDatabase, alias);
+  }
+}
+
+class IdiomPuzzleRecord extends DataClass
+    implements Insertable<IdiomPuzzleRecord> {
+  final int id;
+  final int childId;
+  final String gameMode;
+  final int grade;
+  final int correctCount;
+  final int totalCount;
+  final int starsEarned;
+  final int timeTakenSeconds;
+  final bool isDeleted;
+  final DateTime playedAt;
+  final DateTime createdAt;
+  const IdiomPuzzleRecord(
+      {required this.id,
+      required this.childId,
+      required this.gameMode,
+      required this.grade,
+      required this.correctCount,
+      required this.totalCount,
+      required this.starsEarned,
+      required this.timeTakenSeconds,
+      required this.isDeleted,
+      required this.playedAt,
+      required this.createdAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['child_id'] = Variable<int>(childId);
+    map['game_mode'] = Variable<String>(gameMode);
+    map['grade'] = Variable<int>(grade);
+    map['correct_count'] = Variable<int>(correctCount);
+    map['total_count'] = Variable<int>(totalCount);
+    map['stars_earned'] = Variable<int>(starsEarned);
+    map['time_taken_seconds'] = Variable<int>(timeTakenSeconds);
+    map['is_deleted'] = Variable<bool>(isDeleted);
+    map['played_at'] = Variable<DateTime>(playedAt);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  IdiomPuzzleRecordsCompanion toCompanion(bool nullToAbsent) {
+    return IdiomPuzzleRecordsCompanion(
+      id: Value(id),
+      childId: Value(childId),
+      gameMode: Value(gameMode),
+      grade: Value(grade),
+      correctCount: Value(correctCount),
+      totalCount: Value(totalCount),
+      starsEarned: Value(starsEarned),
+      timeTakenSeconds: Value(timeTakenSeconds),
+      isDeleted: Value(isDeleted),
+      playedAt: Value(playedAt),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory IdiomPuzzleRecord.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return IdiomPuzzleRecord(
+      id: serializer.fromJson<int>(json['id']),
+      childId: serializer.fromJson<int>(json['childId']),
+      gameMode: serializer.fromJson<String>(json['gameMode']),
+      grade: serializer.fromJson<int>(json['grade']),
+      correctCount: serializer.fromJson<int>(json['correctCount']),
+      totalCount: serializer.fromJson<int>(json['totalCount']),
+      starsEarned: serializer.fromJson<int>(json['starsEarned']),
+      timeTakenSeconds: serializer.fromJson<int>(json['timeTakenSeconds']),
+      isDeleted: serializer.fromJson<bool>(json['isDeleted']),
+      playedAt: serializer.fromJson<DateTime>(json['playedAt']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'childId': serializer.toJson<int>(childId),
+      'gameMode': serializer.toJson<String>(gameMode),
+      'grade': serializer.toJson<int>(grade),
+      'correctCount': serializer.toJson<int>(correctCount),
+      'totalCount': serializer.toJson<int>(totalCount),
+      'starsEarned': serializer.toJson<int>(starsEarned),
+      'timeTakenSeconds': serializer.toJson<int>(timeTakenSeconds),
+      'isDeleted': serializer.toJson<bool>(isDeleted),
+      'playedAt': serializer.toJson<DateTime>(playedAt),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  IdiomPuzzleRecord copyWith(
+          {int? id,
+          int? childId,
+          String? gameMode,
+          int? grade,
+          int? correctCount,
+          int? totalCount,
+          int? starsEarned,
+          int? timeTakenSeconds,
+          bool? isDeleted,
+          DateTime? playedAt,
+          DateTime? createdAt}) =>
+      IdiomPuzzleRecord(
+        id: id ?? this.id,
+        childId: childId ?? this.childId,
+        gameMode: gameMode ?? this.gameMode,
+        grade: grade ?? this.grade,
+        correctCount: correctCount ?? this.correctCount,
+        totalCount: totalCount ?? this.totalCount,
+        starsEarned: starsEarned ?? this.starsEarned,
+        timeTakenSeconds: timeTakenSeconds ?? this.timeTakenSeconds,
+        isDeleted: isDeleted ?? this.isDeleted,
+        playedAt: playedAt ?? this.playedAt,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  IdiomPuzzleRecord copyWithCompanion(IdiomPuzzleRecordsCompanion data) {
+    return IdiomPuzzleRecord(
+      id: data.id.present ? data.id.value : this.id,
+      childId: data.childId.present ? data.childId.value : this.childId,
+      gameMode: data.gameMode.present ? data.gameMode.value : this.gameMode,
+      grade: data.grade.present ? data.grade.value : this.grade,
+      correctCount: data.correctCount.present
+          ? data.correctCount.value
+          : this.correctCount,
+      totalCount:
+          data.totalCount.present ? data.totalCount.value : this.totalCount,
+      starsEarned:
+          data.starsEarned.present ? data.starsEarned.value : this.starsEarned,
+      timeTakenSeconds: data.timeTakenSeconds.present
+          ? data.timeTakenSeconds.value
+          : this.timeTakenSeconds,
+      isDeleted: data.isDeleted.present ? data.isDeleted.value : this.isDeleted,
+      playedAt: data.playedAt.present ? data.playedAt.value : this.playedAt,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IdiomPuzzleRecord(')
+          ..write('id: $id, ')
+          ..write('childId: $childId, ')
+          ..write('gameMode: $gameMode, ')
+          ..write('grade: $grade, ')
+          ..write('correctCount: $correctCount, ')
+          ..write('totalCount: $totalCount, ')
+          ..write('starsEarned: $starsEarned, ')
+          ..write('timeTakenSeconds: $timeTakenSeconds, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('playedAt: $playedAt, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      childId,
+      gameMode,
+      grade,
+      correctCount,
+      totalCount,
+      starsEarned,
+      timeTakenSeconds,
+      isDeleted,
+      playedAt,
+      createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is IdiomPuzzleRecord &&
+          other.id == this.id &&
+          other.childId == this.childId &&
+          other.gameMode == this.gameMode &&
+          other.grade == this.grade &&
+          other.correctCount == this.correctCount &&
+          other.totalCount == this.totalCount &&
+          other.starsEarned == this.starsEarned &&
+          other.timeTakenSeconds == this.timeTakenSeconds &&
+          other.isDeleted == this.isDeleted &&
+          other.playedAt == this.playedAt &&
+          other.createdAt == this.createdAt);
+}
+
+class IdiomPuzzleRecordsCompanion extends UpdateCompanion<IdiomPuzzleRecord> {
+  final Value<int> id;
+  final Value<int> childId;
+  final Value<String> gameMode;
+  final Value<int> grade;
+  final Value<int> correctCount;
+  final Value<int> totalCount;
+  final Value<int> starsEarned;
+  final Value<int> timeTakenSeconds;
+  final Value<bool> isDeleted;
+  final Value<DateTime> playedAt;
+  final Value<DateTime> createdAt;
+  const IdiomPuzzleRecordsCompanion({
+    this.id = const Value.absent(),
+    this.childId = const Value.absent(),
+    this.gameMode = const Value.absent(),
+    this.grade = const Value.absent(),
+    this.correctCount = const Value.absent(),
+    this.totalCount = const Value.absent(),
+    this.starsEarned = const Value.absent(),
+    this.timeTakenSeconds = const Value.absent(),
+    this.isDeleted = const Value.absent(),
+    this.playedAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  IdiomPuzzleRecordsCompanion.insert({
+    this.id = const Value.absent(),
+    required int childId,
+    required String gameMode,
+    required int grade,
+    required int correctCount,
+    required int totalCount,
+    required int starsEarned,
+    required int timeTakenSeconds,
+    this.isDeleted = const Value.absent(),
+    required DateTime playedAt,
+    required DateTime createdAt,
+  })  : childId = Value(childId),
+        gameMode = Value(gameMode),
+        grade = Value(grade),
+        correctCount = Value(correctCount),
+        totalCount = Value(totalCount),
+        starsEarned = Value(starsEarned),
+        timeTakenSeconds = Value(timeTakenSeconds),
+        playedAt = Value(playedAt),
+        createdAt = Value(createdAt);
+  static Insertable<IdiomPuzzleRecord> custom({
+    Expression<int>? id,
+    Expression<int>? childId,
+    Expression<String>? gameMode,
+    Expression<int>? grade,
+    Expression<int>? correctCount,
+    Expression<int>? totalCount,
+    Expression<int>? starsEarned,
+    Expression<int>? timeTakenSeconds,
+    Expression<bool>? isDeleted,
+    Expression<DateTime>? playedAt,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (childId != null) 'child_id': childId,
+      if (gameMode != null) 'game_mode': gameMode,
+      if (grade != null) 'grade': grade,
+      if (correctCount != null) 'correct_count': correctCount,
+      if (totalCount != null) 'total_count': totalCount,
+      if (starsEarned != null) 'stars_earned': starsEarned,
+      if (timeTakenSeconds != null) 'time_taken_seconds': timeTakenSeconds,
+      if (isDeleted != null) 'is_deleted': isDeleted,
+      if (playedAt != null) 'played_at': playedAt,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  IdiomPuzzleRecordsCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? childId,
+      Value<String>? gameMode,
+      Value<int>? grade,
+      Value<int>? correctCount,
+      Value<int>? totalCount,
+      Value<int>? starsEarned,
+      Value<int>? timeTakenSeconds,
+      Value<bool>? isDeleted,
+      Value<DateTime>? playedAt,
+      Value<DateTime>? createdAt}) {
+    return IdiomPuzzleRecordsCompanion(
+      id: id ?? this.id,
+      childId: childId ?? this.childId,
+      gameMode: gameMode ?? this.gameMode,
+      grade: grade ?? this.grade,
+      correctCount: correctCount ?? this.correctCount,
+      totalCount: totalCount ?? this.totalCount,
+      starsEarned: starsEarned ?? this.starsEarned,
+      timeTakenSeconds: timeTakenSeconds ?? this.timeTakenSeconds,
+      isDeleted: isDeleted ?? this.isDeleted,
+      playedAt: playedAt ?? this.playedAt,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (childId.present) {
+      map['child_id'] = Variable<int>(childId.value);
+    }
+    if (gameMode.present) {
+      map['game_mode'] = Variable<String>(gameMode.value);
+    }
+    if (grade.present) {
+      map['grade'] = Variable<int>(grade.value);
+    }
+    if (correctCount.present) {
+      map['correct_count'] = Variable<int>(correctCount.value);
+    }
+    if (totalCount.present) {
+      map['total_count'] = Variable<int>(totalCount.value);
+    }
+    if (starsEarned.present) {
+      map['stars_earned'] = Variable<int>(starsEarned.value);
+    }
+    if (timeTakenSeconds.present) {
+      map['time_taken_seconds'] = Variable<int>(timeTakenSeconds.value);
+    }
+    if (isDeleted.present) {
+      map['is_deleted'] = Variable<bool>(isDeleted.value);
+    }
+    if (playedAt.present) {
+      map['played_at'] = Variable<DateTime>(playedAt.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IdiomPuzzleRecordsCompanion(')
+          ..write('id: $id, ')
+          ..write('childId: $childId, ')
+          ..write('gameMode: $gameMode, ')
+          ..write('grade: $grade, ')
+          ..write('correctCount: $correctCount, ')
+          ..write('totalCount: $totalCount, ')
+          ..write('starsEarned: $starsEarned, ')
+          ..write('timeTakenSeconds: $timeTakenSeconds, ')
+          ..write('isDeleted: $isDeleted, ')
+          ..write('playedAt: $playedAt, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $IdiomEngagementRecordsTable extends IdiomEngagementRecords
+    with TableInfo<$IdiomEngagementRecordsTable, IdiomEngagementRecord> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $IdiomEngagementRecordsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _childIdMeta =
+      const VerificationMeta('childId');
+  @override
+  late final GeneratedColumn<int> childId = GeneratedColumn<int>(
+      'child_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES children (id)'));
+  static const VerificationMeta _idiomIdMeta =
+      const VerificationMeta('idiomId');
+  @override
+  late final GeneratedColumn<int> idiomId = GeneratedColumn<int>(
+      'idiom_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES idioms (id)'));
+  static const VerificationMeta _encounterCountMeta =
+      const VerificationMeta('encounterCount');
+  @override
+  late final GeneratedColumn<int> encounterCount = GeneratedColumn<int>(
+      'encounter_count', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(1));
+  static const VerificationMeta _correctCountMeta =
+      const VerificationMeta('correctCount');
+  @override
+  late final GeneratedColumn<int> correctCount = GeneratedColumn<int>(
+      'correct_count', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _failCountMeta =
+      const VerificationMeta('failCount');
+  @override
+  late final GeneratedColumn<int> failCount = GeneratedColumn<int>(
+      'fail_count', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _lastEncounteredAtMeta =
+      const VerificationMeta('lastEncounteredAt');
+  @override
+  late final GeneratedColumn<DateTime> lastEncounteredAt =
+      GeneratedColumn<DateTime>('last_encountered_at', aliasedName, false,
+          type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _lastWrongAtMeta =
+      const VerificationMeta('lastWrongAt');
+  @override
+  late final GeneratedColumn<DateTime> lastWrongAt = GeneratedColumn<DateTime>(
+      'last_wrong_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _masteryLevelMeta =
+      const VerificationMeta('masteryLevel');
+  @override
+  late final GeneratedColumn<int> masteryLevel = GeneratedColumn<int>(
+      'mastery_level', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _consecutiveCorrectMeta =
+      const VerificationMeta('consecutiveCorrect');
+  @override
+  late final GeneratedColumn<int> consecutiveCorrect = GeneratedColumn<int>(
+      'consecutive_correct', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        childId,
+        idiomId,
+        encounterCount,
+        correctCount,
+        failCount,
+        lastEncounteredAt,
+        lastWrongAt,
+        masteryLevel,
+        consecutiveCorrect
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'idiom_engagement_records';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<IdiomEngagementRecord> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('child_id')) {
+      context.handle(_childIdMeta,
+          childId.isAcceptableOrUnknown(data['child_id']!, _childIdMeta));
+    } else if (isInserting) {
+      context.missing(_childIdMeta);
+    }
+    if (data.containsKey('idiom_id')) {
+      context.handle(_idiomIdMeta,
+          idiomId.isAcceptableOrUnknown(data['idiom_id']!, _idiomIdMeta));
+    } else if (isInserting) {
+      context.missing(_idiomIdMeta);
+    }
+    if (data.containsKey('encounter_count')) {
+      context.handle(
+          _encounterCountMeta,
+          encounterCount.isAcceptableOrUnknown(
+              data['encounter_count']!, _encounterCountMeta));
+    }
+    if (data.containsKey('correct_count')) {
+      context.handle(
+          _correctCountMeta,
+          correctCount.isAcceptableOrUnknown(
+              data['correct_count']!, _correctCountMeta));
+    }
+    if (data.containsKey('fail_count')) {
+      context.handle(_failCountMeta,
+          failCount.isAcceptableOrUnknown(data['fail_count']!, _failCountMeta));
+    }
+    if (data.containsKey('last_encountered_at')) {
+      context.handle(
+          _lastEncounteredAtMeta,
+          lastEncounteredAt.isAcceptableOrUnknown(
+              data['last_encountered_at']!, _lastEncounteredAtMeta));
+    } else if (isInserting) {
+      context.missing(_lastEncounteredAtMeta);
+    }
+    if (data.containsKey('last_wrong_at')) {
+      context.handle(
+          _lastWrongAtMeta,
+          lastWrongAt.isAcceptableOrUnknown(
+              data['last_wrong_at']!, _lastWrongAtMeta));
+    }
+    if (data.containsKey('mastery_level')) {
+      context.handle(
+          _masteryLevelMeta,
+          masteryLevel.isAcceptableOrUnknown(
+              data['mastery_level']!, _masteryLevelMeta));
+    }
+    if (data.containsKey('consecutive_correct')) {
+      context.handle(
+          _consecutiveCorrectMeta,
+          consecutiveCorrect.isAcceptableOrUnknown(
+              data['consecutive_correct']!, _consecutiveCorrectMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  IdiomEngagementRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return IdiomEngagementRecord(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      childId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}child_id'])!,
+      idiomId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}idiom_id'])!,
+      encounterCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}encounter_count'])!,
+      correctCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}correct_count'])!,
+      failCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}fail_count'])!,
+      lastEncounteredAt: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}last_encountered_at'])!,
+      lastWrongAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}last_wrong_at']),
+      masteryLevel: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}mastery_level'])!,
+      consecutiveCorrect: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}consecutive_correct'])!,
+    );
+  }
+
+  @override
+  $IdiomEngagementRecordsTable createAlias(String alias) {
+    return $IdiomEngagementRecordsTable(attachedDatabase, alias);
+  }
+}
+
+class IdiomEngagementRecord extends DataClass
+    implements Insertable<IdiomEngagementRecord> {
+  final int id;
+  final int childId;
+  final int idiomId;
+  final int encounterCount;
+  final int correctCount;
+  final int failCount;
+  final DateTime lastEncounteredAt;
+  final DateTime? lastWrongAt;
+  final int masteryLevel;
+  final int consecutiveCorrect;
+  const IdiomEngagementRecord(
+      {required this.id,
+      required this.childId,
+      required this.idiomId,
+      required this.encounterCount,
+      required this.correctCount,
+      required this.failCount,
+      required this.lastEncounteredAt,
+      this.lastWrongAt,
+      required this.masteryLevel,
+      required this.consecutiveCorrect});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['child_id'] = Variable<int>(childId);
+    map['idiom_id'] = Variable<int>(idiomId);
+    map['encounter_count'] = Variable<int>(encounterCount);
+    map['correct_count'] = Variable<int>(correctCount);
+    map['fail_count'] = Variable<int>(failCount);
+    map['last_encountered_at'] = Variable<DateTime>(lastEncounteredAt);
+    if (!nullToAbsent || lastWrongAt != null) {
+      map['last_wrong_at'] = Variable<DateTime>(lastWrongAt);
+    }
+    map['mastery_level'] = Variable<int>(masteryLevel);
+    map['consecutive_correct'] = Variable<int>(consecutiveCorrect);
+    return map;
+  }
+
+  IdiomEngagementRecordsCompanion toCompanion(bool nullToAbsent) {
+    return IdiomEngagementRecordsCompanion(
+      id: Value(id),
+      childId: Value(childId),
+      idiomId: Value(idiomId),
+      encounterCount: Value(encounterCount),
+      correctCount: Value(correctCount),
+      failCount: Value(failCount),
+      lastEncounteredAt: Value(lastEncounteredAt),
+      lastWrongAt: lastWrongAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastWrongAt),
+      masteryLevel: Value(masteryLevel),
+      consecutiveCorrect: Value(consecutiveCorrect),
+    );
+  }
+
+  factory IdiomEngagementRecord.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return IdiomEngagementRecord(
+      id: serializer.fromJson<int>(json['id']),
+      childId: serializer.fromJson<int>(json['childId']),
+      idiomId: serializer.fromJson<int>(json['idiomId']),
+      encounterCount: serializer.fromJson<int>(json['encounterCount']),
+      correctCount: serializer.fromJson<int>(json['correctCount']),
+      failCount: serializer.fromJson<int>(json['failCount']),
+      lastEncounteredAt:
+          serializer.fromJson<DateTime>(json['lastEncounteredAt']),
+      lastWrongAt: serializer.fromJson<DateTime?>(json['lastWrongAt']),
+      masteryLevel: serializer.fromJson<int>(json['masteryLevel']),
+      consecutiveCorrect: serializer.fromJson<int>(json['consecutiveCorrect']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'childId': serializer.toJson<int>(childId),
+      'idiomId': serializer.toJson<int>(idiomId),
+      'encounterCount': serializer.toJson<int>(encounterCount),
+      'correctCount': serializer.toJson<int>(correctCount),
+      'failCount': serializer.toJson<int>(failCount),
+      'lastEncounteredAt': serializer.toJson<DateTime>(lastEncounteredAt),
+      'lastWrongAt': serializer.toJson<DateTime?>(lastWrongAt),
+      'masteryLevel': serializer.toJson<int>(masteryLevel),
+      'consecutiveCorrect': serializer.toJson<int>(consecutiveCorrect),
+    };
+  }
+
+  IdiomEngagementRecord copyWith(
+          {int? id,
+          int? childId,
+          int? idiomId,
+          int? encounterCount,
+          int? correctCount,
+          int? failCount,
+          DateTime? lastEncounteredAt,
+          Value<DateTime?> lastWrongAt = const Value.absent(),
+          int? masteryLevel,
+          int? consecutiveCorrect}) =>
+      IdiomEngagementRecord(
+        id: id ?? this.id,
+        childId: childId ?? this.childId,
+        idiomId: idiomId ?? this.idiomId,
+        encounterCount: encounterCount ?? this.encounterCount,
+        correctCount: correctCount ?? this.correctCount,
+        failCount: failCount ?? this.failCount,
+        lastEncounteredAt: lastEncounteredAt ?? this.lastEncounteredAt,
+        lastWrongAt: lastWrongAt.present ? lastWrongAt.value : this.lastWrongAt,
+        masteryLevel: masteryLevel ?? this.masteryLevel,
+        consecutiveCorrect: consecutiveCorrect ?? this.consecutiveCorrect,
+      );
+  IdiomEngagementRecord copyWithCompanion(
+      IdiomEngagementRecordsCompanion data) {
+    return IdiomEngagementRecord(
+      id: data.id.present ? data.id.value : this.id,
+      childId: data.childId.present ? data.childId.value : this.childId,
+      idiomId: data.idiomId.present ? data.idiomId.value : this.idiomId,
+      encounterCount: data.encounterCount.present
+          ? data.encounterCount.value
+          : this.encounterCount,
+      correctCount: data.correctCount.present
+          ? data.correctCount.value
+          : this.correctCount,
+      failCount: data.failCount.present ? data.failCount.value : this.failCount,
+      lastEncounteredAt: data.lastEncounteredAt.present
+          ? data.lastEncounteredAt.value
+          : this.lastEncounteredAt,
+      lastWrongAt:
+          data.lastWrongAt.present ? data.lastWrongAt.value : this.lastWrongAt,
+      masteryLevel: data.masteryLevel.present
+          ? data.masteryLevel.value
+          : this.masteryLevel,
+      consecutiveCorrect: data.consecutiveCorrect.present
+          ? data.consecutiveCorrect.value
+          : this.consecutiveCorrect,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IdiomEngagementRecord(')
+          ..write('id: $id, ')
+          ..write('childId: $childId, ')
+          ..write('idiomId: $idiomId, ')
+          ..write('encounterCount: $encounterCount, ')
+          ..write('correctCount: $correctCount, ')
+          ..write('failCount: $failCount, ')
+          ..write('lastEncounteredAt: $lastEncounteredAt, ')
+          ..write('lastWrongAt: $lastWrongAt, ')
+          ..write('masteryLevel: $masteryLevel, ')
+          ..write('consecutiveCorrect: $consecutiveCorrect')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      childId,
+      idiomId,
+      encounterCount,
+      correctCount,
+      failCount,
+      lastEncounteredAt,
+      lastWrongAt,
+      masteryLevel,
+      consecutiveCorrect);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is IdiomEngagementRecord &&
+          other.id == this.id &&
+          other.childId == this.childId &&
+          other.idiomId == this.idiomId &&
+          other.encounterCount == this.encounterCount &&
+          other.correctCount == this.correctCount &&
+          other.failCount == this.failCount &&
+          other.lastEncounteredAt == this.lastEncounteredAt &&
+          other.lastWrongAt == this.lastWrongAt &&
+          other.masteryLevel == this.masteryLevel &&
+          other.consecutiveCorrect == this.consecutiveCorrect);
+}
+
+class IdiomEngagementRecordsCompanion
+    extends UpdateCompanion<IdiomEngagementRecord> {
+  final Value<int> id;
+  final Value<int> childId;
+  final Value<int> idiomId;
+  final Value<int> encounterCount;
+  final Value<int> correctCount;
+  final Value<int> failCount;
+  final Value<DateTime> lastEncounteredAt;
+  final Value<DateTime?> lastWrongAt;
+  final Value<int> masteryLevel;
+  final Value<int> consecutiveCorrect;
+  const IdiomEngagementRecordsCompanion({
+    this.id = const Value.absent(),
+    this.childId = const Value.absent(),
+    this.idiomId = const Value.absent(),
+    this.encounterCount = const Value.absent(),
+    this.correctCount = const Value.absent(),
+    this.failCount = const Value.absent(),
+    this.lastEncounteredAt = const Value.absent(),
+    this.lastWrongAt = const Value.absent(),
+    this.masteryLevel = const Value.absent(),
+    this.consecutiveCorrect = const Value.absent(),
+  });
+  IdiomEngagementRecordsCompanion.insert({
+    this.id = const Value.absent(),
+    required int childId,
+    required int idiomId,
+    this.encounterCount = const Value.absent(),
+    this.correctCount = const Value.absent(),
+    this.failCount = const Value.absent(),
+    required DateTime lastEncounteredAt,
+    this.lastWrongAt = const Value.absent(),
+    this.masteryLevel = const Value.absent(),
+    this.consecutiveCorrect = const Value.absent(),
+  })  : childId = Value(childId),
+        idiomId = Value(idiomId),
+        lastEncounteredAt = Value(lastEncounteredAt);
+  static Insertable<IdiomEngagementRecord> custom({
+    Expression<int>? id,
+    Expression<int>? childId,
+    Expression<int>? idiomId,
+    Expression<int>? encounterCount,
+    Expression<int>? correctCount,
+    Expression<int>? failCount,
+    Expression<DateTime>? lastEncounteredAt,
+    Expression<DateTime>? lastWrongAt,
+    Expression<int>? masteryLevel,
+    Expression<int>? consecutiveCorrect,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (childId != null) 'child_id': childId,
+      if (idiomId != null) 'idiom_id': idiomId,
+      if (encounterCount != null) 'encounter_count': encounterCount,
+      if (correctCount != null) 'correct_count': correctCount,
+      if (failCount != null) 'fail_count': failCount,
+      if (lastEncounteredAt != null) 'last_encountered_at': lastEncounteredAt,
+      if (lastWrongAt != null) 'last_wrong_at': lastWrongAt,
+      if (masteryLevel != null) 'mastery_level': masteryLevel,
+      if (consecutiveCorrect != null) 'consecutive_correct': consecutiveCorrect,
+    });
+  }
+
+  IdiomEngagementRecordsCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? childId,
+      Value<int>? idiomId,
+      Value<int>? encounterCount,
+      Value<int>? correctCount,
+      Value<int>? failCount,
+      Value<DateTime>? lastEncounteredAt,
+      Value<DateTime?>? lastWrongAt,
+      Value<int>? masteryLevel,
+      Value<int>? consecutiveCorrect}) {
+    return IdiomEngagementRecordsCompanion(
+      id: id ?? this.id,
+      childId: childId ?? this.childId,
+      idiomId: idiomId ?? this.idiomId,
+      encounterCount: encounterCount ?? this.encounterCount,
+      correctCount: correctCount ?? this.correctCount,
+      failCount: failCount ?? this.failCount,
+      lastEncounteredAt: lastEncounteredAt ?? this.lastEncounteredAt,
+      lastWrongAt: lastWrongAt ?? this.lastWrongAt,
+      masteryLevel: masteryLevel ?? this.masteryLevel,
+      consecutiveCorrect: consecutiveCorrect ?? this.consecutiveCorrect,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (childId.present) {
+      map['child_id'] = Variable<int>(childId.value);
+    }
+    if (idiomId.present) {
+      map['idiom_id'] = Variable<int>(idiomId.value);
+    }
+    if (encounterCount.present) {
+      map['encounter_count'] = Variable<int>(encounterCount.value);
+    }
+    if (correctCount.present) {
+      map['correct_count'] = Variable<int>(correctCount.value);
+    }
+    if (failCount.present) {
+      map['fail_count'] = Variable<int>(failCount.value);
+    }
+    if (lastEncounteredAt.present) {
+      map['last_encountered_at'] = Variable<DateTime>(lastEncounteredAt.value);
+    }
+    if (lastWrongAt.present) {
+      map['last_wrong_at'] = Variable<DateTime>(lastWrongAt.value);
+    }
+    if (masteryLevel.present) {
+      map['mastery_level'] = Variable<int>(masteryLevel.value);
+    }
+    if (consecutiveCorrect.present) {
+      map['consecutive_correct'] = Variable<int>(consecutiveCorrect.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('IdiomEngagementRecordsCompanion(')
+          ..write('id: $id, ')
+          ..write('childId: $childId, ')
+          ..write('idiomId: $idiomId, ')
+          ..write('encounterCount: $encounterCount, ')
+          ..write('correctCount: $correctCount, ')
+          ..write('failCount: $failCount, ')
+          ..write('lastEncounteredAt: $lastEncounteredAt, ')
+          ..write('lastWrongAt: $lastWrongAt, ')
+          ..write('masteryLevel: $masteryLevel, ')
+          ..write('consecutiveCorrect: $consecutiveCorrect')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -5123,6 +9530,46 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $BadgeAcquisitionsTable badgeAcquisitions =
       $BadgeAcquisitionsTable(this);
   late final $CheckinRecordsTable checkinRecords = $CheckinRecordsTable(this);
+  late final $IdiomsTable idioms = $IdiomsTable(this);
+  late final $IdiomGameSettingsTable idiomGameSettings =
+      $IdiomGameSettingsTable(this);
+  late final $IdiomGameRecordsTable idiomGameRecords =
+      $IdiomGameRecordsTable(this);
+  late final $IdiomGradeProgressTable idiomGradeProgress =
+      $IdiomGradeProgressTable(this);
+  late final $IdiomFailureRecordsTable idiomFailureRecords =
+      $IdiomFailureRecordsTable(this);
+  late final $IdiomPuzzleRecordsTable idiomPuzzleRecords =
+      $IdiomPuzzleRecordsTable(this);
+  late final $IdiomEngagementRecordsTable idiomEngagementRecords =
+      $IdiomEngagementRecordsTable(this);
+  late final Index idxIdiomsFirstPinyin = Index('idx_idioms_first_pinyin',
+      'CREATE INDEX idx_idioms_first_pinyin ON idioms (first_pinyin_no_tone)');
+  late final Index idxIdiomsLastPinyin = Index('idx_idioms_last_pinyin',
+      'CREATE INDEX idx_idioms_last_pinyin ON idioms (last_pinyin_no_tone)');
+  late final Index idxIdiomsFirstChar = Index('idx_idioms_first_char',
+      'CREATE INDEX idx_idioms_first_char ON idioms (first_char)');
+  late final Index idxIdiomsLastChar = Index('idx_idioms_last_char',
+      'CREATE INDEX idx_idioms_last_char ON idioms (last_char)');
+  late final Index idxIdiomsGrade = Index('idx_idioms_grade',
+      'CREATE INDEX idx_idioms_grade ON idioms (grade_level)');
+  late final Index idxIdiomsRare = Index(
+      'idx_idioms_rare', 'CREATE INDEX idx_idioms_rare ON idioms (is_rare)');
+  late final Index idxIdiomsFirstPinyinTone = Index(
+      'idx_idioms_first_pinyin_tone',
+      'CREATE INDEX idx_idioms_first_pinyin_tone ON idioms (first_pinyin)');
+  late final Index idxIdiomsLastPinyinTone = Index(
+      'idx_idioms_last_pinyin_tone',
+      'CREATE INDEX idx_idioms_last_pinyin_tone ON idioms (last_pinyin)');
+  late final Index idxIdiomFailuresChild = Index('idx_idiom_failures_child',
+      'CREATE INDEX idx_idiom_failures_child ON idiom_failure_records (child_id)');
+  late final Index idxIdiomFailuresLastChar = Index(
+      'idx_idiom_failures_last_char',
+      'CREATE INDEX idx_idiom_failures_last_char ON idiom_failure_records (last_char)');
+  late final Index idxEngagementChildIdiom = Index('idx_engagement_child_idiom',
+      'CREATE UNIQUE INDEX idx_engagement_child_idiom ON idiom_engagement_records (child_id, idiom_id)');
+  late final Index idxReviewQueue = Index('idx_review_queue',
+      'CREATE INDEX idx_review_queue ON idiom_engagement_records (child_id, mastery_level, last_wrong_at)');
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -5137,7 +9584,26 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         appLogs,
         badges,
         badgeAcquisitions,
-        checkinRecords
+        checkinRecords,
+        idioms,
+        idiomGameSettings,
+        idiomGameRecords,
+        idiomGradeProgress,
+        idiomFailureRecords,
+        idiomPuzzleRecords,
+        idiomEngagementRecords,
+        idxIdiomsFirstPinyin,
+        idxIdiomsLastPinyin,
+        idxIdiomsFirstChar,
+        idxIdiomsLastChar,
+        idxIdiomsGrade,
+        idxIdiomsRare,
+        idxIdiomsFirstPinyinTone,
+        idxIdiomsLastPinyinTone,
+        idxIdiomFailuresChild,
+        idxIdiomFailuresLastChar,
+        idxEngagementChildIdiom,
+        idxReviewQueue
       ];
 }
 
@@ -5240,6 +9706,112 @@ final class $$ChildrenTableReferences
         .filter((f) => f.childId.id($_item.id));
 
     final cache = $_typedResult.readTableOrNull(_checkinRecordsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$IdiomGameSettingsTable, List<IdiomGameSetting>>
+      _idiomGameSettingsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.idiomGameSettings,
+              aliasName: $_aliasNameGenerator(
+                  db.children.id, db.idiomGameSettings.childId));
+
+  $$IdiomGameSettingsTableProcessedTableManager get idiomGameSettingsRefs {
+    final manager =
+        $$IdiomGameSettingsTableTableManager($_db, $_db.idiomGameSettings)
+            .filter((f) => f.childId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_idiomGameSettingsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$IdiomGameRecordsTable, List<IdiomGameRecord>>
+      _idiomGameRecordsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.idiomGameRecords,
+              aliasName: $_aliasNameGenerator(
+                  db.children.id, db.idiomGameRecords.childId));
+
+  $$IdiomGameRecordsTableProcessedTableManager get idiomGameRecordsRefs {
+    final manager =
+        $$IdiomGameRecordsTableTableManager($_db, $_db.idiomGameRecords)
+            .filter((f) => f.childId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_idiomGameRecordsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$IdiomGradeProgressTable,
+      List<IdiomGradeProgressData>> _idiomGradeProgressRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.idiomGradeProgress,
+          aliasName: $_aliasNameGenerator(
+              db.children.id, db.idiomGradeProgress.childId));
+
+  $$IdiomGradeProgressTableProcessedTableManager get idiomGradeProgressRefs {
+    final manager =
+        $$IdiomGradeProgressTableTableManager($_db, $_db.idiomGradeProgress)
+            .filter((f) => f.childId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_idiomGradeProgressRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$IdiomFailureRecordsTable,
+      List<IdiomFailureRecord>> _idiomFailureRecordsRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.idiomFailureRecords,
+          aliasName: $_aliasNameGenerator(
+              db.children.id, db.idiomFailureRecords.childId));
+
+  $$IdiomFailureRecordsTableProcessedTableManager get idiomFailureRecordsRefs {
+    final manager =
+        $$IdiomFailureRecordsTableTableManager($_db, $_db.idiomFailureRecords)
+            .filter((f) => f.childId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_idiomFailureRecordsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$IdiomPuzzleRecordsTable, List<IdiomPuzzleRecord>>
+      _idiomPuzzleRecordsRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.idiomPuzzleRecords,
+              aliasName: $_aliasNameGenerator(
+                  db.children.id, db.idiomPuzzleRecords.childId));
+
+  $$IdiomPuzzleRecordsTableProcessedTableManager get idiomPuzzleRecordsRefs {
+    final manager =
+        $$IdiomPuzzleRecordsTableTableManager($_db, $_db.idiomPuzzleRecords)
+            .filter((f) => f.childId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_idiomPuzzleRecordsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$IdiomEngagementRecordsTable,
+      List<IdiomEngagementRecord>> _idiomEngagementRecordsRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.idiomEngagementRecords,
+          aliasName: $_aliasNameGenerator(
+              db.children.id, db.idiomEngagementRecords.childId));
+
+  $$IdiomEngagementRecordsTableProcessedTableManager
+      get idiomEngagementRecordsRefs {
+    final manager = $$IdiomEngagementRecordsTableTableManager(
+            $_db, $_db.idiomEngagementRecords)
+        .filter((f) => f.childId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_idiomEngagementRecordsRefsTable($_db));
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
@@ -5383,6 +9955,134 @@ class $$ChildrenTableFilterComposer
               $removeJoinBuilderFromRootComposer:
                   $removeJoinBuilderFromRootComposer,
             ));
+    return f(composer);
+  }
+
+  Expression<bool> idiomGameSettingsRefs(
+      Expression<bool> Function($$IdiomGameSettingsTableFilterComposer f) f) {
+    final $$IdiomGameSettingsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.idiomGameSettings,
+        getReferencedColumn: (t) => t.childId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$IdiomGameSettingsTableFilterComposer(
+              $db: $db,
+              $table: $db.idiomGameSettings,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> idiomGameRecordsRefs(
+      Expression<bool> Function($$IdiomGameRecordsTableFilterComposer f) f) {
+    final $$IdiomGameRecordsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.idiomGameRecords,
+        getReferencedColumn: (t) => t.childId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$IdiomGameRecordsTableFilterComposer(
+              $db: $db,
+              $table: $db.idiomGameRecords,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> idiomGradeProgressRefs(
+      Expression<bool> Function($$IdiomGradeProgressTableFilterComposer f) f) {
+    final $$IdiomGradeProgressTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.idiomGradeProgress,
+        getReferencedColumn: (t) => t.childId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$IdiomGradeProgressTableFilterComposer(
+              $db: $db,
+              $table: $db.idiomGradeProgress,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> idiomFailureRecordsRefs(
+      Expression<bool> Function($$IdiomFailureRecordsTableFilterComposer f) f) {
+    final $$IdiomFailureRecordsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.idiomFailureRecords,
+        getReferencedColumn: (t) => t.childId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$IdiomFailureRecordsTableFilterComposer(
+              $db: $db,
+              $table: $db.idiomFailureRecords,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> idiomPuzzleRecordsRefs(
+      Expression<bool> Function($$IdiomPuzzleRecordsTableFilterComposer f) f) {
+    final $$IdiomPuzzleRecordsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.idiomPuzzleRecords,
+        getReferencedColumn: (t) => t.childId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$IdiomPuzzleRecordsTableFilterComposer(
+              $db: $db,
+              $table: $db.idiomPuzzleRecords,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> idiomEngagementRecordsRefs(
+      Expression<bool> Function($$IdiomEngagementRecordsTableFilterComposer f)
+          f) {
+    final $$IdiomEngagementRecordsTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.idiomEngagementRecords,
+            getReferencedColumn: (t) => t.childId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$IdiomEngagementRecordsTableFilterComposer(
+                  $db: $db,
+                  $table: $db.idiomEngagementRecords,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return f(composer);
   }
 }
@@ -5565,6 +10265,139 @@ class $$ChildrenTableAnnotationComposer
             ));
     return f(composer);
   }
+
+  Expression<T> idiomGameSettingsRefs<T extends Object>(
+      Expression<T> Function($$IdiomGameSettingsTableAnnotationComposer a) f) {
+    final $$IdiomGameSettingsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.idiomGameSettings,
+            getReferencedColumn: (t) => t.childId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$IdiomGameSettingsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.idiomGameSettings,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> idiomGameRecordsRefs<T extends Object>(
+      Expression<T> Function($$IdiomGameRecordsTableAnnotationComposer a) f) {
+    final $$IdiomGameRecordsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.idiomGameRecords,
+        getReferencedColumn: (t) => t.childId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$IdiomGameRecordsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.idiomGameRecords,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> idiomGradeProgressRefs<T extends Object>(
+      Expression<T> Function($$IdiomGradeProgressTableAnnotationComposer a) f) {
+    final $$IdiomGradeProgressTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.idiomGradeProgress,
+            getReferencedColumn: (t) => t.childId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$IdiomGradeProgressTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.idiomGradeProgress,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> idiomFailureRecordsRefs<T extends Object>(
+      Expression<T> Function($$IdiomFailureRecordsTableAnnotationComposer a)
+          f) {
+    final $$IdiomFailureRecordsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.idiomFailureRecords,
+            getReferencedColumn: (t) => t.childId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$IdiomFailureRecordsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.idiomFailureRecords,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> idiomPuzzleRecordsRefs<T extends Object>(
+      Expression<T> Function($$IdiomPuzzleRecordsTableAnnotationComposer a) f) {
+    final $$IdiomPuzzleRecordsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.idiomPuzzleRecords,
+            getReferencedColumn: (t) => t.childId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$IdiomPuzzleRecordsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.idiomPuzzleRecords,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+
+  Expression<T> idiomEngagementRecordsRefs<T extends Object>(
+      Expression<T> Function($$IdiomEngagementRecordsTableAnnotationComposer a)
+          f) {
+    final $$IdiomEngagementRecordsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.idiomEngagementRecords,
+            getReferencedColumn: (t) => t.childId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$IdiomEngagementRecordsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.idiomEngagementRecords,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
 }
 
 class $$ChildrenTableTableManager extends RootTableManager<
@@ -5583,7 +10416,13 @@ class $$ChildrenTableTableManager extends RootTableManager<
         bool exchangesRefs,
         bool pointRecordsRefs,
         bool badgeAcquisitionsRefs,
-        bool checkinRecordsRefs})> {
+        bool checkinRecordsRefs,
+        bool idiomGameSettingsRefs,
+        bool idiomGameRecordsRefs,
+        bool idiomGradeProgressRefs,
+        bool idiomFailureRecordsRefs,
+        bool idiomPuzzleRecordsRefs,
+        bool idiomEngagementRecordsRefs})> {
   $$ChildrenTableTableManager(_$AppDatabase db, $ChildrenTable table)
       : super(TableManagerState(
           db: db,
@@ -5647,7 +10486,13 @@ class $$ChildrenTableTableManager extends RootTableManager<
               exchangesRefs = false,
               pointRecordsRefs = false,
               badgeAcquisitionsRefs = false,
-              checkinRecordsRefs = false}) {
+              checkinRecordsRefs = false,
+              idiomGameSettingsRefs = false,
+              idiomGameRecordsRefs = false,
+              idiomGradeProgressRefs = false,
+              idiomFailureRecordsRefs = false,
+              idiomPuzzleRecordsRefs = false,
+              idiomEngagementRecordsRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
@@ -5655,7 +10500,13 @@ class $$ChildrenTableTableManager extends RootTableManager<
                 if (exchangesRefs) db.exchanges,
                 if (pointRecordsRefs) db.pointRecords,
                 if (badgeAcquisitionsRefs) db.badgeAcquisitions,
-                if (checkinRecordsRefs) db.checkinRecords
+                if (checkinRecordsRefs) db.checkinRecords,
+                if (idiomGameSettingsRefs) db.idiomGameSettings,
+                if (idiomGameRecordsRefs) db.idiomGameRecords,
+                if (idiomGradeProgressRefs) db.idiomGradeProgress,
+                if (idiomFailureRecordsRefs) db.idiomFailureRecords,
+                if (idiomPuzzleRecordsRefs) db.idiomPuzzleRecords,
+                if (idiomEngagementRecordsRefs) db.idiomEngagementRecords
               ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
@@ -5718,6 +10569,78 @@ class $$ChildrenTableTableManager extends RootTableManager<
                         referencedItemsForCurrentItem: (item,
                                 referencedItems) =>
                             referencedItems.where((e) => e.childId == item.id),
+                        typedResults: items),
+                  if (idiomGameSettingsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChildrenTableReferences
+                            ._idiomGameSettingsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChildrenTableReferences(db, table, p0)
+                                .idiomGameSettingsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.childId == item.id),
+                        typedResults: items),
+                  if (idiomGameRecordsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChildrenTableReferences
+                            ._idiomGameRecordsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChildrenTableReferences(db, table, p0)
+                                .idiomGameRecordsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.childId == item.id),
+                        typedResults: items),
+                  if (idiomGradeProgressRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChildrenTableReferences
+                            ._idiomGradeProgressRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChildrenTableReferences(db, table, p0)
+                                .idiomGradeProgressRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.childId == item.id),
+                        typedResults: items),
+                  if (idiomFailureRecordsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChildrenTableReferences
+                            ._idiomFailureRecordsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChildrenTableReferences(db, table, p0)
+                                .idiomFailureRecordsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.childId == item.id),
+                        typedResults: items),
+                  if (idiomPuzzleRecordsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChildrenTableReferences
+                            ._idiomPuzzleRecordsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChildrenTableReferences(db, table, p0)
+                                .idiomPuzzleRecordsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.childId == item.id),
+                        typedResults: items),
+                  if (idiomEngagementRecordsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$ChildrenTableReferences
+                            ._idiomEngagementRecordsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$ChildrenTableReferences(db, table, p0)
+                                .idiomEngagementRecordsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.childId == item.id),
                         typedResults: items)
                 ];
               },
@@ -5742,7 +10665,13 @@ typedef $$ChildrenTableProcessedTableManager = ProcessedTableManager<
         bool exchangesRefs,
         bool pointRecordsRefs,
         bool badgeAcquisitionsRefs,
-        bool checkinRecordsRefs})>;
+        bool checkinRecordsRefs,
+        bool idiomGameSettingsRefs,
+        bool idiomGameRecordsRefs,
+        bool idiomGradeProgressRefs,
+        bool idiomFailureRecordsRefs,
+        bool idiomPuzzleRecordsRefs,
+        bool idiomEngagementRecordsRefs})>;
 typedef $$RulesTableCreateCompanionBuilder = RulesCompanion Function({
   Value<int> id,
   Value<int?> childId,
@@ -9047,6 +13976,2798 @@ typedef $$CheckinRecordsTableProcessedTableManager = ProcessedTableManager<
     (CheckinRecord, $$CheckinRecordsTableReferences),
     CheckinRecord,
     PrefetchHooks Function({bool childId})>;
+typedef $$IdiomsTableCreateCompanionBuilder = IdiomsCompanion Function({
+  Value<int> id,
+  required String word,
+  required String pinyin,
+  required String firstPinyinNoTone,
+  required String lastPinyinNoTone,
+  Value<String> firstPinyin,
+  Value<String> lastPinyin,
+  required String firstChar,
+  required String lastChar,
+  Value<String?> explanation,
+  Value<String?> source,
+  Value<String?> example,
+  Value<int> gradeLevel,
+  Value<int> frequency,
+  Value<bool> isRare,
+  Value<bool> isDeleted,
+  required DateTime createdAt,
+});
+typedef $$IdiomsTableUpdateCompanionBuilder = IdiomsCompanion Function({
+  Value<int> id,
+  Value<String> word,
+  Value<String> pinyin,
+  Value<String> firstPinyinNoTone,
+  Value<String> lastPinyinNoTone,
+  Value<String> firstPinyin,
+  Value<String> lastPinyin,
+  Value<String> firstChar,
+  Value<String> lastChar,
+  Value<String?> explanation,
+  Value<String?> source,
+  Value<String?> example,
+  Value<int> gradeLevel,
+  Value<int> frequency,
+  Value<bool> isRare,
+  Value<bool> isDeleted,
+  Value<DateTime> createdAt,
+});
+
+final class $$IdiomsTableReferences
+    extends BaseReferences<_$AppDatabase, $IdiomsTable, Idiom> {
+  $$IdiomsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$IdiomEngagementRecordsTable,
+      List<IdiomEngagementRecord>> _idiomEngagementRecordsRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.idiomEngagementRecords,
+          aliasName: $_aliasNameGenerator(
+              db.idioms.id, db.idiomEngagementRecords.idiomId));
+
+  $$IdiomEngagementRecordsTableProcessedTableManager
+      get idiomEngagementRecordsRefs {
+    final manager = $$IdiomEngagementRecordsTableTableManager(
+            $_db, $_db.idiomEngagementRecords)
+        .filter((f) => f.idiomId.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_idiomEngagementRecordsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$IdiomsTableFilterComposer
+    extends Composer<_$AppDatabase, $IdiomsTable> {
+  $$IdiomsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get word => $composableBuilder(
+      column: $table.word, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get pinyin => $composableBuilder(
+      column: $table.pinyin, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get firstPinyinNoTone => $composableBuilder(
+      column: $table.firstPinyinNoTone,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get lastPinyinNoTone => $composableBuilder(
+      column: $table.lastPinyinNoTone,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get firstPinyin => $composableBuilder(
+      column: $table.firstPinyin, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get lastPinyin => $composableBuilder(
+      column: $table.lastPinyin, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get firstChar => $composableBuilder(
+      column: $table.firstChar, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get lastChar => $composableBuilder(
+      column: $table.lastChar, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get explanation => $composableBuilder(
+      column: $table.explanation, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get source => $composableBuilder(
+      column: $table.source, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get example => $composableBuilder(
+      column: $table.example, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get gradeLevel => $composableBuilder(
+      column: $table.gradeLevel, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get frequency => $composableBuilder(
+      column: $table.frequency, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isRare => $composableBuilder(
+      column: $table.isRare, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> idiomEngagementRecordsRefs(
+      Expression<bool> Function($$IdiomEngagementRecordsTableFilterComposer f)
+          f) {
+    final $$IdiomEngagementRecordsTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.idiomEngagementRecords,
+            getReferencedColumn: (t) => t.idiomId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$IdiomEngagementRecordsTableFilterComposer(
+                  $db: $db,
+                  $table: $db.idiomEngagementRecords,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$IdiomsTableOrderingComposer
+    extends Composer<_$AppDatabase, $IdiomsTable> {
+  $$IdiomsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get word => $composableBuilder(
+      column: $table.word, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get pinyin => $composableBuilder(
+      column: $table.pinyin, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get firstPinyinNoTone => $composableBuilder(
+      column: $table.firstPinyinNoTone,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get lastPinyinNoTone => $composableBuilder(
+      column: $table.lastPinyinNoTone,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get firstPinyin => $composableBuilder(
+      column: $table.firstPinyin, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get lastPinyin => $composableBuilder(
+      column: $table.lastPinyin, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get firstChar => $composableBuilder(
+      column: $table.firstChar, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get lastChar => $composableBuilder(
+      column: $table.lastChar, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get explanation => $composableBuilder(
+      column: $table.explanation, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get source => $composableBuilder(
+      column: $table.source, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get example => $composableBuilder(
+      column: $table.example, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get gradeLevel => $composableBuilder(
+      column: $table.gradeLevel, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get frequency => $composableBuilder(
+      column: $table.frequency, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isRare => $composableBuilder(
+      column: $table.isRare, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$IdiomsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $IdiomsTable> {
+  $$IdiomsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get word =>
+      $composableBuilder(column: $table.word, builder: (column) => column);
+
+  GeneratedColumn<String> get pinyin =>
+      $composableBuilder(column: $table.pinyin, builder: (column) => column);
+
+  GeneratedColumn<String> get firstPinyinNoTone => $composableBuilder(
+      column: $table.firstPinyinNoTone, builder: (column) => column);
+
+  GeneratedColumn<String> get lastPinyinNoTone => $composableBuilder(
+      column: $table.lastPinyinNoTone, builder: (column) => column);
+
+  GeneratedColumn<String> get firstPinyin => $composableBuilder(
+      column: $table.firstPinyin, builder: (column) => column);
+
+  GeneratedColumn<String> get lastPinyin => $composableBuilder(
+      column: $table.lastPinyin, builder: (column) => column);
+
+  GeneratedColumn<String> get firstChar =>
+      $composableBuilder(column: $table.firstChar, builder: (column) => column);
+
+  GeneratedColumn<String> get lastChar =>
+      $composableBuilder(column: $table.lastChar, builder: (column) => column);
+
+  GeneratedColumn<String> get explanation => $composableBuilder(
+      column: $table.explanation, builder: (column) => column);
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+
+  GeneratedColumn<String> get example =>
+      $composableBuilder(column: $table.example, builder: (column) => column);
+
+  GeneratedColumn<int> get gradeLevel => $composableBuilder(
+      column: $table.gradeLevel, builder: (column) => column);
+
+  GeneratedColumn<int> get frequency =>
+      $composableBuilder(column: $table.frequency, builder: (column) => column);
+
+  GeneratedColumn<bool> get isRare =>
+      $composableBuilder(column: $table.isRare, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  Expression<T> idiomEngagementRecordsRefs<T extends Object>(
+      Expression<T> Function($$IdiomEngagementRecordsTableAnnotationComposer a)
+          f) {
+    final $$IdiomEngagementRecordsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.idiomEngagementRecords,
+            getReferencedColumn: (t) => t.idiomId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$IdiomEngagementRecordsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.idiomEngagementRecords,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$IdiomsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $IdiomsTable,
+    Idiom,
+    $$IdiomsTableFilterComposer,
+    $$IdiomsTableOrderingComposer,
+    $$IdiomsTableAnnotationComposer,
+    $$IdiomsTableCreateCompanionBuilder,
+    $$IdiomsTableUpdateCompanionBuilder,
+    (Idiom, $$IdiomsTableReferences),
+    Idiom,
+    PrefetchHooks Function({bool idiomEngagementRecordsRefs})> {
+  $$IdiomsTableTableManager(_$AppDatabase db, $IdiomsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$IdiomsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$IdiomsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$IdiomsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> word = const Value.absent(),
+            Value<String> pinyin = const Value.absent(),
+            Value<String> firstPinyinNoTone = const Value.absent(),
+            Value<String> lastPinyinNoTone = const Value.absent(),
+            Value<String> firstPinyin = const Value.absent(),
+            Value<String> lastPinyin = const Value.absent(),
+            Value<String> firstChar = const Value.absent(),
+            Value<String> lastChar = const Value.absent(),
+            Value<String?> explanation = const Value.absent(),
+            Value<String?> source = const Value.absent(),
+            Value<String?> example = const Value.absent(),
+            Value<int> gradeLevel = const Value.absent(),
+            Value<int> frequency = const Value.absent(),
+            Value<bool> isRare = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+          }) =>
+              IdiomsCompanion(
+            id: id,
+            word: word,
+            pinyin: pinyin,
+            firstPinyinNoTone: firstPinyinNoTone,
+            lastPinyinNoTone: lastPinyinNoTone,
+            firstPinyin: firstPinyin,
+            lastPinyin: lastPinyin,
+            firstChar: firstChar,
+            lastChar: lastChar,
+            explanation: explanation,
+            source: source,
+            example: example,
+            gradeLevel: gradeLevel,
+            frequency: frequency,
+            isRare: isRare,
+            isDeleted: isDeleted,
+            createdAt: createdAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String word,
+            required String pinyin,
+            required String firstPinyinNoTone,
+            required String lastPinyinNoTone,
+            Value<String> firstPinyin = const Value.absent(),
+            Value<String> lastPinyin = const Value.absent(),
+            required String firstChar,
+            required String lastChar,
+            Value<String?> explanation = const Value.absent(),
+            Value<String?> source = const Value.absent(),
+            Value<String?> example = const Value.absent(),
+            Value<int> gradeLevel = const Value.absent(),
+            Value<int> frequency = const Value.absent(),
+            Value<bool> isRare = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
+            required DateTime createdAt,
+          }) =>
+              IdiomsCompanion.insert(
+            id: id,
+            word: word,
+            pinyin: pinyin,
+            firstPinyinNoTone: firstPinyinNoTone,
+            lastPinyinNoTone: lastPinyinNoTone,
+            firstPinyin: firstPinyin,
+            lastPinyin: lastPinyin,
+            firstChar: firstChar,
+            lastChar: lastChar,
+            explanation: explanation,
+            source: source,
+            example: example,
+            gradeLevel: gradeLevel,
+            frequency: frequency,
+            isRare: isRare,
+            isDeleted: isDeleted,
+            createdAt: createdAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) =>
+                  (e.readTable(table), $$IdiomsTableReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: ({idiomEngagementRecordsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (idiomEngagementRecordsRefs) db.idiomEngagementRecords
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (idiomEngagementRecordsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$IdiomsTableReferences
+                            ._idiomEngagementRecordsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$IdiomsTableReferences(db, table, p0)
+                                .idiomEngagementRecordsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.idiomId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$IdiomsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $IdiomsTable,
+    Idiom,
+    $$IdiomsTableFilterComposer,
+    $$IdiomsTableOrderingComposer,
+    $$IdiomsTableAnnotationComposer,
+    $$IdiomsTableCreateCompanionBuilder,
+    $$IdiomsTableUpdateCompanionBuilder,
+    (Idiom, $$IdiomsTableReferences),
+    Idiom,
+    PrefetchHooks Function({bool idiomEngagementRecordsRefs})>;
+typedef $$IdiomGameSettingsTableCreateCompanionBuilder
+    = IdiomGameSettingsCompanion Function({
+  Value<int> id,
+  required int childId,
+  Value<int> currentGrade,
+  Value<int?> customCountdown,
+  Value<int?> customFreeHints,
+  Value<int> matchMode,
+  Value<bool> soundEnabled,
+  Value<bool> includeRareIdioms,
+  Value<bool> isDeleted,
+  required DateTime createdAt,
+  Value<DateTime?> updatedAt,
+});
+typedef $$IdiomGameSettingsTableUpdateCompanionBuilder
+    = IdiomGameSettingsCompanion Function({
+  Value<int> id,
+  Value<int> childId,
+  Value<int> currentGrade,
+  Value<int?> customCountdown,
+  Value<int?> customFreeHints,
+  Value<int> matchMode,
+  Value<bool> soundEnabled,
+  Value<bool> includeRareIdioms,
+  Value<bool> isDeleted,
+  Value<DateTime> createdAt,
+  Value<DateTime?> updatedAt,
+});
+
+final class $$IdiomGameSettingsTableReferences extends BaseReferences<
+    _$AppDatabase, $IdiomGameSettingsTable, IdiomGameSetting> {
+  $$IdiomGameSettingsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChildrenTable _childIdTable(_$AppDatabase db) =>
+      db.children.createAlias(
+          $_aliasNameGenerator(db.idiomGameSettings.childId, db.children.id));
+
+  $$ChildrenTableProcessedTableManager? get childId {
+    if ($_item.childId == null) return null;
+    final manager = $$ChildrenTableTableManager($_db, $_db.children)
+        .filter((f) => f.id($_item.childId!));
+    final item = $_typedResult.readTableOrNull(_childIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$IdiomGameSettingsTableFilterComposer
+    extends Composer<_$AppDatabase, $IdiomGameSettingsTable> {
+  $$IdiomGameSettingsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get currentGrade => $composableBuilder(
+      column: $table.currentGrade, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get customCountdown => $composableBuilder(
+      column: $table.customCountdown,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get customFreeHints => $composableBuilder(
+      column: $table.customFreeHints,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get matchMode => $composableBuilder(
+      column: $table.matchMode, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get soundEnabled => $composableBuilder(
+      column: $table.soundEnabled, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get includeRareIdioms => $composableBuilder(
+      column: $table.includeRareIdioms,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  $$ChildrenTableFilterComposer get childId {
+    final $$ChildrenTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableFilterComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomGameSettingsTableOrderingComposer
+    extends Composer<_$AppDatabase, $IdiomGameSettingsTable> {
+  $$IdiomGameSettingsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get currentGrade => $composableBuilder(
+      column: $table.currentGrade,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get customCountdown => $composableBuilder(
+      column: $table.customCountdown,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get customFreeHints => $composableBuilder(
+      column: $table.customFreeHints,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get matchMode => $composableBuilder(
+      column: $table.matchMode, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get soundEnabled => $composableBuilder(
+      column: $table.soundEnabled,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get includeRareIdioms => $composableBuilder(
+      column: $table.includeRareIdioms,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+
+  $$ChildrenTableOrderingComposer get childId {
+    final $$ChildrenTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableOrderingComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomGameSettingsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $IdiomGameSettingsTable> {
+  $$IdiomGameSettingsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get currentGrade => $composableBuilder(
+      column: $table.currentGrade, builder: (column) => column);
+
+  GeneratedColumn<int> get customCountdown => $composableBuilder(
+      column: $table.customCountdown, builder: (column) => column);
+
+  GeneratedColumn<int> get customFreeHints => $composableBuilder(
+      column: $table.customFreeHints, builder: (column) => column);
+
+  GeneratedColumn<int> get matchMode =>
+      $composableBuilder(column: $table.matchMode, builder: (column) => column);
+
+  GeneratedColumn<bool> get soundEnabled => $composableBuilder(
+      column: $table.soundEnabled, builder: (column) => column);
+
+  GeneratedColumn<bool> get includeRareIdioms => $composableBuilder(
+      column: $table.includeRareIdioms, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$ChildrenTableAnnotationComposer get childId {
+    final $$ChildrenTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableAnnotationComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomGameSettingsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $IdiomGameSettingsTable,
+    IdiomGameSetting,
+    $$IdiomGameSettingsTableFilterComposer,
+    $$IdiomGameSettingsTableOrderingComposer,
+    $$IdiomGameSettingsTableAnnotationComposer,
+    $$IdiomGameSettingsTableCreateCompanionBuilder,
+    $$IdiomGameSettingsTableUpdateCompanionBuilder,
+    (IdiomGameSetting, $$IdiomGameSettingsTableReferences),
+    IdiomGameSetting,
+    PrefetchHooks Function({bool childId})> {
+  $$IdiomGameSettingsTableTableManager(
+      _$AppDatabase db, $IdiomGameSettingsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$IdiomGameSettingsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$IdiomGameSettingsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$IdiomGameSettingsTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> childId = const Value.absent(),
+            Value<int> currentGrade = const Value.absent(),
+            Value<int?> customCountdown = const Value.absent(),
+            Value<int?> customFreeHints = const Value.absent(),
+            Value<int> matchMode = const Value.absent(),
+            Value<bool> soundEnabled = const Value.absent(),
+            Value<bool> includeRareIdioms = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              IdiomGameSettingsCompanion(
+            id: id,
+            childId: childId,
+            currentGrade: currentGrade,
+            customCountdown: customCountdown,
+            customFreeHints: customFreeHints,
+            matchMode: matchMode,
+            soundEnabled: soundEnabled,
+            includeRareIdioms: includeRareIdioms,
+            isDeleted: isDeleted,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int childId,
+            Value<int> currentGrade = const Value.absent(),
+            Value<int?> customCountdown = const Value.absent(),
+            Value<int?> customFreeHints = const Value.absent(),
+            Value<int> matchMode = const Value.absent(),
+            Value<bool> soundEnabled = const Value.absent(),
+            Value<bool> includeRareIdioms = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
+            required DateTime createdAt,
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              IdiomGameSettingsCompanion.insert(
+            id: id,
+            childId: childId,
+            currentGrade: currentGrade,
+            customCountdown: customCountdown,
+            customFreeHints: customFreeHints,
+            matchMode: matchMode,
+            soundEnabled: soundEnabled,
+            includeRareIdioms: includeRareIdioms,
+            isDeleted: isDeleted,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$IdiomGameSettingsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({childId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (childId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.childId,
+                    referencedTable:
+                        $$IdiomGameSettingsTableReferences._childIdTable(db),
+                    referencedColumn:
+                        $$IdiomGameSettingsTableReferences._childIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$IdiomGameSettingsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $IdiomGameSettingsTable,
+    IdiomGameSetting,
+    $$IdiomGameSettingsTableFilterComposer,
+    $$IdiomGameSettingsTableOrderingComposer,
+    $$IdiomGameSettingsTableAnnotationComposer,
+    $$IdiomGameSettingsTableCreateCompanionBuilder,
+    $$IdiomGameSettingsTableUpdateCompanionBuilder,
+    (IdiomGameSetting, $$IdiomGameSettingsTableReferences),
+    IdiomGameSetting,
+    PrefetchHooks Function({bool childId})>;
+typedef $$IdiomGameRecordsTableCreateCompanionBuilder
+    = IdiomGameRecordsCompanion Function({
+  Value<int> id,
+  required int childId,
+  required int grade,
+  required int score,
+  required int chainLength,
+  required int duration,
+  Value<int> hintsUsed,
+  Value<int> fastAnswerCount,
+  Value<int> rareIdiomCount,
+  Value<int> playerTurns,
+  Value<int> timeoutWarningCount,
+  Value<bool> isAiSurrender,
+  Value<int> comboMax,
+  Value<int> starsEarned,
+  Value<int> starRating,
+  Value<String?> idiomChain,
+  Value<bool> isDeleted,
+  required DateTime playedAt,
+  required DateTime createdAt,
+});
+typedef $$IdiomGameRecordsTableUpdateCompanionBuilder
+    = IdiomGameRecordsCompanion Function({
+  Value<int> id,
+  Value<int> childId,
+  Value<int> grade,
+  Value<int> score,
+  Value<int> chainLength,
+  Value<int> duration,
+  Value<int> hintsUsed,
+  Value<int> fastAnswerCount,
+  Value<int> rareIdiomCount,
+  Value<int> playerTurns,
+  Value<int> timeoutWarningCount,
+  Value<bool> isAiSurrender,
+  Value<int> comboMax,
+  Value<int> starsEarned,
+  Value<int> starRating,
+  Value<String?> idiomChain,
+  Value<bool> isDeleted,
+  Value<DateTime> playedAt,
+  Value<DateTime> createdAt,
+});
+
+final class $$IdiomGameRecordsTableReferences extends BaseReferences<
+    _$AppDatabase, $IdiomGameRecordsTable, IdiomGameRecord> {
+  $$IdiomGameRecordsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChildrenTable _childIdTable(_$AppDatabase db) =>
+      db.children.createAlias(
+          $_aliasNameGenerator(db.idiomGameRecords.childId, db.children.id));
+
+  $$ChildrenTableProcessedTableManager? get childId {
+    if ($_item.childId == null) return null;
+    final manager = $$ChildrenTableTableManager($_db, $_db.children)
+        .filter((f) => f.id($_item.childId!));
+    final item = $_typedResult.readTableOrNull(_childIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$IdiomGameRecordsTableFilterComposer
+    extends Composer<_$AppDatabase, $IdiomGameRecordsTable> {
+  $$IdiomGameRecordsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get grade => $composableBuilder(
+      column: $table.grade, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get score => $composableBuilder(
+      column: $table.score, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get chainLength => $composableBuilder(
+      column: $table.chainLength, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get duration => $composableBuilder(
+      column: $table.duration, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get hintsUsed => $composableBuilder(
+      column: $table.hintsUsed, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get fastAnswerCount => $composableBuilder(
+      column: $table.fastAnswerCount,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get rareIdiomCount => $composableBuilder(
+      column: $table.rareIdiomCount,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get playerTurns => $composableBuilder(
+      column: $table.playerTurns, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get timeoutWarningCount => $composableBuilder(
+      column: $table.timeoutWarningCount,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isAiSurrender => $composableBuilder(
+      column: $table.isAiSurrender, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get comboMax => $composableBuilder(
+      column: $table.comboMax, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get starsEarned => $composableBuilder(
+      column: $table.starsEarned, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get starRating => $composableBuilder(
+      column: $table.starRating, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get idiomChain => $composableBuilder(
+      column: $table.idiomChain, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get playedAt => $composableBuilder(
+      column: $table.playedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  $$ChildrenTableFilterComposer get childId {
+    final $$ChildrenTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableFilterComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomGameRecordsTableOrderingComposer
+    extends Composer<_$AppDatabase, $IdiomGameRecordsTable> {
+  $$IdiomGameRecordsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get grade => $composableBuilder(
+      column: $table.grade, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get score => $composableBuilder(
+      column: $table.score, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get chainLength => $composableBuilder(
+      column: $table.chainLength, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get duration => $composableBuilder(
+      column: $table.duration, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get hintsUsed => $composableBuilder(
+      column: $table.hintsUsed, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get fastAnswerCount => $composableBuilder(
+      column: $table.fastAnswerCount,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get rareIdiomCount => $composableBuilder(
+      column: $table.rareIdiomCount,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get playerTurns => $composableBuilder(
+      column: $table.playerTurns, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get timeoutWarningCount => $composableBuilder(
+      column: $table.timeoutWarningCount,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isAiSurrender => $composableBuilder(
+      column: $table.isAiSurrender,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get comboMax => $composableBuilder(
+      column: $table.comboMax, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get starsEarned => $composableBuilder(
+      column: $table.starsEarned, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get starRating => $composableBuilder(
+      column: $table.starRating, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get idiomChain => $composableBuilder(
+      column: $table.idiomChain, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get playedAt => $composableBuilder(
+      column: $table.playedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  $$ChildrenTableOrderingComposer get childId {
+    final $$ChildrenTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableOrderingComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomGameRecordsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $IdiomGameRecordsTable> {
+  $$IdiomGameRecordsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get grade =>
+      $composableBuilder(column: $table.grade, builder: (column) => column);
+
+  GeneratedColumn<int> get score =>
+      $composableBuilder(column: $table.score, builder: (column) => column);
+
+  GeneratedColumn<int> get chainLength => $composableBuilder(
+      column: $table.chainLength, builder: (column) => column);
+
+  GeneratedColumn<int> get duration =>
+      $composableBuilder(column: $table.duration, builder: (column) => column);
+
+  GeneratedColumn<int> get hintsUsed =>
+      $composableBuilder(column: $table.hintsUsed, builder: (column) => column);
+
+  GeneratedColumn<int> get fastAnswerCount => $composableBuilder(
+      column: $table.fastAnswerCount, builder: (column) => column);
+
+  GeneratedColumn<int> get rareIdiomCount => $composableBuilder(
+      column: $table.rareIdiomCount, builder: (column) => column);
+
+  GeneratedColumn<int> get playerTurns => $composableBuilder(
+      column: $table.playerTurns, builder: (column) => column);
+
+  GeneratedColumn<int> get timeoutWarningCount => $composableBuilder(
+      column: $table.timeoutWarningCount, builder: (column) => column);
+
+  GeneratedColumn<bool> get isAiSurrender => $composableBuilder(
+      column: $table.isAiSurrender, builder: (column) => column);
+
+  GeneratedColumn<int> get comboMax =>
+      $composableBuilder(column: $table.comboMax, builder: (column) => column);
+
+  GeneratedColumn<int> get starsEarned => $composableBuilder(
+      column: $table.starsEarned, builder: (column) => column);
+
+  GeneratedColumn<int> get starRating => $composableBuilder(
+      column: $table.starRating, builder: (column) => column);
+
+  GeneratedColumn<String> get idiomChain => $composableBuilder(
+      column: $table.idiomChain, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get playedAt =>
+      $composableBuilder(column: $table.playedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$ChildrenTableAnnotationComposer get childId {
+    final $$ChildrenTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableAnnotationComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomGameRecordsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $IdiomGameRecordsTable,
+    IdiomGameRecord,
+    $$IdiomGameRecordsTableFilterComposer,
+    $$IdiomGameRecordsTableOrderingComposer,
+    $$IdiomGameRecordsTableAnnotationComposer,
+    $$IdiomGameRecordsTableCreateCompanionBuilder,
+    $$IdiomGameRecordsTableUpdateCompanionBuilder,
+    (IdiomGameRecord, $$IdiomGameRecordsTableReferences),
+    IdiomGameRecord,
+    PrefetchHooks Function({bool childId})> {
+  $$IdiomGameRecordsTableTableManager(
+      _$AppDatabase db, $IdiomGameRecordsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$IdiomGameRecordsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$IdiomGameRecordsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$IdiomGameRecordsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> childId = const Value.absent(),
+            Value<int> grade = const Value.absent(),
+            Value<int> score = const Value.absent(),
+            Value<int> chainLength = const Value.absent(),
+            Value<int> duration = const Value.absent(),
+            Value<int> hintsUsed = const Value.absent(),
+            Value<int> fastAnswerCount = const Value.absent(),
+            Value<int> rareIdiomCount = const Value.absent(),
+            Value<int> playerTurns = const Value.absent(),
+            Value<int> timeoutWarningCount = const Value.absent(),
+            Value<bool> isAiSurrender = const Value.absent(),
+            Value<int> comboMax = const Value.absent(),
+            Value<int> starsEarned = const Value.absent(),
+            Value<int> starRating = const Value.absent(),
+            Value<String?> idiomChain = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
+            Value<DateTime> playedAt = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+          }) =>
+              IdiomGameRecordsCompanion(
+            id: id,
+            childId: childId,
+            grade: grade,
+            score: score,
+            chainLength: chainLength,
+            duration: duration,
+            hintsUsed: hintsUsed,
+            fastAnswerCount: fastAnswerCount,
+            rareIdiomCount: rareIdiomCount,
+            playerTurns: playerTurns,
+            timeoutWarningCount: timeoutWarningCount,
+            isAiSurrender: isAiSurrender,
+            comboMax: comboMax,
+            starsEarned: starsEarned,
+            starRating: starRating,
+            idiomChain: idiomChain,
+            isDeleted: isDeleted,
+            playedAt: playedAt,
+            createdAt: createdAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int childId,
+            required int grade,
+            required int score,
+            required int chainLength,
+            required int duration,
+            Value<int> hintsUsed = const Value.absent(),
+            Value<int> fastAnswerCount = const Value.absent(),
+            Value<int> rareIdiomCount = const Value.absent(),
+            Value<int> playerTurns = const Value.absent(),
+            Value<int> timeoutWarningCount = const Value.absent(),
+            Value<bool> isAiSurrender = const Value.absent(),
+            Value<int> comboMax = const Value.absent(),
+            Value<int> starsEarned = const Value.absent(),
+            Value<int> starRating = const Value.absent(),
+            Value<String?> idiomChain = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
+            required DateTime playedAt,
+            required DateTime createdAt,
+          }) =>
+              IdiomGameRecordsCompanion.insert(
+            id: id,
+            childId: childId,
+            grade: grade,
+            score: score,
+            chainLength: chainLength,
+            duration: duration,
+            hintsUsed: hintsUsed,
+            fastAnswerCount: fastAnswerCount,
+            rareIdiomCount: rareIdiomCount,
+            playerTurns: playerTurns,
+            timeoutWarningCount: timeoutWarningCount,
+            isAiSurrender: isAiSurrender,
+            comboMax: comboMax,
+            starsEarned: starsEarned,
+            starRating: starRating,
+            idiomChain: idiomChain,
+            isDeleted: isDeleted,
+            playedAt: playedAt,
+            createdAt: createdAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$IdiomGameRecordsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({childId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (childId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.childId,
+                    referencedTable:
+                        $$IdiomGameRecordsTableReferences._childIdTable(db),
+                    referencedColumn:
+                        $$IdiomGameRecordsTableReferences._childIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$IdiomGameRecordsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $IdiomGameRecordsTable,
+    IdiomGameRecord,
+    $$IdiomGameRecordsTableFilterComposer,
+    $$IdiomGameRecordsTableOrderingComposer,
+    $$IdiomGameRecordsTableAnnotationComposer,
+    $$IdiomGameRecordsTableCreateCompanionBuilder,
+    $$IdiomGameRecordsTableUpdateCompanionBuilder,
+    (IdiomGameRecord, $$IdiomGameRecordsTableReferences),
+    IdiomGameRecord,
+    PrefetchHooks Function({bool childId})>;
+typedef $$IdiomGradeProgressTableCreateCompanionBuilder
+    = IdiomGradeProgressCompanion Function({
+  Value<int> id,
+  required int childId,
+  required int grade,
+  Value<int> highScore,
+  Value<int> bestChainLength,
+  Value<int> starRating,
+  Value<int> playCount,
+  Value<bool> isUnlocked,
+  Value<bool> isDeleted,
+  required DateTime createdAt,
+  Value<DateTime?> updatedAt,
+});
+typedef $$IdiomGradeProgressTableUpdateCompanionBuilder
+    = IdiomGradeProgressCompanion Function({
+  Value<int> id,
+  Value<int> childId,
+  Value<int> grade,
+  Value<int> highScore,
+  Value<int> bestChainLength,
+  Value<int> starRating,
+  Value<int> playCount,
+  Value<bool> isUnlocked,
+  Value<bool> isDeleted,
+  Value<DateTime> createdAt,
+  Value<DateTime?> updatedAt,
+});
+
+final class $$IdiomGradeProgressTableReferences extends BaseReferences<
+    _$AppDatabase, $IdiomGradeProgressTable, IdiomGradeProgressData> {
+  $$IdiomGradeProgressTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChildrenTable _childIdTable(_$AppDatabase db) =>
+      db.children.createAlias(
+          $_aliasNameGenerator(db.idiomGradeProgress.childId, db.children.id));
+
+  $$ChildrenTableProcessedTableManager? get childId {
+    if ($_item.childId == null) return null;
+    final manager = $$ChildrenTableTableManager($_db, $_db.children)
+        .filter((f) => f.id($_item.childId!));
+    final item = $_typedResult.readTableOrNull(_childIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$IdiomGradeProgressTableFilterComposer
+    extends Composer<_$AppDatabase, $IdiomGradeProgressTable> {
+  $$IdiomGradeProgressTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get grade => $composableBuilder(
+      column: $table.grade, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get highScore => $composableBuilder(
+      column: $table.highScore, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get bestChainLength => $composableBuilder(
+      column: $table.bestChainLength,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get starRating => $composableBuilder(
+      column: $table.starRating, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get playCount => $composableBuilder(
+      column: $table.playCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isUnlocked => $composableBuilder(
+      column: $table.isUnlocked, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  $$ChildrenTableFilterComposer get childId {
+    final $$ChildrenTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableFilterComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomGradeProgressTableOrderingComposer
+    extends Composer<_$AppDatabase, $IdiomGradeProgressTable> {
+  $$IdiomGradeProgressTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get grade => $composableBuilder(
+      column: $table.grade, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get highScore => $composableBuilder(
+      column: $table.highScore, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get bestChainLength => $composableBuilder(
+      column: $table.bestChainLength,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get starRating => $composableBuilder(
+      column: $table.starRating, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get playCount => $composableBuilder(
+      column: $table.playCount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isUnlocked => $composableBuilder(
+      column: $table.isUnlocked, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+
+  $$ChildrenTableOrderingComposer get childId {
+    final $$ChildrenTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableOrderingComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomGradeProgressTableAnnotationComposer
+    extends Composer<_$AppDatabase, $IdiomGradeProgressTable> {
+  $$IdiomGradeProgressTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get grade =>
+      $composableBuilder(column: $table.grade, builder: (column) => column);
+
+  GeneratedColumn<int> get highScore =>
+      $composableBuilder(column: $table.highScore, builder: (column) => column);
+
+  GeneratedColumn<int> get bestChainLength => $composableBuilder(
+      column: $table.bestChainLength, builder: (column) => column);
+
+  GeneratedColumn<int> get starRating => $composableBuilder(
+      column: $table.starRating, builder: (column) => column);
+
+  GeneratedColumn<int> get playCount =>
+      $composableBuilder(column: $table.playCount, builder: (column) => column);
+
+  GeneratedColumn<bool> get isUnlocked => $composableBuilder(
+      column: $table.isUnlocked, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$ChildrenTableAnnotationComposer get childId {
+    final $$ChildrenTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableAnnotationComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomGradeProgressTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $IdiomGradeProgressTable,
+    IdiomGradeProgressData,
+    $$IdiomGradeProgressTableFilterComposer,
+    $$IdiomGradeProgressTableOrderingComposer,
+    $$IdiomGradeProgressTableAnnotationComposer,
+    $$IdiomGradeProgressTableCreateCompanionBuilder,
+    $$IdiomGradeProgressTableUpdateCompanionBuilder,
+    (IdiomGradeProgressData, $$IdiomGradeProgressTableReferences),
+    IdiomGradeProgressData,
+    PrefetchHooks Function({bool childId})> {
+  $$IdiomGradeProgressTableTableManager(
+      _$AppDatabase db, $IdiomGradeProgressTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$IdiomGradeProgressTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$IdiomGradeProgressTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$IdiomGradeProgressTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> childId = const Value.absent(),
+            Value<int> grade = const Value.absent(),
+            Value<int> highScore = const Value.absent(),
+            Value<int> bestChainLength = const Value.absent(),
+            Value<int> starRating = const Value.absent(),
+            Value<int> playCount = const Value.absent(),
+            Value<bool> isUnlocked = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              IdiomGradeProgressCompanion(
+            id: id,
+            childId: childId,
+            grade: grade,
+            highScore: highScore,
+            bestChainLength: bestChainLength,
+            starRating: starRating,
+            playCount: playCount,
+            isUnlocked: isUnlocked,
+            isDeleted: isDeleted,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int childId,
+            required int grade,
+            Value<int> highScore = const Value.absent(),
+            Value<int> bestChainLength = const Value.absent(),
+            Value<int> starRating = const Value.absent(),
+            Value<int> playCount = const Value.absent(),
+            Value<bool> isUnlocked = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
+            required DateTime createdAt,
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              IdiomGradeProgressCompanion.insert(
+            id: id,
+            childId: childId,
+            grade: grade,
+            highScore: highScore,
+            bestChainLength: bestChainLength,
+            starRating: starRating,
+            playCount: playCount,
+            isUnlocked: isUnlocked,
+            isDeleted: isDeleted,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$IdiomGradeProgressTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({childId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (childId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.childId,
+                    referencedTable:
+                        $$IdiomGradeProgressTableReferences._childIdTable(db),
+                    referencedColumn: $$IdiomGradeProgressTableReferences
+                        ._childIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$IdiomGradeProgressTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $IdiomGradeProgressTable,
+    IdiomGradeProgressData,
+    $$IdiomGradeProgressTableFilterComposer,
+    $$IdiomGradeProgressTableOrderingComposer,
+    $$IdiomGradeProgressTableAnnotationComposer,
+    $$IdiomGradeProgressTableCreateCompanionBuilder,
+    $$IdiomGradeProgressTableUpdateCompanionBuilder,
+    (IdiomGradeProgressData, $$IdiomGradeProgressTableReferences),
+    IdiomGradeProgressData,
+    PrefetchHooks Function({bool childId})>;
+typedef $$IdiomFailureRecordsTableCreateCompanionBuilder
+    = IdiomFailureRecordsCompanion Function({
+  Value<int> id,
+  required int childId,
+  required String lastChar,
+  Value<int> failCount,
+  Value<int> successCount,
+  required DateTime lastFailedAt,
+  Value<DateTime?> lastSuccessAt,
+  required DateTime createdAt,
+  Value<DateTime?> updatedAt,
+});
+typedef $$IdiomFailureRecordsTableUpdateCompanionBuilder
+    = IdiomFailureRecordsCompanion Function({
+  Value<int> id,
+  Value<int> childId,
+  Value<String> lastChar,
+  Value<int> failCount,
+  Value<int> successCount,
+  Value<DateTime> lastFailedAt,
+  Value<DateTime?> lastSuccessAt,
+  Value<DateTime> createdAt,
+  Value<DateTime?> updatedAt,
+});
+
+final class $$IdiomFailureRecordsTableReferences extends BaseReferences<
+    _$AppDatabase, $IdiomFailureRecordsTable, IdiomFailureRecord> {
+  $$IdiomFailureRecordsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChildrenTable _childIdTable(_$AppDatabase db) =>
+      db.children.createAlias(
+          $_aliasNameGenerator(db.idiomFailureRecords.childId, db.children.id));
+
+  $$ChildrenTableProcessedTableManager? get childId {
+    if ($_item.childId == null) return null;
+    final manager = $$ChildrenTableTableManager($_db, $_db.children)
+        .filter((f) => f.id($_item.childId!));
+    final item = $_typedResult.readTableOrNull(_childIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$IdiomFailureRecordsTableFilterComposer
+    extends Composer<_$AppDatabase, $IdiomFailureRecordsTable> {
+  $$IdiomFailureRecordsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get lastChar => $composableBuilder(
+      column: $table.lastChar, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get failCount => $composableBuilder(
+      column: $table.failCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get successCount => $composableBuilder(
+      column: $table.successCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastFailedAt => $composableBuilder(
+      column: $table.lastFailedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastSuccessAt => $composableBuilder(
+      column: $table.lastSuccessAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+
+  $$ChildrenTableFilterComposer get childId {
+    final $$ChildrenTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableFilterComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomFailureRecordsTableOrderingComposer
+    extends Composer<_$AppDatabase, $IdiomFailureRecordsTable> {
+  $$IdiomFailureRecordsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get lastChar => $composableBuilder(
+      column: $table.lastChar, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get failCount => $composableBuilder(
+      column: $table.failCount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get successCount => $composableBuilder(
+      column: $table.successCount,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastFailedAt => $composableBuilder(
+      column: $table.lastFailedAt,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastSuccessAt => $composableBuilder(
+      column: $table.lastSuccessAt,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+
+  $$ChildrenTableOrderingComposer get childId {
+    final $$ChildrenTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableOrderingComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomFailureRecordsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $IdiomFailureRecordsTable> {
+  $$IdiomFailureRecordsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get lastChar =>
+      $composableBuilder(column: $table.lastChar, builder: (column) => column);
+
+  GeneratedColumn<int> get failCount =>
+      $composableBuilder(column: $table.failCount, builder: (column) => column);
+
+  GeneratedColumn<int> get successCount => $composableBuilder(
+      column: $table.successCount, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastFailedAt => $composableBuilder(
+      column: $table.lastFailedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastSuccessAt => $composableBuilder(
+      column: $table.lastSuccessAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$ChildrenTableAnnotationComposer get childId {
+    final $$ChildrenTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableAnnotationComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomFailureRecordsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $IdiomFailureRecordsTable,
+    IdiomFailureRecord,
+    $$IdiomFailureRecordsTableFilterComposer,
+    $$IdiomFailureRecordsTableOrderingComposer,
+    $$IdiomFailureRecordsTableAnnotationComposer,
+    $$IdiomFailureRecordsTableCreateCompanionBuilder,
+    $$IdiomFailureRecordsTableUpdateCompanionBuilder,
+    (IdiomFailureRecord, $$IdiomFailureRecordsTableReferences),
+    IdiomFailureRecord,
+    PrefetchHooks Function({bool childId})> {
+  $$IdiomFailureRecordsTableTableManager(
+      _$AppDatabase db, $IdiomFailureRecordsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$IdiomFailureRecordsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$IdiomFailureRecordsTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$IdiomFailureRecordsTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> childId = const Value.absent(),
+            Value<String> lastChar = const Value.absent(),
+            Value<int> failCount = const Value.absent(),
+            Value<int> successCount = const Value.absent(),
+            Value<DateTime> lastFailedAt = const Value.absent(),
+            Value<DateTime?> lastSuccessAt = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              IdiomFailureRecordsCompanion(
+            id: id,
+            childId: childId,
+            lastChar: lastChar,
+            failCount: failCount,
+            successCount: successCount,
+            lastFailedAt: lastFailedAt,
+            lastSuccessAt: lastSuccessAt,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int childId,
+            required String lastChar,
+            Value<int> failCount = const Value.absent(),
+            Value<int> successCount = const Value.absent(),
+            required DateTime lastFailedAt,
+            Value<DateTime?> lastSuccessAt = const Value.absent(),
+            required DateTime createdAt,
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              IdiomFailureRecordsCompanion.insert(
+            id: id,
+            childId: childId,
+            lastChar: lastChar,
+            failCount: failCount,
+            successCount: successCount,
+            lastFailedAt: lastFailedAt,
+            lastSuccessAt: lastSuccessAt,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$IdiomFailureRecordsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({childId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (childId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.childId,
+                    referencedTable:
+                        $$IdiomFailureRecordsTableReferences._childIdTable(db),
+                    referencedColumn: $$IdiomFailureRecordsTableReferences
+                        ._childIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$IdiomFailureRecordsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $IdiomFailureRecordsTable,
+    IdiomFailureRecord,
+    $$IdiomFailureRecordsTableFilterComposer,
+    $$IdiomFailureRecordsTableOrderingComposer,
+    $$IdiomFailureRecordsTableAnnotationComposer,
+    $$IdiomFailureRecordsTableCreateCompanionBuilder,
+    $$IdiomFailureRecordsTableUpdateCompanionBuilder,
+    (IdiomFailureRecord, $$IdiomFailureRecordsTableReferences),
+    IdiomFailureRecord,
+    PrefetchHooks Function({bool childId})>;
+typedef $$IdiomPuzzleRecordsTableCreateCompanionBuilder
+    = IdiomPuzzleRecordsCompanion Function({
+  Value<int> id,
+  required int childId,
+  required String gameMode,
+  required int grade,
+  required int correctCount,
+  required int totalCount,
+  required int starsEarned,
+  required int timeTakenSeconds,
+  Value<bool> isDeleted,
+  required DateTime playedAt,
+  required DateTime createdAt,
+});
+typedef $$IdiomPuzzleRecordsTableUpdateCompanionBuilder
+    = IdiomPuzzleRecordsCompanion Function({
+  Value<int> id,
+  Value<int> childId,
+  Value<String> gameMode,
+  Value<int> grade,
+  Value<int> correctCount,
+  Value<int> totalCount,
+  Value<int> starsEarned,
+  Value<int> timeTakenSeconds,
+  Value<bool> isDeleted,
+  Value<DateTime> playedAt,
+  Value<DateTime> createdAt,
+});
+
+final class $$IdiomPuzzleRecordsTableReferences extends BaseReferences<
+    _$AppDatabase, $IdiomPuzzleRecordsTable, IdiomPuzzleRecord> {
+  $$IdiomPuzzleRecordsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChildrenTable _childIdTable(_$AppDatabase db) =>
+      db.children.createAlias(
+          $_aliasNameGenerator(db.idiomPuzzleRecords.childId, db.children.id));
+
+  $$ChildrenTableProcessedTableManager? get childId {
+    if ($_item.childId == null) return null;
+    final manager = $$ChildrenTableTableManager($_db, $_db.children)
+        .filter((f) => f.id($_item.childId!));
+    final item = $_typedResult.readTableOrNull(_childIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$IdiomPuzzleRecordsTableFilterComposer
+    extends Composer<_$AppDatabase, $IdiomPuzzleRecordsTable> {
+  $$IdiomPuzzleRecordsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get gameMode => $composableBuilder(
+      column: $table.gameMode, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get grade => $composableBuilder(
+      column: $table.grade, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get correctCount => $composableBuilder(
+      column: $table.correctCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get totalCount => $composableBuilder(
+      column: $table.totalCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get starsEarned => $composableBuilder(
+      column: $table.starsEarned, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get timeTakenSeconds => $composableBuilder(
+      column: $table.timeTakenSeconds,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get playedAt => $composableBuilder(
+      column: $table.playedAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  $$ChildrenTableFilterComposer get childId {
+    final $$ChildrenTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableFilterComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomPuzzleRecordsTableOrderingComposer
+    extends Composer<_$AppDatabase, $IdiomPuzzleRecordsTable> {
+  $$IdiomPuzzleRecordsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get gameMode => $composableBuilder(
+      column: $table.gameMode, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get grade => $composableBuilder(
+      column: $table.grade, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get correctCount => $composableBuilder(
+      column: $table.correctCount,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get totalCount => $composableBuilder(
+      column: $table.totalCount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get starsEarned => $composableBuilder(
+      column: $table.starsEarned, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get timeTakenSeconds => $composableBuilder(
+      column: $table.timeTakenSeconds,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isDeleted => $composableBuilder(
+      column: $table.isDeleted, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get playedAt => $composableBuilder(
+      column: $table.playedAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  $$ChildrenTableOrderingComposer get childId {
+    final $$ChildrenTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableOrderingComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomPuzzleRecordsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $IdiomPuzzleRecordsTable> {
+  $$IdiomPuzzleRecordsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get gameMode =>
+      $composableBuilder(column: $table.gameMode, builder: (column) => column);
+
+  GeneratedColumn<int> get grade =>
+      $composableBuilder(column: $table.grade, builder: (column) => column);
+
+  GeneratedColumn<int> get correctCount => $composableBuilder(
+      column: $table.correctCount, builder: (column) => column);
+
+  GeneratedColumn<int> get totalCount => $composableBuilder(
+      column: $table.totalCount, builder: (column) => column);
+
+  GeneratedColumn<int> get starsEarned => $composableBuilder(
+      column: $table.starsEarned, builder: (column) => column);
+
+  GeneratedColumn<int> get timeTakenSeconds => $composableBuilder(
+      column: $table.timeTakenSeconds, builder: (column) => column);
+
+  GeneratedColumn<bool> get isDeleted =>
+      $composableBuilder(column: $table.isDeleted, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get playedAt =>
+      $composableBuilder(column: $table.playedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$ChildrenTableAnnotationComposer get childId {
+    final $$ChildrenTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableAnnotationComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomPuzzleRecordsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $IdiomPuzzleRecordsTable,
+    IdiomPuzzleRecord,
+    $$IdiomPuzzleRecordsTableFilterComposer,
+    $$IdiomPuzzleRecordsTableOrderingComposer,
+    $$IdiomPuzzleRecordsTableAnnotationComposer,
+    $$IdiomPuzzleRecordsTableCreateCompanionBuilder,
+    $$IdiomPuzzleRecordsTableUpdateCompanionBuilder,
+    (IdiomPuzzleRecord, $$IdiomPuzzleRecordsTableReferences),
+    IdiomPuzzleRecord,
+    PrefetchHooks Function({bool childId})> {
+  $$IdiomPuzzleRecordsTableTableManager(
+      _$AppDatabase db, $IdiomPuzzleRecordsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$IdiomPuzzleRecordsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$IdiomPuzzleRecordsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$IdiomPuzzleRecordsTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> childId = const Value.absent(),
+            Value<String> gameMode = const Value.absent(),
+            Value<int> grade = const Value.absent(),
+            Value<int> correctCount = const Value.absent(),
+            Value<int> totalCount = const Value.absent(),
+            Value<int> starsEarned = const Value.absent(),
+            Value<int> timeTakenSeconds = const Value.absent(),
+            Value<bool> isDeleted = const Value.absent(),
+            Value<DateTime> playedAt = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+          }) =>
+              IdiomPuzzleRecordsCompanion(
+            id: id,
+            childId: childId,
+            gameMode: gameMode,
+            grade: grade,
+            correctCount: correctCount,
+            totalCount: totalCount,
+            starsEarned: starsEarned,
+            timeTakenSeconds: timeTakenSeconds,
+            isDeleted: isDeleted,
+            playedAt: playedAt,
+            createdAt: createdAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int childId,
+            required String gameMode,
+            required int grade,
+            required int correctCount,
+            required int totalCount,
+            required int starsEarned,
+            required int timeTakenSeconds,
+            Value<bool> isDeleted = const Value.absent(),
+            required DateTime playedAt,
+            required DateTime createdAt,
+          }) =>
+              IdiomPuzzleRecordsCompanion.insert(
+            id: id,
+            childId: childId,
+            gameMode: gameMode,
+            grade: grade,
+            correctCount: correctCount,
+            totalCount: totalCount,
+            starsEarned: starsEarned,
+            timeTakenSeconds: timeTakenSeconds,
+            isDeleted: isDeleted,
+            playedAt: playedAt,
+            createdAt: createdAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$IdiomPuzzleRecordsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({childId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (childId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.childId,
+                    referencedTable:
+                        $$IdiomPuzzleRecordsTableReferences._childIdTable(db),
+                    referencedColumn: $$IdiomPuzzleRecordsTableReferences
+                        ._childIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$IdiomPuzzleRecordsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $IdiomPuzzleRecordsTable,
+    IdiomPuzzleRecord,
+    $$IdiomPuzzleRecordsTableFilterComposer,
+    $$IdiomPuzzleRecordsTableOrderingComposer,
+    $$IdiomPuzzleRecordsTableAnnotationComposer,
+    $$IdiomPuzzleRecordsTableCreateCompanionBuilder,
+    $$IdiomPuzzleRecordsTableUpdateCompanionBuilder,
+    (IdiomPuzzleRecord, $$IdiomPuzzleRecordsTableReferences),
+    IdiomPuzzleRecord,
+    PrefetchHooks Function({bool childId})>;
+typedef $$IdiomEngagementRecordsTableCreateCompanionBuilder
+    = IdiomEngagementRecordsCompanion Function({
+  Value<int> id,
+  required int childId,
+  required int idiomId,
+  Value<int> encounterCount,
+  Value<int> correctCount,
+  Value<int> failCount,
+  required DateTime lastEncounteredAt,
+  Value<DateTime?> lastWrongAt,
+  Value<int> masteryLevel,
+  Value<int> consecutiveCorrect,
+});
+typedef $$IdiomEngagementRecordsTableUpdateCompanionBuilder
+    = IdiomEngagementRecordsCompanion Function({
+  Value<int> id,
+  Value<int> childId,
+  Value<int> idiomId,
+  Value<int> encounterCount,
+  Value<int> correctCount,
+  Value<int> failCount,
+  Value<DateTime> lastEncounteredAt,
+  Value<DateTime?> lastWrongAt,
+  Value<int> masteryLevel,
+  Value<int> consecutiveCorrect,
+});
+
+final class $$IdiomEngagementRecordsTableReferences extends BaseReferences<
+    _$AppDatabase, $IdiomEngagementRecordsTable, IdiomEngagementRecord> {
+  $$IdiomEngagementRecordsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $ChildrenTable _childIdTable(_$AppDatabase db) =>
+      db.children.createAlias($_aliasNameGenerator(
+          db.idiomEngagementRecords.childId, db.children.id));
+
+  $$ChildrenTableProcessedTableManager? get childId {
+    if ($_item.childId == null) return null;
+    final manager = $$ChildrenTableTableManager($_db, $_db.children)
+        .filter((f) => f.id($_item.childId!));
+    final item = $_typedResult.readTableOrNull(_childIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $IdiomsTable _idiomIdTable(_$AppDatabase db) => db.idioms.createAlias(
+      $_aliasNameGenerator(db.idiomEngagementRecords.idiomId, db.idioms.id));
+
+  $$IdiomsTableProcessedTableManager? get idiomId {
+    if ($_item.idiomId == null) return null;
+    final manager = $$IdiomsTableTableManager($_db, $_db.idioms)
+        .filter((f) => f.id($_item.idiomId!));
+    final item = $_typedResult.readTableOrNull(_idiomIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$IdiomEngagementRecordsTableFilterComposer
+    extends Composer<_$AppDatabase, $IdiomEngagementRecordsTable> {
+  $$IdiomEngagementRecordsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get encounterCount => $composableBuilder(
+      column: $table.encounterCount,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get correctCount => $composableBuilder(
+      column: $table.correctCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get failCount => $composableBuilder(
+      column: $table.failCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastEncounteredAt => $composableBuilder(
+      column: $table.lastEncounteredAt,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastWrongAt => $composableBuilder(
+      column: $table.lastWrongAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get masteryLevel => $composableBuilder(
+      column: $table.masteryLevel, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get consecutiveCorrect => $composableBuilder(
+      column: $table.consecutiveCorrect,
+      builder: (column) => ColumnFilters(column));
+
+  $$ChildrenTableFilterComposer get childId {
+    final $$ChildrenTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableFilterComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$IdiomsTableFilterComposer get idiomId {
+    final $$IdiomsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.idiomId,
+        referencedTable: $db.idioms,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$IdiomsTableFilterComposer(
+              $db: $db,
+              $table: $db.idioms,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomEngagementRecordsTableOrderingComposer
+    extends Composer<_$AppDatabase, $IdiomEngagementRecordsTable> {
+  $$IdiomEngagementRecordsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get encounterCount => $composableBuilder(
+      column: $table.encounterCount,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get correctCount => $composableBuilder(
+      column: $table.correctCount,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get failCount => $composableBuilder(
+      column: $table.failCount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastEncounteredAt => $composableBuilder(
+      column: $table.lastEncounteredAt,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastWrongAt => $composableBuilder(
+      column: $table.lastWrongAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get masteryLevel => $composableBuilder(
+      column: $table.masteryLevel,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get consecutiveCorrect => $composableBuilder(
+      column: $table.consecutiveCorrect,
+      builder: (column) => ColumnOrderings(column));
+
+  $$ChildrenTableOrderingComposer get childId {
+    final $$ChildrenTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableOrderingComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$IdiomsTableOrderingComposer get idiomId {
+    final $$IdiomsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.idiomId,
+        referencedTable: $db.idioms,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$IdiomsTableOrderingComposer(
+              $db: $db,
+              $table: $db.idioms,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomEngagementRecordsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $IdiomEngagementRecordsTable> {
+  $$IdiomEngagementRecordsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get encounterCount => $composableBuilder(
+      column: $table.encounterCount, builder: (column) => column);
+
+  GeneratedColumn<int> get correctCount => $composableBuilder(
+      column: $table.correctCount, builder: (column) => column);
+
+  GeneratedColumn<int> get failCount =>
+      $composableBuilder(column: $table.failCount, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastEncounteredAt => $composableBuilder(
+      column: $table.lastEncounteredAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastWrongAt => $composableBuilder(
+      column: $table.lastWrongAt, builder: (column) => column);
+
+  GeneratedColumn<int> get masteryLevel => $composableBuilder(
+      column: $table.masteryLevel, builder: (column) => column);
+
+  GeneratedColumn<int> get consecutiveCorrect => $composableBuilder(
+      column: $table.consecutiveCorrect, builder: (column) => column);
+
+  $$ChildrenTableAnnotationComposer get childId {
+    final $$ChildrenTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.childId,
+        referencedTable: $db.children,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ChildrenTableAnnotationComposer(
+              $db: $db,
+              $table: $db.children,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$IdiomsTableAnnotationComposer get idiomId {
+    final $$IdiomsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.idiomId,
+        referencedTable: $db.idioms,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$IdiomsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.idioms,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$IdiomEngagementRecordsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $IdiomEngagementRecordsTable,
+    IdiomEngagementRecord,
+    $$IdiomEngagementRecordsTableFilterComposer,
+    $$IdiomEngagementRecordsTableOrderingComposer,
+    $$IdiomEngagementRecordsTableAnnotationComposer,
+    $$IdiomEngagementRecordsTableCreateCompanionBuilder,
+    $$IdiomEngagementRecordsTableUpdateCompanionBuilder,
+    (IdiomEngagementRecord, $$IdiomEngagementRecordsTableReferences),
+    IdiomEngagementRecord,
+    PrefetchHooks Function({bool childId, bool idiomId})> {
+  $$IdiomEngagementRecordsTableTableManager(
+      _$AppDatabase db, $IdiomEngagementRecordsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$IdiomEngagementRecordsTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$IdiomEngagementRecordsTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$IdiomEngagementRecordsTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> childId = const Value.absent(),
+            Value<int> idiomId = const Value.absent(),
+            Value<int> encounterCount = const Value.absent(),
+            Value<int> correctCount = const Value.absent(),
+            Value<int> failCount = const Value.absent(),
+            Value<DateTime> lastEncounteredAt = const Value.absent(),
+            Value<DateTime?> lastWrongAt = const Value.absent(),
+            Value<int> masteryLevel = const Value.absent(),
+            Value<int> consecutiveCorrect = const Value.absent(),
+          }) =>
+              IdiomEngagementRecordsCompanion(
+            id: id,
+            childId: childId,
+            idiomId: idiomId,
+            encounterCount: encounterCount,
+            correctCount: correctCount,
+            failCount: failCount,
+            lastEncounteredAt: lastEncounteredAt,
+            lastWrongAt: lastWrongAt,
+            masteryLevel: masteryLevel,
+            consecutiveCorrect: consecutiveCorrect,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int childId,
+            required int idiomId,
+            Value<int> encounterCount = const Value.absent(),
+            Value<int> correctCount = const Value.absent(),
+            Value<int> failCount = const Value.absent(),
+            required DateTime lastEncounteredAt,
+            Value<DateTime?> lastWrongAt = const Value.absent(),
+            Value<int> masteryLevel = const Value.absent(),
+            Value<int> consecutiveCorrect = const Value.absent(),
+          }) =>
+              IdiomEngagementRecordsCompanion.insert(
+            id: id,
+            childId: childId,
+            idiomId: idiomId,
+            encounterCount: encounterCount,
+            correctCount: correctCount,
+            failCount: failCount,
+            lastEncounteredAt: lastEncounteredAt,
+            lastWrongAt: lastWrongAt,
+            masteryLevel: masteryLevel,
+            consecutiveCorrect: consecutiveCorrect,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$IdiomEngagementRecordsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({childId = false, idiomId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (childId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.childId,
+                    referencedTable: $$IdiomEngagementRecordsTableReferences
+                        ._childIdTable(db),
+                    referencedColumn: $$IdiomEngagementRecordsTableReferences
+                        ._childIdTable(db)
+                        .id,
+                  ) as T;
+                }
+                if (idiomId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.idiomId,
+                    referencedTable: $$IdiomEngagementRecordsTableReferences
+                        ._idiomIdTable(db),
+                    referencedColumn: $$IdiomEngagementRecordsTableReferences
+                        ._idiomIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$IdiomEngagementRecordsTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $IdiomEngagementRecordsTable,
+        IdiomEngagementRecord,
+        $$IdiomEngagementRecordsTableFilterComposer,
+        $$IdiomEngagementRecordsTableOrderingComposer,
+        $$IdiomEngagementRecordsTableAnnotationComposer,
+        $$IdiomEngagementRecordsTableCreateCompanionBuilder,
+        $$IdiomEngagementRecordsTableUpdateCompanionBuilder,
+        (IdiomEngagementRecord, $$IdiomEngagementRecordsTableReferences),
+        IdiomEngagementRecord,
+        PrefetchHooks Function({bool childId, bool idiomId})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -9071,4 +16792,19 @@ class $AppDatabaseManager {
       $$BadgeAcquisitionsTableTableManager(_db, _db.badgeAcquisitions);
   $$CheckinRecordsTableTableManager get checkinRecords =>
       $$CheckinRecordsTableTableManager(_db, _db.checkinRecords);
+  $$IdiomsTableTableManager get idioms =>
+      $$IdiomsTableTableManager(_db, _db.idioms);
+  $$IdiomGameSettingsTableTableManager get idiomGameSettings =>
+      $$IdiomGameSettingsTableTableManager(_db, _db.idiomGameSettings);
+  $$IdiomGameRecordsTableTableManager get idiomGameRecords =>
+      $$IdiomGameRecordsTableTableManager(_db, _db.idiomGameRecords);
+  $$IdiomGradeProgressTableTableManager get idiomGradeProgress =>
+      $$IdiomGradeProgressTableTableManager(_db, _db.idiomGradeProgress);
+  $$IdiomFailureRecordsTableTableManager get idiomFailureRecords =>
+      $$IdiomFailureRecordsTableTableManager(_db, _db.idiomFailureRecords);
+  $$IdiomPuzzleRecordsTableTableManager get idiomPuzzleRecords =>
+      $$IdiomPuzzleRecordsTableTableManager(_db, _db.idiomPuzzleRecords);
+  $$IdiomEngagementRecordsTableTableManager get idiomEngagementRecords =>
+      $$IdiomEngagementRecordsTableTableManager(
+          _db, _db.idiomEngagementRecords);
 }

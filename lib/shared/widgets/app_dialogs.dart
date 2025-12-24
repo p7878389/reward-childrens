@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:children_rewards/core/theme/app_dimens.dart';
+import 'package:children_rewards/l10n/app_localizations.dart';
 
 class AppDialogs {
   static Future<T?> _showCustomDialog<T>({
@@ -15,14 +16,14 @@ class AppDialogs {
     required Color primaryButtonColor,
     String? secondaryButtonText,
     bool isDestructive = false,
-    bool animate = false, // Animation control
   }) {
     return showDialog<T>(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.4),
+      barrierColor: Colors.black.withValues(alpha: 0.4),
       builder: (context) => Dialog(
         backgroundColor: Colors.transparent,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 40),
+        elevation: 0,
+        insetPadding: const EdgeInsets.symmetric(horizontal: AppDimens.paddingL),
         child: _AnimatedDialogContent<T>(
           icon: icon,
           iconColor: iconColor,
@@ -34,7 +35,6 @@ class AppDialogs {
           primaryButtonColor: primaryButtonColor,
           secondaryButtonText: secondaryButtonText,
           isDestructive: isDestructive,
-          animate: animate,
         ),
       ),
     );
@@ -51,23 +51,22 @@ class AppDialogs {
       iconBorderColor: const Color(0xFFFEE2E2),
       title: message,
       primaryButtonText: l10n.gotIt,
-      primaryButtonColor: AppColors.primary,
+      primaryButtonColor: const Color(0xFFDC2626), // Matched to Icon Color
     );
   }
 
-  /// 成功弹窗 (Optimized Style)
+  /// 成功弹窗
   static Future<void> showSuccess(BuildContext context, String message) {
     final l10n = AppLocalizations.of(context)!;
     return _showCustomDialog<void>(
       context: context,
-      icon: Icons.check_circle_rounded, // Changed to checkmark icon
-      iconColor: const Color(0xFF16A34A),      // Vibrant Green
-      iconBgColor: const Color(0xFFF0FDF4),      // Light Green
-      iconBorderColor: const Color(0xFFDCFCE7), // Lighter Green
+      icon: Icons.check_circle_rounded,
+      iconColor: const Color(0xFF16A34A),
+      iconBgColor: const Color(0xFFF0FDF4),
+      iconBorderColor: const Color(0xFFDCFCE7),
       title: message,
       primaryButtonText: l10n.gotIt,
-      primaryButtonColor: const Color(0xFF16A34A), // Primary button matches icon color
-      animate: false, // Animation disabled for consistency
+      primaryButtonColor: const Color(0xFF16A34A),
     );
   }
 
@@ -77,19 +76,21 @@ class AppDialogs {
     required String title,
     String? message,
     String? confirmText,
+    bool isDanger = false,
   }) async {
     final l10n = AppLocalizations.of(context)!;
     final result = await _showCustomDialog<bool>(
       context: context,
-      icon: Icons.help_outline_rounded,
-      iconColor: const Color(0xFFD97706),
-      iconBgColor: const Color(0xFFFEF3C7),
-      iconBorderColor: const Color(0xFFFDE68A),
+      icon: isDanger ? Icons.warning_amber_rounded : Icons.help_outline_rounded,
+      iconColor: isDanger ? const Color(0xFFDC2626) : const Color(0xFFD97706),
+      iconBgColor: isDanger ? const Color(0xFFFEF2F2) : const Color(0xFFFEF3C7),
+      iconBorderColor: isDanger ? const Color(0xFFFEE2E2) : const Color(0xFFFDE68A),
       title: title,
       message: message,
       primaryButtonText: confirmText ?? l10n.confirm,
-      primaryButtonColor: AppColors.primary,
+      primaryButtonColor: isDanger ? const Color(0xFFDC2626) : AppColors.primary,
       secondaryButtonText: l10n.cancel,
+      isDestructive: isDanger,
     );
     return result ?? false;
   }
@@ -131,7 +132,6 @@ class _AnimatedDialogContent<T> extends StatefulWidget {
   final Color primaryButtonColor;
   final String? secondaryButtonText;
   final bool isDestructive;
-  final bool animate;
 
   const _AnimatedDialogContent({
     super.key,
@@ -145,7 +145,6 @@ class _AnimatedDialogContent<T> extends StatefulWidget {
     required this.primaryButtonColor,
     this.secondaryButtonText,
     this.isDestructive = false,
-    this.animate = false,
   });
 
   @override
@@ -161,16 +160,14 @@ class _AnimatedDialogContentState<T> extends State<_AnimatedDialogContent<T>>
   void initState() {
     super.initState();
     _controller = AnimationController(
+      duration: const Duration(milliseconds: 600),
       vsync: this,
-      duration: const Duration(milliseconds: 500),
     );
     _scaleAnimation = CurvedAnimation(
       parent: _controller,
       curve: Curves.elasticOut,
     );
-    if (widget.animate) {
-      _controller.forward();
-    }
+    _controller.forward();
   }
 
   @override
@@ -181,72 +178,70 @@ class _AnimatedDialogContentState<T> extends State<_AnimatedDialogContent<T>>
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 400), // Enlarged dialog
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.white, Color(0xFFFFFEF9)],
+    return ScaleTransition(
+      scale: _scaleAnimation,
+      child: Container(
+        padding: const EdgeInsets.all(AppDimens.paddingL),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(AppDimens.radiusXL),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
             ),
-            borderRadius: BorderRadius.circular(28),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.06),
-                blurRadius: 24,
-                offset: const Offset(0, 12),
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Animated Icon
-              if (widget.animate)
-                ScaleTransition(
-                  scale: _scaleAnimation,
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Animated Icon
+            TweenAnimationBuilder(
+              tween: Tween<double>(begin: 0.0, end: 1.0),
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeOutBack,
+              builder: (context, value, child) {
+                return Transform.scale(
+                  scale: value,
                   child: _buildIcon(),
-                )
-              else
-                _buildIcon(),
+                );
+              },
+            ),
 
-              const SizedBox(height: 20),
+            const SizedBox(height: AppDimens.paddingL),
 
-              // Title
+            // Title
+            Text(
+              widget.title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w900,
+                color: AppColors.textMain,
+                height: 1.2,
+              ),
+            ),
+
+            // Message
+            if (widget.message != null) ...[
+              const SizedBox(height: AppDimens.paddingS),
               Text(
-                widget.title,
+                widget.message!,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w900,
-                  color: AppColors.textMain,
-                  height: 1.3,
+                  color: AppColors.textSecondary,
+                  fontWeight: FontWeight.w500,
+                  height: 1.5,
                 ),
               ),
-
-              // Message
-              if (widget.message != null) ...[
-                const SizedBox(height: 10),
-                Text(
-                  widget.message!,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: AppColors.textSecondary.withOpacity(0.8),
-                    height: 1.5,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-              const SizedBox(height: 32),
-
-              // Buttons
-              _buildButtons(context),
             ],
-          ),
+            const SizedBox(height: AppDimens.paddingXL),
+
+            // Buttons
+            _buildButtons(context),
+          ],
         ),
       ),
     );
@@ -254,14 +249,14 @@ class _AnimatedDialogContentState<T> extends State<_AnimatedDialogContent<T>>
 
   Widget _buildIcon() {
     return Container(
-      width: 64,
-      height: 64,
+      width: 80,
+      height: 80,
       decoration: BoxDecoration(
         color: widget.iconBgColor,
         shape: BoxShape.circle,
         border: Border.all(color: widget.iconBorderColor, width: 4),
       ),
-      child: Icon(widget.icon, color: widget.iconColor, size: 28),
+      child: Icon(widget.icon, color: widget.iconColor, size: 40),
     );
   }
 
@@ -272,41 +267,42 @@ class _AnimatedDialogContentState<T> extends State<_AnimatedDialogContent<T>>
           // Secondary Button
           Expanded(
             child: SizedBox(
-              height: 40, // Shrink button height
+              height: 56,
               child: TextButton(
                 onPressed: () => Navigator.pop(context, false),
                 style: TextButton.styleFrom(
                   backgroundColor: const Color(0xFFF1F5F9),
                   foregroundColor: AppColors.textSecondary,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14)),
+                      borderRadius: BorderRadius.circular(AppDimens.radiusXL)),
                 ),
                 child: Text(
                   widget.secondaryButtonText!,
                   style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w700),
+                      fontSize: 16, fontWeight: FontWeight.w800),
                 ),
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: AppDimens.paddingM),
           // Primary Button
           Expanded(
             child: SizedBox(
-              height: 40, // Shrink button height
+              height: 56,
               child: ElevatedButton(
                 onPressed: () => Navigator.pop(context, true),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: widget.primaryButtonColor,
                   foregroundColor: Colors.white,
-                  elevation: 0,
+                  elevation: 4,
+                  shadowColor: widget.primaryButtonColor.withValues(alpha: 0.3),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14)),
+                      borderRadius: BorderRadius.circular(AppDimens.radiusXL)),
                 ),
                 child: Text(
                   widget.primaryButtonText,
                   style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w800),
+                      fontSize: 16, fontWeight: FontWeight.w800),
                 ),
               ),
             ),
@@ -316,21 +312,21 @@ class _AnimatedDialogContentState<T> extends State<_AnimatedDialogContent<T>>
     } else {
       // Single Button
       return SizedBox(
-        width: double.infinity, // Make single button fill width
-        height: 40, // Shrink button height
+        width: double.infinity,
+        height: 56,
         child: ElevatedButton(
           onPressed: () => Navigator.pop(context, true),
           style: ElevatedButton.styleFrom(
             backgroundColor: widget.primaryButtonColor,
             foregroundColor: Colors.white,
-            elevation: 2,
-            shadowColor: widget.primaryButtonColor.withOpacity(0.3),
+            elevation: 4,
+            shadowColor: widget.primaryButtonColor.withValues(alpha: 0.3),
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimens.radiusXL)),
           ),
           child: Text(
             widget.primaryButtonText,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
       );

@@ -1,7 +1,9 @@
 import 'dart:developer' as developer;
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:children_rewards/core/logging/app_logger.dart' as db_logger;
 import 'package:children_rewards/core/logging/log_level.dart';
+import 'package:children_rewards/core/services/file_storage_service.dart';
 
 /// 日志配置
 class LogConfig {
@@ -17,11 +19,19 @@ class LogConfig {
   /// 是否使用 emoji
   final bool useEmoji;
 
+  /// 是否启用文件日志
+  final bool enableFileLogging;
+
+  /// 是否强制启用控制台输出（即使在非 Debug 模式下）
+  final bool enableConsoleOutput;
+
   const LogConfig({
     this.level = LogLevel.debug,
     this.showTimestamp = true,
     this.showCaller = true,
     this.useEmoji = true,
+    this.enableFileLogging = false,
+    this.enableConsoleOutput = false,
   });
 
   /// 调试环境配置
@@ -30,6 +40,8 @@ class LogConfig {
     showTimestamp: true,
     showCaller: true,
     useEmoji: true,
+    enableFileLogging: true,
+    enableConsoleOutput: true,
   );
 
   /// 生产环境配置
@@ -38,6 +50,8 @@ class LogConfig {
     showTimestamp: false,
     showCaller: false,
     useEmoji: false,
+    enableFileLogging: false,
+    enableConsoleOutput: false,
   );
 }
 
@@ -58,6 +72,11 @@ class Logger {
       // 根据编译模式自动选择配置
       instance._config = kDebugMode ? LogConfig.debug : LogConfig.production;
     }
+
+    if (instance._config.enableFileLogging) {
+      instance._initFileLogging();
+    }
+
     instance.info('Logger initialized with level: ${instance._config.level.label}');
   }
 
@@ -68,6 +87,8 @@ class Logger {
       showTimestamp: instance._config.showTimestamp,
       showCaller: instance._config.showCaller,
       useEmoji: instance._config.useEmoji,
+      enableFileLogging: instance._config.enableFileLogging,
+      enableConsoleOutput: instance._config.enableConsoleOutput,
     );
   }
 
@@ -103,6 +124,52 @@ class Logger {
       data: error,
       stackTrace: stackTrace,
     );
+  }
+
+  File? _logFile;
+  IOSink? _logSink;
+
+  Future<void> _initFileLogging() async {
+    try {
+      final logDir = Directory(await FileStorageService.getLogsPath());
+      if (!await logDir.exists()) {
+        await logDir.create(recursive: true);
+      }
+
+      final now = DateTime.now();
+      final dateStr = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+      _logFile = File('${logDir.path}/app_log_$dateStr.txt');
+
+      _logSink = _logFile?.openWrite(mode: FileMode.append);
+      _logSink?.writeln('\n=== App Started at ${DateTime.now()} ===');
+
+      if (kDebugMode) {
+        debugPrint('File logging enabled. Log path: ${_logFile?.path}');
+      }
+    } catch (e) {
+      debugPrint('Failed to initialize file logging: $e');
+    }
+  }
+
+  void _writeLogToFile(String message) {
+    if (_logSink != null) {
+      _logSink?.writeln(message);
+    } else if (_logFile != null) {
+      // 如果 sink 未准备好但文件已确定（罕见），直接追加
+      _logFile?.writeAsStringSync('$message\n', mode: FileMode.append);
+    }
+  }
+
+  void dispose() {
+    _logSink?.close();
+  }
+
+  /// 获取当前日志文件路径
+  Future<String?> get currentLogFilePath async {
+    if (_logFile == null) {
+      await _initFileLogging();
+    }
+    return _logFile?.path;
   }
 
   /// 核心日志方法
@@ -159,23 +226,30 @@ class Logger {
     // 输出日志
     final logMessage = buffer.toString();
 
-    if (kDebugMode) {
-      // 调试模式使用 debugPrint，避免日志被截断
+    if (kDebugMode || _config.enableConsoleOutput) {
+      // 调试模式或强制输出时使用 debugPrint
       debugPrint(logMessage);
 
-      // 同时使用 developer.log 以便在 DevTools 中查看
-      developer.log(
-        message,
-        name: tag ?? 'App',
-        level: level.value * 500,
-        error: data is Exception || data is Error ? data : null,
-        stackTrace: stackTrace,
-      );
+      // 仅在 Debug 模式下使用 developer.log
+      if (kDebugMode) {
+        developer.log(
+          message,
+          name: tag ?? 'App',
+          level: level.value * 500,
+          error: data is Exception || data is Error ? data : null,
+          stackTrace: stackTrace,
+        );
+      }
     } else {
-      // 生产模式只输出 error 级别
+      // 生产模式且未强制输出，只输出 error 级别
       if (level == LogLevel.error) {
         debugPrint(logMessage);
       }
+    }
+
+    // 写入文件日志
+    if (_config.enableFileLogging) {
+      _writeLogToFile(logMessage);
     }
 
     // 输出堆栈信息

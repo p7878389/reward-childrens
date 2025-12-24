@@ -1,13 +1,11 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:children_rewards/core/database/app_database.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
+import 'package:children_rewards/core/theme/app_dimens.dart';
 import 'package:children_rewards/core/services/logger_service.dart';
 import 'package:children_rewards/shared/widgets/common_widgets.dart';
-import 'package:children_rewards/core/constants/avatar_data.dart';
 import 'package:children_rewards/features/children/data/children_repository.dart';
 import 'package:children_rewards/features/children/providers/children_providers.dart';
 import 'package:children_rewards/features/points/presentation/screens/points_history_screen.dart';
@@ -18,6 +16,7 @@ import 'package:children_rewards/features/badges/presentation/screens/badge_gall
 import 'package:children_rewards/features/badges/presentation/dialogs/checkin_success_dialog.dart';
 import 'package:children_rewards/features/badges/presentation/dialogs/badge_award_dialog.dart';
 import 'package:children_rewards/features/badges/domain/usecases/checkin_usecase.dart';
+import 'package:children_rewards/features/idiom_game/presentation/screens/game_hall_screen.dart';
 
 class ChildManageScreen extends ConsumerWidget {
   final ChildrenData child;
@@ -30,37 +29,61 @@ class ChildManageScreen extends ConsumerWidget {
     if (l10n == null) return const Scaffold();
 
     final childAsync = ref.watch(childStreamProvider(child.id));
+    final badgesAsync = ref.watch(childAcquiredBadgesProvider(child.id));
+    final hasCheckedInAsync = ref.watch(hasCheckedInTodayProvider(child.id));
 
     return childAsync.when(
       data: (latestChild) {
         if (latestChild == null) {
           return Scaffold(
-            appBar: AppBar(),
-            body: const Center(child: Text('Child not found')),
+            backgroundColor: AppColors.background,
+            body: SafeArea(
+              child: Column(
+                children: [
+                  AppHeader(title: l10n.manageChild),
+                  const Expanded(child: Center(child: Text('Child not found'))),
+                ],
+              ),
+            ),
           );
         }
-        return _buildContent(context, ref, latestChild, l10n);
+        final badgeCount = badgesAsync.valueOrNull?.length ?? 0;
+        final hasCheckedIn = hasCheckedInAsync.valueOrNull ?? false;
+        
+        return _buildContent(context, ref, latestChild, badgeCount, hasCheckedIn, l10n);
       },
       loading: () => const Scaffold(
         backgroundColor: AppColors.background,
         body: Center(child: CircularProgressIndicator()),
       ),
-      error: (err, stack) => Scaffold(
-        backgroundColor: AppColors.background,
-        body: Center(child: Text('Error: $err')),
+      error: (err, stack) => ErrorScreen(
+        title: l10n.errorTitle,
+        message: err.toString(),
+        stackTrace: stack.toString(),
+        onRetry: () {
+          // ignore: unused_result
+          ref.refresh(childStreamProvider(child.id));
+          // ignore: unused_result
+          ref.refresh(hasCheckedInTodayProvider(child.id));
+        },
       ),
     );
   }
 
-  Widget _buildContent(BuildContext context, WidgetRef ref, ChildrenData child, AppLocalizations l10n) {
-    final topPadding = MediaQuery.of(context).padding.top;
-    
-    String ageText = "Unknown";
+  Widget _buildContent(
+    BuildContext context, 
+    WidgetRef ref, 
+    ChildrenData child, 
+    int badgeCount,
+    bool hasCheckedIn,
+    AppLocalizations l10n
+  ) {
+    String ageText = "??";
     if (child.birthday != null) {
       try {
         final birthDate = DateTime.parse(child.birthday!);
         final age = DateTime.now().year - birthDate.year;
-        ageText = "$age ${l10n.years}";
+        ageText = "$age";
       } catch (e, stackTrace) {
         logError('解析生日失败', tag: 'ChildManageScreen', error: e, stackTrace: stackTrace);
       }
@@ -71,220 +94,135 @@ class ChildManageScreen extends ConsumerWidget {
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
+          // Header
           SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: 24, 
-                right: 24, 
-                top: 16 + topPadding,
-                bottom: 20
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  HeaderButton(icon: Icons.arrow_back_ios_new_rounded, onTap: () => Navigator.pop(context)),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [BoxShadow(color: AppColors.primary.withOpacity(0.1), spreadRadius: 1)],
-                    ),
-                    child: Row(
+            child: AppHeader(
+              title: l10n.manageChild,
+            ),
+          ),
+
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: AppDimens.paddingL),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                const SizedBox(height: AppDimens.paddingS),
+                
+                // 1. Compact Profile Card (Horizontal)
+                _buildProfileCard(context, child, badgeCount, l10n, ageText),
+                
+                const SizedBox(height: AppDimens.paddingL),
+
+                // 2. Game Entry Card (Featured)
+                _buildGameCard(context, l10n, child),
+
+                const SizedBox(height: AppDimens.paddingL),
+                
+                // 3. Action Grid (Dashboard Style)
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Column(
                       children: [
-                        Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF88C458), shape: BoxShape.circle)),
-                        const SizedBox(width: 8),
-                        Text(l10n.manageChild.toUpperCase(), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textSecondary, letterSpacing: 1.1)),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildDashboardTile(
+                                title: hasCheckedIn ? l10n.alreadyCheckedin : l10n.dailyCheckin,
+                                icon: Icons.calendar_today_rounded,
+                                color: hasCheckedIn ? Colors.grey : Colors.teal,
+                                onTap: hasCheckedIn ? null : () => _handleCheckin(context, ref, l10n, child.id),
+                                isGrey: hasCheckedIn,
+                              ),
+                            ),
+                            const SizedBox(width: AppDimens.paddingM),
+                            Expanded(
+                              child: _buildDashboardTile(
+                                title: l10n.pointsHistory,
+                                icon: Icons.history_rounded,
+                                color: Colors.orange,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PointsHistoryScreen(childId: child.id),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: AppDimens.paddingM),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildDashboardTile(
+                                title: l10n.growthBadges,
+                                icon: Icons.emoji_events_rounded,
+                                color: Colors.deepPurple,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => BadgeGalleryScreen(
+                                        childId: child.id,
+                                        childName: child.name,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: AppDimens.paddingM),
+                            Expanded(
+                              child: _buildDashboardTile(
+                                title: l10n.rewardHistory,
+                                icon: Icons.card_giftcard_rounded,
+                                color: const Color(0xFFF43F5E),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ExchangeHistoryScreen(childId: child.id),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
+                    );
+                  },
+                ),
+
+                const SizedBox(height: AppDimens.paddingXXL),
+
+                // 4. Discreet Delete Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton.icon(
+                    onPressed: () => _showDeleteConfirm(context, ref, l10n, child.id, child.name),
+                    icon: const Icon(Icons.delete_outline_rounded, size: 20),
+                    label: Text(l10n.deleteChildProfile),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFEF4444),
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppDimens.radiusM),
+                      ),
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w900, 
+                        fontSize: 16,
+                        letterSpacing: 0.5,
+                      ),
                     ),
                   ),
-                  HeaderButton(
-                    icon: Icons.edit_rounded,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditChildScreen(child: child),
-                        ),
-                      );
-                    },
-                  ), 
-                ],
-              ),
-            ),
-          ),
-
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    // Avatar with Tap to Enlarge
-                    GestureDetector(
-                      onTap: () => _showEnlargedAvatar(context, child),
-                      child: Hero(
-                        tag: 'child_avatar_manage_${child.id}',
-                        child: Container(
-                          width: 140, height: 140,
-                          margin: const EdgeInsets.only(top: 10, bottom: 16),
-                          decoration: BoxDecoration(
-                            color: AppColors.blueTag,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.primary, width: 4),
-                            boxShadow: [
-                              BoxShadow(color: AppColors.primary.withOpacity(0.2), offset: const Offset(0, 8), blurRadius: 24, spreadRadius: -2),
-                            ],
-                          ),
-                          child: _buildAvatarContent(child, size: 140),
-                        ),
-                      ),
-                    ),
-                    // Star Badge Medal (Bottom Right)
-                    Positioned(
-                      bottom: 15,
-                      right: -5,
-                      child: StarBadge(
-                        count: child.stars,
-                        avatarSize: 140,
-                      ),
-                    ),
-                  ],
                 ),
                 
-                Text(
-                  child.name,
-                  style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: AppColors.textMain),
-                ),
-                
-                const SizedBox(height: 12),
-                
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildInfoTag(
-                      icon: child.gender == 'boy' ? Icons.male_rounded : Icons.female_rounded,
-                      text: child.gender == 'boy' ? l10n.boy : l10n.girl,
-                      color: child.gender == 'boy' ? Colors.blue : Colors.pink,
-                      bgColor: child.gender == 'boy' ? const Color(0xFFEFF6FF) : const Color(0xFFFFF1F2),
-                    ),
-                    if (child.birthday != null) ...[
-                      const SizedBox(width: 12),
-                      _buildInfoTag(
-                        icon: Icons.cake_rounded,
-                        text: ageText,
-                        color: AppColors.textSecondary,
-                        bgColor: const Color(0xFFF1F5F9),
-                      ),
-                    ],
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20),
-                  _buildMenuLink(
-                    title: l10n.pointsHistory,
-                    subtitle: l10n.pointsHistorySubtitle,
-                    icon: Icons.history_rounded,
-                    iconBg: const Color(0xFFFFF7ED),
-                    iconColor: Colors.orange,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PointsHistoryScreen(childId: child.id),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  _buildMenuLink(
-                    title: l10n.dailyCheckin,
-                    subtitle: l10n.checkinToEarn,
-                    icon: Icons.calendar_today_rounded,
-                    iconBg: const Color(0xFFE0F2F1),
-                    iconColor: Colors.teal,
-                    onTap: () => _handleCheckin(context, ref, l10n),
-                  ),
-                  const SizedBox(height: 12),
-                  _buildMenuLink(
-                    title: l10n.growthBadges,
-                    subtitle: l10n.viewAchievements,
-                    icon: Icons.emoji_events_rounded,
-                    iconBg: const Color(0xFFFFF3E0),
-                    iconColor: Colors.orange,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BadgeGalleryScreen(
-                            childId: child.id,
-                            childName: child.name,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-
-                  _buildMenuLink(
-                    title: l10n.rewardHistory,
-                    subtitle: l10n.rewardHistorySubtitle(child.name),
-                    icon: Icons.card_giftcard_rounded,
-                    iconBg: const Color(0xFFF0FDFA),
-                    iconColor: Colors.teal,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ExchangeHistoryScreen(childId: child.id),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    height: 52,
-                    child: ElevatedButton.icon(
-                      onPressed: () =>
-                          _showDeleteConfirm(context, ref, l10n, child.id, child.name),
-                      icon: const Icon(Icons.delete_outline_rounded, size: 20),
-                      label: Text(
-                        l10n.deleteChildProfile,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFEF2F2),
-                        foregroundColor: const Color(0xFFEF4444),
-                        elevation: 0,
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          side: const BorderSide(color: Color(0xFFFEE2E2), width: 1),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 40), // Bottom breathing space
-                ],
-              ),
+                const SizedBox(height: AppDimens.paddingXXL),
+              ]),
             ),
           ),
         ],
@@ -292,22 +230,311 @@ class ChildManageScreen extends ConsumerWidget {
     );
   }
 
-  void _handleCheckin(BuildContext context, WidgetRef ref, AppLocalizations l10n) async {
+  Widget _buildGameCard(BuildContext context, AppLocalizations l10n, ChildrenData child) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => GameHallScreen(childId: child.id),
+          ),
+        );
+      },
+      child: Container(
+        height: 100,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF6366F1), Color(0xFF818CF8)], // Indigo gradient
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(AppDimens.radiusL),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+              offset: const Offset(0, 8),
+              blurRadius: 20,
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            // Background Pattern
+            Positioned(
+              right: -20,
+              top: -20,
+              child: Icon(
+                Icons.sports_esports_rounded,
+                size: 140,
+                color: Colors.white.withValues(alpha: 0.1),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.rocket_launch_rounded, color: Colors.white, size: 32),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "游戏大厅", // "Game Center"
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          "成语接龙、填字挑战、看意猜词...",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.white.withValues(alpha: 0.9),
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 18),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileCard(
+    BuildContext context,
+    ChildrenData child,
+    int badgeCount,
+    AppLocalizations l10n,
+    String ageText
+  ) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditChildScreen(child: child),
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppDimens.radiusL),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.textMain.withValues(alpha: 0.04),
+            offset: const Offset(0, 4),
+            blurRadius: 16,
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Avatar
+          GestureDetector(
+            onTap: () => _showEnlargedAvatar(context, child),
+            child: Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              children: [
+                Hero(
+                  tag: 'child_avatar_manage_${child.id}',
+                  child: Container(
+                    width: 88,
+                    height: 88,
+                    decoration: BoxDecoration(
+                      color: AppColors.blueTag,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 3),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.textMain.withValues(alpha: 0.1),
+                          offset: const Offset(0, 4),
+                          blurRadius: 12,
+                        ),
+                      ],
+                    ),
+                    child: _buildAvatarContent(child, size: 88),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: -4,
+                  child: StarBadge(
+                    count: child.stars,
+                    avatarSize: 88,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
+          const SizedBox(width: AppDimens.paddingL),
+          
+          // Info
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  child.name,
+                  style: const TextStyle(
+                    fontSize: 22, 
+                    fontWeight: FontWeight.w900, 
+                    color: AppColors.textMain,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    _buildCompactStat(
+                      icon: child.gender == 'boy' ? Icons.male_rounded : Icons.female_rounded,
+                      text: child.gender == 'boy' ? l10n.boy : l10n.girl,
+                      color: child.gender == 'boy' ? Colors.blue : Colors.pink,
+                    ),
+                    const SizedBox(width: 12),
+                    _buildCompactStat(
+                      icon: Icons.cake_rounded,
+                      text: "$ageText ${l10n.years}",
+                      color: AppColors.textSecondary,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                _buildCompactStat(
+                  icon: Icons.emoji_events_rounded,
+                  text: "$badgeCount ${l10n.growthBadges}",
+                  color: Colors.deepPurple,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      ),
+    );
+  }
+
+  Widget _buildCompactStat({
+    required IconData icon, 
+    required String text, 
+    required Color color
+  }) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 14, color: color.withValues(alpha: 0.8)),
+        const SizedBox(width: 4),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textMain.withValues(alpha: 0.7),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDashboardTile({
+    required String title,
+    required IconData icon,
+    required Color color,
+    required VoidCallback? onTap,
+    bool isGrey = false,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Opacity(
+        opacity: isGrey ? 0.6 : 1.0,
+        child: Container(
+          height: 120, // Clean square-ish ratio
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(AppDimens.radiusL),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.textMain.withValues(alpha: 0.04),
+                offset: const Offset(0, 4),
+                blurRadius: 16,
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, color: color, size: 28),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 14, 
+                  fontWeight: FontWeight.w700, 
+                  color: isGrey ? AppColors.textSecondary : AppColors.textMain,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _handleCheckin(BuildContext context, WidgetRef ref, AppLocalizations l10n, int childId) async {
     final result = await ref.read(checkinUseCaseProvider).execute(CheckinParams(
-      childId: child.id,
-      rewardPoints: 5, // 默认签到奖励
+      childId: childId,
+      rewardPoints: 1,
     ));
 
     result.when(
       success: (checkinResult) {
+        // Refresh checkin status
+        // ignore: unused_result
+        ref.refresh(hasCheckedInTodayProvider(childId));
+        
         showDialog(
           context: context,
           builder: (context) => CheckinSuccessDialog(
             streakDays: checkinResult.streakDays,
-            rewardPoints: 5,
+            rewardPoints: 1,
           ),
         ).then((_) {
-          // 签到弹窗关闭后，检查是否有徽章奖励
+          if (!context.mounted) return;
           if (checkinResult.badgeResult != null && checkinResult.badgeResult!.hasBadges) {
             for (final badge in checkinResult.badgeResult!.awardedBadges) {
                showDialog(
@@ -322,10 +549,12 @@ class ChildManageScreen extends ConsumerWidget {
         });
       },
       failure: (message, _, __) async {
-        // 如果是今日已签到，也显示弹窗保持风格一致
         if (message == '今日已签到' || message == l10n.alreadyCheckedin) {
-          // 获取当前的连续签到天数
-          final streakDays = await ref.read(checkinRepositoryProvider).getCurrentStreak(child.id);
+          // If we somehow clicked it but it failed due to already checked in, refresh status
+          // ignore: unused_result
+          ref.refresh(hasCheckedInTodayProvider(childId));
+          
+          final streakDays = await ref.read(checkinRepositoryProvider).getCurrentStreak(childId);
           if (context.mounted) {
             showDialog(
               context: context,
@@ -361,7 +590,7 @@ class ChildManageScreen extends ConsumerWidget {
     if (confirmed) {
       await ref.read(childrenRepositoryProvider).deleteChild(childId);
       if (context.mounted) {
-        Navigator.pop(context); // Close management screen
+        Navigator.pop(context);
       }
     }
   }
@@ -369,7 +598,7 @@ class ChildManageScreen extends ConsumerWidget {
   void _showEnlargedAvatar(BuildContext context, ChildrenData child) {
     showDialog(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.9), // Deep dark background
+      barrierColor: Colors.black.withValues(alpha: 0.9),
       builder: (context) => GestureDetector(
         onTap: () => Navigator.pop(context),
         child: Dialog(
@@ -396,110 +625,10 @@ class ChildManageScreen extends ConsumerWidget {
   }
 
   Widget _buildAvatarContent(ChildrenData child, {double size = 100}) {
-    if (child.avatar != null) {
-      if (child.avatar!.startsWith('builtin:')) {
-        final index = int.tryParse(child.avatar!.split(':')[1]) ?? 0;
-        if (index >= 0 && index < AvatarData.builtInSvgs.length) {
-          return ClipOval(
-            child: SvgPicture.string(
-              AvatarData.builtInSvgs[index],
-              fit: BoxFit.cover,
-              width: size, height: size,
-            ),
-          );
-        }
-      } else {
-        final file = File(child.avatar!);
-        if (file.existsSync()) {
-          return ClipOval(
-            child: Image.file(
-              file,
-              fit: BoxFit.cover,
-              width: size, height: size,
-            ),
-          );
-        }
-      }
-    }
-    return Center(
-      child: Text(
-        child.name.isNotEmpty ? child.name[0].toUpperCase() : "?",
-        style: TextStyle(fontSize: size * 0.4, fontWeight: FontWeight.bold, color: AppColors.textMain),
-      ),
-    );
-  }
-
-  Widget _buildInfoTag({required IconData icon, required String text, required Color color, required Color bgColor}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 12, color: color),
-          const SizedBox(width: 4),
-          Text(
-            text.toUpperCase(), 
-            style: TextStyle(
-              fontSize: 10, 
-              fontWeight: FontWeight.w800, 
-              color: color.withOpacity(0.8),
-              letterSpacing: 0.5,
-            )
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMenuLink({
-    required String title,
-    required String subtitle,
-    required IconData icon,
-    required Color iconBg,
-    required Color iconColor,
-    VoidCallback? onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.textMain.withOpacity(0.04), // Softer shadow matching ChildCard
-              offset: const Offset(0, 4), 
-              blurRadius: 16,
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 40, height: 40,
-              decoration: BoxDecoration(color: iconBg, borderRadius: BorderRadius.circular(20)),
-              child: Icon(icon, color: iconColor, size: 20),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textMain)),
-                  const SizedBox(height: 2),
-                  Text(subtitle, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.textSecondary)),
-                ],
-              ),
-            ),
-            Icon(Icons.chevron_right_rounded, color: AppColors.textSecondary.withOpacity(0.5), size: 20),
-          ],
-        ),
-      ),
+    return AvatarImage(
+      avatar: child.avatar,
+      fallbackText: child.name,
+      size: size,
     );
   }
 }

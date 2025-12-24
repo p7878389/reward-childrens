@@ -27,7 +27,7 @@ class StarBadge extends StatelessWidget {
         border: Border.all(color: Colors.white, width: 2.5 * scale), // 明显的白色描边
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.3),
+            color: AppColors.primary.withValues(alpha: 0.3),
             offset: Offset(0, 4 * scale),
             blurRadius: 10 * scale,
           ),

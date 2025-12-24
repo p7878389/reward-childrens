@@ -1,12 +1,9 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:children_rewards/core/database/app_database.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
-import 'package:children_rewards/core/constants/avatar_data.dart';
 import 'package:children_rewards/features/exchange/providers/exchange_providers.dart';
 import 'package:children_rewards/features/children/providers/children_providers.dart';
 import 'package:children_rewards/features/points/providers/point_records_providers.dart';
@@ -34,48 +31,9 @@ class ExchangeHistoryScreen extends ConsumerWidget {
           slivers: [
             // Header
             SliverToBoxAdapter(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    HeaderButton(
-                        icon: Icons.arrow_back_ios_new_rounded,
-                        onTap: () => Navigator.pop(context)),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                              color: AppColors.primary.withOpacity(0.1),
-                              spreadRadius: 1)
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                              width: 8,
-                              height: 8,
-                              decoration: const BoxDecoration(
-                                  color: Color(0xFFF59E0B),
-                                  shape: BoxShape.circle)),
-                          const SizedBox(width: 8),
-                          Text(l10n.rewardHistory.toUpperCase(),
-                              style: const TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.textSecondary,
-                                  letterSpacing: 1.1)),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 40),
-                  ],
-                ),
+              child: AppHeader(
+                title: l10n.rewardHistory,
+                dotColor: const Color(0xFFF59E0B),
               ),
             ),
 
@@ -196,7 +154,7 @@ class ExchangeHistoryScreen extends ConsumerWidget {
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-                color: AppColors.textMain.withOpacity(0.03),
+                color: AppColors.textMain.withValues(alpha: 0.03),
                 offset: const Offset(0, 4),
                 blurRadius: 12),
           ],
@@ -210,10 +168,14 @@ class ExchangeHistoryScreen extends ConsumerWidget {
                         shape: BoxShape.circle,
                         border: Border.all(color: AppColors.primary, width: 3),
                         boxShadow: [
-                          BoxShadow(color: AppColors.primary.withOpacity(0.15), offset: const Offset(0, 4), blurRadius: 12),
+                          BoxShadow(color: AppColors.primary.withValues(alpha: 0.15), offset: const Offset(0, 4), blurRadius: 12),
                         ],
                       ),
-                      child: ClipOval(child: _buildAvatarImage(child.avatar, size: 80)),
+                      child: AvatarImage(
+                        avatar: child.avatar,
+                        fallbackText: child.name,
+                        size: 80,
+                      ),
                     ),
                     const SizedBox(width: 16),
             Expanded(
@@ -278,7 +240,7 @@ class ExchangeHistoryScreen extends ConsumerWidget {
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w800,
-              color: color.withOpacity(0.8),
+              color: color.withValues(alpha: 0.8),
               letterSpacing: 0.5,
             ),
           ),
@@ -287,44 +249,6 @@ class ExchangeHistoryScreen extends ConsumerWidget {
     );
   }
 
-    Widget _buildAvatarImage(String? avatarPath, {double size = 64}) {
-
-      if (avatarPath == null) return const Icon(Icons.person, color: Colors.white);
-
-      if (avatarPath.startsWith('builtin:')) {
-
-        final index = int.tryParse(avatarPath.split(':')[1]) ?? 0;
-
-        return SvgPicture.string(
-
-          AvatarData.builtInSvgs[index % AvatarData.builtInSvgs.length],
-
-          fit: BoxFit.cover,
-
-          width: size,
-
-          height: size,
-
-        );
-
-      }
-
-      return Image.file(
-
-        File(avatarPath),
-
-        fit: BoxFit.cover,
-
-        width: size,
-
-        height: size,
-
-        errorBuilder: (_, __, ___) => const Icon(Icons.person, color: Colors.white),
-
-      );
-
-    }
-
   Widget _buildDaySection(String dateKey, List<Exchange> exchanges) {
     return Stack(
       children: [
@@ -332,7 +256,7 @@ class ExchangeHistoryScreen extends ConsumerWidget {
           left: 5,
           top: 0,
           bottom: 0,
-          child: Container(width: 2, color: AppColors.primary.withOpacity(0.2)),
+          child: Container(width: 2, color: AppColors.primary.withValues(alpha: 0.2)),
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -354,7 +278,7 @@ class ExchangeHistoryScreen extends ConsumerWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textSecondary.withOpacity(0.6),
+                    color: AppColors.textSecondary.withValues(alpha: 0.6),
                     letterSpacing: 2.0,
                   ),
                 ),
@@ -378,9 +302,9 @@ class ExchangeHistoryScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-              color: AppColors.primary.withOpacity(0.05), spreadRadius: 1),
+              color: AppColors.primary.withValues(alpha: 0.05), spreadRadius: 1),
           BoxShadow(
-              color: AppColors.textMain.withOpacity(0.03),
+              color: AppColors.textMain.withValues(alpha: 0.03),
               offset: const Offset(0, 4),
               blurRadius: 14),
         ],
@@ -414,7 +338,7 @@ class ExchangeHistoryScreen extends ConsumerWidget {
                   style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textSecondary.withOpacity(0.6)),
+                      color: AppColors.textSecondary.withValues(alpha: 0.6)),
                 ),
               ],
             ),

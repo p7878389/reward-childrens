@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
+import 'package:children_rewards/core/theme/app_dimens.dart';
 import 'package:children_rewards/features/children/providers/children_providers.dart';
 import 'package:children_rewards/features/points/providers/point_records_providers.dart';
 import 'package:children_rewards/features/points/presentation/widgets/history_stats_card.dart';
@@ -78,35 +79,28 @@ class _PointsHistoryScreenState extends ConsumerState<PointsHistoryScreen> {
           slivers: [
             // Header
             SliverToBoxAdapter(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    HeaderButton(
-                        icon: Icons.arrow_back_ios_new_rounded,
-                        onTap: () => Navigator.pop(context)),
-                    const SizedBox.shrink(),
-                    HeaderButton(
-                        icon: Icons.add_rounded,
-                        onTap: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  AddRecordScreen(childId: widget.childId),
-                            ),
+              child: AppHeader(
+                title: l10n.pointsHistory,
+                actions: [
+                  HeaderButton(
+                    icon: Icons.add_rounded,
+                    onTap: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AddRecordScreen(childId: widget.childId),
+                        ),
+                      );
+                      // 返回后刷新
+                      ref
+                          .read(pointRecordsPaginationProvider.notifier)
+                          .refresh(
+                            PointRecordsFilter(widget.childId, _filter),
                           );
-                          // 返回后刷新
-                          ref
-                              .read(pointRecordsPaginationProvider.notifier)
-                              .refresh(
-                                PointRecordsFilter(widget.childId, _filter),
-                              );
-                        }),
-                  ],
-                ),
+                    },
+                  ),
+                ],
               ),
             ),
 
@@ -133,7 +127,7 @@ class _PointsHistoryScreenState extends ConsumerState<PointsHistoryScreen> {
                 },
                 loading: () => const Center(
                     child: Padding(
-                        padding: EdgeInsets.all(20),
+                        padding: EdgeInsets.all(AppDimens.paddingL),
                         child: CircularProgressIndicator())),
                 error: (err, _) => Center(child: Text('Stats Error: $err')),
               ),
@@ -143,7 +137,7 @@ class _PointsHistoryScreenState extends ConsumerState<PointsHistoryScreen> {
             SliverToBoxAdapter(
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                    const EdgeInsets.symmetric(horizontal: AppDimens.paddingL, vertical: AppDimens.paddingL),
                 child: CommonFilterTabs(
                   selectedValue: _filter,
                   onSelect: _switchFilter,
@@ -158,7 +152,7 @@ class _PointsHistoryScreenState extends ConsumerState<PointsHistoryScreen> {
 
             // Timeline List
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: AppDimens.paddingL),
               sliver: _buildRecordsList(paginationState, l10n),
             ),
 
@@ -206,7 +200,7 @@ class _PointsHistoryScreenState extends ConsumerState<PointsHistoryScreen> {
                   height: 24,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: AppColors.primary.withOpacity(0.5),
+                    color: AppColors.primary.withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -229,7 +223,7 @@ class _PointsHistoryScreenState extends ConsumerState<PointsHistoryScreen> {
           left: 5,
           top: 0,
           bottom: 0,
-          child: Container(width: 2, color: AppColors.primary.withOpacity(0.2)),
+          child: Container(width: 2, color: AppColors.primary.withValues(alpha: 0.2)),
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,7 +245,7 @@ class _PointsHistoryScreenState extends ConsumerState<PointsHistoryScreen> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textSecondary.withOpacity(0.6),
+                    color: AppColors.textSecondary.withValues(alpha: 0.6),
                     letterSpacing: 2.0,
                   ),
                 ),
@@ -300,9 +294,9 @@ class _PointsHistoryScreenState extends ConsumerState<PointsHistoryScreen> {
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-              color: AppColors.primary.withOpacity(0.05), spreadRadius: 1),
+              color: AppColors.primary.withValues(alpha: 0.05), spreadRadius: 1),
           BoxShadow(
-              color: AppColors.textMain.withOpacity(0.03),
+              color: AppColors.textMain.withValues(alpha: 0.03),
               offset: const Offset(0, 4),
               blurRadius: 14),
         ],
@@ -314,7 +308,7 @@ class _PointsHistoryScreenState extends ConsumerState<PointsHistoryScreen> {
             height: 44,
             decoration: BoxDecoration(
                 color: iconBg, borderRadius: BorderRadius.circular(22)),
-            child: Icon(icon, size: 24, color: amountColor.withOpacity(0.7)),
+            child: Icon(icon, size: 24, color: amountColor.withValues(alpha: 0.7)),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -334,7 +328,7 @@ class _PointsHistoryScreenState extends ConsumerState<PointsHistoryScreen> {
                     record.note!,
                     style: TextStyle(
                       fontSize: 12,
-                      color: AppColors.textSecondary.withOpacity(0.8),
+                      color: AppColors.textSecondary.withValues(alpha: 0.8),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -344,7 +338,7 @@ class _PointsHistoryScreenState extends ConsumerState<PointsHistoryScreen> {
                   children: [
                     Icon(Icons.access_time_rounded,
                         size: 10,
-                        color: AppColors.textSecondary.withOpacity(0.6)),
+                        color: AppColors.textSecondary.withValues(alpha: 0.6)),
                     const SizedBox(width: 4),
                     Text(
                       DateFormat('yyyy-MM-dd HH:mm:ss')
@@ -352,7 +346,7 @@ class _PointsHistoryScreenState extends ConsumerState<PointsHistoryScreen> {
                       style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.textSecondary.withOpacity(0.6)),
+                          color: AppColors.textSecondary.withValues(alpha: 0.6)),
                     ),
                   ],
                 ),

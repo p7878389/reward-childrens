@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/shared/widgets/common_widgets.dart';
 import 'package:children_rewards/shared/providers/database_provider.dart';
@@ -29,26 +29,7 @@ class PrivacyPolicyScreen extends ConsumerWidget {
         child: Column(
           children: [
             // Header
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-              child: Row(
-                children: [
-                  HeaderButton(icon: Icons.arrow_back_ios_new_rounded, onTap: () => Navigator.pop(context)),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Text(
-                      l10n.privacyPolicy.toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textSecondary,
-                        letterSpacing: 1.1,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            AppHeader(title: l10n.privacyPolicy),
 
             // Content
             Expanded(
@@ -69,11 +50,11 @@ class PrivacyPolicyScreen extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.05),
+                          color: AppColors.primary.withValues(alpha: 0.05),
                           spreadRadius: 1,
                         ),
                         BoxShadow(
-                          color: AppColors.textMain.withOpacity(0.02),
+                          color: AppColors.textMain.withValues(alpha: 0.02),
                           offset: const Offset(0, 4),
                           blurRadius: 10,
                         ),
@@ -119,13 +100,13 @@ class PrivacyPolicyScreen extends ConsumerWidget {
                           ),
                           blockquote: TextStyle(
                             fontSize: 14,
-                            color: AppColors.textSecondary.withOpacity(0.8),
+                            color: AppColors.textSecondary.withValues(alpha: 0.8),
                             fontStyle: FontStyle.italic,
                           ),
                           horizontalRuleDecoration: BoxDecoration(
                             border: Border(
                               top: BorderSide(
-                                color: AppColors.textSecondary.withOpacity(0.2),
+                                color: AppColors.textSecondary.withValues(alpha: 0.2),
                                 width: 1,
                               ),
                             ),
