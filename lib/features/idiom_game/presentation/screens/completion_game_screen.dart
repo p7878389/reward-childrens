@@ -46,6 +46,9 @@ class _CompletionGameScreenState extends ConsumerState<CompletionGameScreen> wit
     setState(() {
       _isCountingDown = true;
       _countdownValue = 3;
+      _userInputs.clear();
+      _usedWordBankIndices.clear();
+      _idiomIndexToWordBankIndex.clear();
     });
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted) {
@@ -156,6 +159,15 @@ class _CompletionGameScreenState extends ConsumerState<CompletionGameScreen> wit
       case PuzzleGameStatus.loading:
         return const Center(child: CircularProgressIndicator());
       case PuzzleGameStatus.error:
+        if (widget.isReviewMode && state.errorMessage == "没有需要复习的成语") {
+          return EmptyState(
+            icon: Icons.fact_check_rounded,
+            message: "没有需要复习的成语",
+            description: "错题已清空，先去挑战新题吧～",
+            actionText: "返回大厅",
+            onAction: () => Navigator.of(context).pop(),
+          );
+        }
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

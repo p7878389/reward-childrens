@@ -46,25 +46,28 @@ class PuzzleResultDialog extends StatelessWidget {
                   _buildStatItem("答对题目", "$correctCount / $totalCount", isBold: true),
                   const Divider(height: 24, thickness: 1),
                   _buildStatItem("正确率", "$accuracy%"),
-                  _buildStatItem("获得奖励", "${state.currentStars} ⭐", color: const Color(0xFFFFB020)),
-                  
-                  const Divider(height: 24, thickness: 2),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(3, (index) {
-                      // Simple star rating visualization
-                      bool isEarned = false;
-                      if (index == 0 && accuracy >= 60) isEarned = true;
-                      if (index == 1 && accuracy >= 80) isEarned = true;
-                      if (index == 2 && accuracy >= 100) isEarned = true;
-                      
-                      return Icon(
-                        Icons.star_rounded,
-                        size: 48,
-                        color: isEarned ? const Color(0xFFFFB020) : Colors.grey[300],
-                      );
-                    }),
-                  ),
+                  if (!state.isReviewMode)
+                    _buildStatItem("获得奖励", "${state.currentStars} ⭐", color: const Color(0xFFFFB020))
+                  else
+                    _buildStatItem("复习模式", "不计积分"),
+                  if (!state.isReviewMode) ...[
+                    const Divider(height: 24, thickness: 2),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(3, (index) {
+                        bool isEarned = false;
+                        if (index == 0 && accuracy >= 60) isEarned = true;
+                        if (index == 1 && accuracy >= 80) isEarned = true;
+                        if (index == 2 && accuracy >= 100) isEarned = true;
+                        
+                        return Icon(
+                          Icons.star_rounded,
+                          size: 48,
+                          color: isEarned ? const Color(0xFFFFB020) : Colors.grey[300],
+                        );
+                      }),
+                    ),
+                  ],
                 ],
               ),
             ),

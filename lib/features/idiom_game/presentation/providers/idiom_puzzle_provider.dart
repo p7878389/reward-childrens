@@ -28,6 +28,7 @@ class IdiomPuzzleState {
   final List<dynamic> puzzles; // CompletionPuzzle or MeaningPuzzle
   final List<PuzzleResult> results;
   final int currentStars; // 本局累计星星
+  final bool isReviewMode; // 复习模式不计积分
   
   final int timeLeft;
   final int maxDuration; // Replaces maxTime with dynamic value
@@ -46,6 +47,7 @@ class IdiomPuzzleState {
     this.puzzles = const [],
     this.results = const [],
     this.currentStars = 0,
+    this.isReviewMode = false,
     this.timeLeft = 60,
     this.maxDuration = 60,
     this.errorMessage,
@@ -62,6 +64,7 @@ class IdiomPuzzleState {
     List<dynamic>? puzzles,
     List<PuzzleResult>? results,
     int? currentStars,
+    bool? isReviewMode,
     int? timeLeft,
     int? maxDuration,
     String? errorMessage,
@@ -77,6 +80,7 @@ class IdiomPuzzleState {
       puzzles: puzzles ?? this.puzzles,
       results: results ?? this.results,
       currentStars: currentStars ?? this.currentStars,
+      isReviewMode: isReviewMode ?? this.isReviewMode,
       timeLeft: timeLeft ?? this.timeLeft,
       maxDuration: maxDuration ?? this.maxDuration,
       errorMessage: errorMessage ?? this.errorMessage,
@@ -186,6 +190,7 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
         currentQuestionIndex: 0,
         results: [],
         currentStars: 0,
+        isReviewMode: isReviewMode,
         timeLeft: maxDuration,
         maxDuration: maxDuration,
         currentInput: () => '',
@@ -254,7 +259,7 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
     final timeTaken = DateTime.now().difference(_questionStartTime!).inSeconds;
     
     final result = await _service.validateCompletionAnswer(input, puzzle.idiom, timeTaken);
-    
+    if (!mounted) return;
     _handleResult(puzzle.idiom.id, result);
   }
 
@@ -270,10 +275,12 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
     final result = _service.validateMeaningAnswer(selectedIndex, puzzle, timeTaken);
     
     await Future.delayed(const Duration(milliseconds: 300));
+    if (!mounted) return;
     _handleResult(puzzle.correctIdiom.id, result);
   }
 
   void _handleResult(int idiomId, PuzzleResult result) async {
+    if (!mounted) return;
     final newResults = [...state.results, result];
     
     // Intermediate star calculation (just for display, final calc is strict)
@@ -281,9 +288,11 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
     if (result.isCorrect) stars += 1;
 
     final engagement = await _service.getEngagementRecord(_childId, idiomId);
+    if (!mounted) return;
     final encounterCount = engagement != null ? engagement.encounterCount : 0;
 
     await _service.recordEngagement(_childId, idiomId, isCorrect: result.isCorrect);
+    if (!mounted) return;
 
     Idiom? idiomToShow;
     if (!result.isCorrect || encounterCount == 0 || result.isSkipped) {
@@ -309,6 +318,7 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
       delayMs = 5500; // 5s auto-close + buffer
     }
     await Future.delayed(Duration(milliseconds: delayMs));
+    if (!mounted) return;
 
     if (state.currentQuestionIndex < state.totalQuestions - 1) {
       _nextQuestion();
@@ -362,17 +372,19 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
       currentStars: finalStars, // Sync correctly calculated stars to state
     );
 
-    await _service.saveRecord(
-      childId: _childId,
-      mode: state.mode,
-      grade: grade,
-      correctCount: correctCount,
-      totalCount: totalCount,
-      starsEarned: finalStars,
-      timeTakenSeconds: totalTime,
-    );
+    if (!state.isReviewMode) {
+      await _service.saveRecord(
+        childId: _childId,
+        mode: state.mode,
+        grade: grade,
+        correctCount: correctCount,
+        totalCount: totalCount,
+        starsEarned: finalStars,
+        timeTakenSeconds: totalTime,
+      );
+    }
 
-    if (finalStars > 0) {
+    if (finalStars > 0 && !state.isReviewMode) {
       int? ruleId;
       final String modeName = state.isCompletionMode ? "成语补全" : "看意猜词";
       const ruleName = "成语专项训练";
