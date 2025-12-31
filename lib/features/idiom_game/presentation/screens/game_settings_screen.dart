@@ -11,8 +11,13 @@ import 'package:children_rewards/shared/widgets/app_header.dart';
 /// 游戏设置界面
 class GameSettingsScreen extends ConsumerStatefulWidget {
   final int childId;
+  final bool isEmbedded;
 
-  const GameSettingsScreen({super.key, required this.childId});
+  const GameSettingsScreen({
+    super.key, 
+    required this.childId, 
+    this.isEmbedded = false,
+  });
 
   @override
   ConsumerState<GameSettingsScreen> createState() => _GameSettingsScreenState();
@@ -59,8 +64,8 @@ class _GameSettingsScreenState extends ConsumerState<GameSettingsScreen> {
     if (mounted) {
       // final l10n = AppLocalizations.of(context)!; // Removed as we use custom text now
       await AppDialogs.showSuccess(context, '保存成功');
-      if (mounted) {
-        Navigator.pop(context, true); // 返回 true 表示配置已更新
+      if (mounted && !widget.isEmbedded) {
+        Navigator.pop(context, true); // 仅在非嵌入模式下返回
       }
     }
   }
@@ -74,82 +79,88 @@ class _GameSettingsScreenState extends ConsumerState<GameSettingsScreen> {
       );
     }
 
+    final content = Column(
+      children: [
+        if (!widget.isEmbedded) const AppHeader(title: '接龙设置'),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: AppDimens.paddingL, vertical: AppDimens.paddingM),
+            physics: const BouncingScrollPhysics(),
+            children: [
+              _buildSectionTitle('接龙规则'),
+              _buildMatchModeCard(),
+
+              const SizedBox(height: AppDimens.paddingXL),
+
+              _buildSectionTitle('难度调整'),
+              _buildSettingsCard([
+                _buildDropdownTile(
+                  title: '倒计时时间',
+                  value: '$_countdownSeconds',
+                  items: [5, 8, 10, 15, 20, 30],
+                  currentValue: _countdownSeconds,
+                  onChanged: (val) => setState(() => _countdownSeconds = val),
+                  suffix: '',
+                ),
+                _buildDivider(),
+                _buildDropdownTile(
+                  title: '免费提示次数',
+                  value: '$_freeHintsCount',
+                  items: [0, 1, 2, 3, 5],
+                  currentValue: _freeHintsCount,
+                  onChanged: (val) => setState(() => _freeHintsCount = val),
+                  suffix: '',
+                ),
+              ]),
+
+              const SizedBox(height: AppDimens.paddingL),
+
+              _buildSectionTitle('其他选项'),
+              _buildSettingsCard([
+                _buildSwitchTile(
+                  title: '包含生僻成语',
+                  subtitle: '开启后将包含高难度生僻成语',
+                  value: _includeRareIdioms,
+                  onChanged: (value) => setState(() => _includeRareIdioms = value),
+                ),
+              ]),
+
+              const SizedBox(height: AppDimens.paddingXXL),
+              
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: _saveSettings,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppDimens.radiusM),
+                    ),
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.w800, 
+                      fontSize: 16,
+                    ),
+                  ),
+                  child: const Text('保存设置'),
+                ),
+              ),
+              const SizedBox(height: AppDimens.paddingXXL),
+            ],
+          ),
+        ),
+      ],
+    );
+
+    if (widget.isEmbedded) {
+      return content;
+    }
+
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: Column(
-        children: [
-          const AppHeader(title: '接龙设置'),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: AppDimens.paddingL, vertical: AppDimens.paddingM),
-              physics: const BouncingScrollPhysics(),
-              children: [
-                _buildSectionTitle('接龙规则'),
-                _buildMatchModeCard(),
-
-                const SizedBox(height: AppDimens.paddingXL),
-
-                _buildSectionTitle('难度调整'),
-                _buildSettingsCard([
-                  _buildDropdownTile(
-                    title: '倒计时时间',
-                    value: '$_countdownSeconds',
-                    items: [5, 8, 10, 15, 20, 30],
-                    currentValue: _countdownSeconds,
-                    onChanged: (val) => setState(() => _countdownSeconds = val),
-                    suffix: '',
-                  ),
-                  _buildDivider(),
-                  _buildDropdownTile(
-                    title: '免费提示次数',
-                    value: '$_freeHintsCount',
-                    items: [0, 1, 2, 3, 5],
-                    currentValue: _freeHintsCount,
-                    onChanged: (val) => setState(() => _freeHintsCount = val),
-                    suffix: '',
-                  ),
-                ]),
-
-                const SizedBox(height: AppDimens.paddingL),
-
-                _buildSectionTitle('其他选项'),
-                _buildSettingsCard([
-                  _buildSwitchTile(
-                    title: '包含生僻成语',
-                    subtitle: '开启后将包含高难度生僻成语',
-                    value: _includeRareIdioms,
-                    onChanged: (value) => setState(() => _includeRareIdioms = value),
-                  ),
-                ]),
-
-                const SizedBox(height: AppDimens.paddingXXL),
-                
-                SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: _saveSettings,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppDimens.radiusM),
-                      ),
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.w800, 
-                        fontSize: 16,
-                      ),
-                    ),
-                    child: const Text('保存设置'),
-                  ),
-                ),
-                const SizedBox(height: AppDimens.paddingXXL),
-              ],
-            ),
-          ),
-        ],
-      ),
+      body: content,
     );
   }
 

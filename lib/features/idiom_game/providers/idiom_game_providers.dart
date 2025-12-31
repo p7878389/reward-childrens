@@ -115,5 +115,5 @@ final idiomPuzzleProvider = StateNotifierProvider.autoDispose.family<IdiomPuzzle
   final pointsRepo = ref.watch(pointRecordsRepositoryProvider);
   final rulesRepo = ref.watch(rulesRepositoryProvider);
   final settingsDao = ref.watch(idiomGameSettingsDaoProvider);
-  return IdiomPuzzleNotifier(service, pointsRepo, rulesRepo, settingsDao, childId);
+  return IdiomPuzzleNotifier(service, pointsRepo, rulesRepo, settingsDao, childId, ref);
 });

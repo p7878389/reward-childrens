@@ -10,6 +10,9 @@ import 'package:children_rewards/features/points/providers/point_records_provide
 import 'package:characters/characters.dart';
 import 'package:children_rewards/core/logging/app_logger.dart';
 
+
+import 'package:children_rewards/features/settings/presentation/screens/game_config/daily_limit_config_screen.dart'; // For dailyLimitProvider
+
 // Represents the state of the idiom game
 class IdiomGameState {
   final GameStatus status;
@@ -31,6 +34,7 @@ class IdiomGameState {
   final Idiom? failureCompensation;
   final GameError? error;
   final ScoreBreakdown? scoreBreakdown;
+  final bool isPointsLimitReached; // New flag
 
   const IdiomGameState({
     this.status = GameStatus.initializing,
@@ -52,6 +56,7 @@ class IdiomGameState {
     this.failureCompensation,
     this.error,
     this.scoreBreakdown,
+    this.isPointsLimitReached = false,
   });
 
   IdiomGameState copyWith({
@@ -74,6 +79,7 @@ class IdiomGameState {
     Idiom? failureCompensation,
     GameError? error,
     ScoreBreakdown? scoreBreakdown,
+    bool? isPointsLimitReached,
   }) {
     return IdiomGameState(
       status: status ?? this.status,
@@ -95,6 +101,7 @@ class IdiomGameState {
       failureCompensation: failureCompensation ?? this.failureCompensation,
       error: error ?? this.error,
       scoreBreakdown: scoreBreakdown ?? this.scoreBreakdown,
+      isPointsLimitReached: isPointsLimitReached ?? this.isPointsLimitReached,
     );
   }
 }
@@ -104,13 +111,19 @@ class IdiomGameNotifier extends StateNotifier<IdiomGameState> {
   final PointRecordsRepository _pointsRepository;
   final IRulesRepository _rulesRepository;
   final int _childId;
+  final Ref _ref; // Inject Ref
   int _currentGrade = 1;
   Timer? _timer;
-  bool _timerPaused = false; // 倒计时是否暂停
-  List<String> _failedLastChars = []; // 缓存失败尾字列表
+  bool _timerPaused = false; 
+  List<String> _failedLastChars = []; 
 
-  IdiomGameNotifier(this._gameService, this._pointsRepository, this._rulesRepository, this._childId)
-      : super(IdiomGameState(config: GameConfig.defaultConfig())) {
+  IdiomGameNotifier(
+    this._gameService, 
+    this._pointsRepository, 
+    this._rulesRepository, 
+    this._childId,
+    this._ref,
+  ) : super(IdiomGameState(config: GameConfig.defaultConfig())) {
     _initialize();
   }
 
@@ -436,7 +449,29 @@ class IdiomGameNotifier extends StateNotifier<IdiomGameState> {
     );
 
     // 添加星星到积分账户
-    if (breakdown.totalStars > 0) {
+    int starsToAward = breakdown.totalStars;
+    bool limitReached = false;
+
+    if (starsToAward > 0) {
+      // Daily Limit Check
+      final todayStars = await _pointsRepository.getDailyPoints(_childId, DateTime.now());
+      final limit = _ref.read(dailyLimitProvider);
+      
+      if (todayStars >= limit) {
+        starsToAward = 0;
+        limitReached = true;
+        logger.info('IdiomGameProvider', '今日积分已达上限 ($todayStars >= $limit)，不添加积分');
+      } else {
+        final remaining = limit - todayStars;
+        if (starsToAward > remaining) {
+          starsToAward = remaining;
+          limitReached = true;
+          logger.info('IdiomGameProvider', '积分触发上限，实际添加: $starsToAward (原始: ${breakdown.totalStars})');
+        }
+      }
+    }
+
+    if (starsToAward > 0) {
       // 获取或创建成语接龙规则
       int? ruleId;
       const ruleName = '成语接龙';
@@ -446,28 +481,25 @@ class IdiomGameNotifier extends StateNotifier<IdiomGameState> {
         if (existingRule != null) {
           ruleId = existingRule.id;
         } else {
-          // 创建新规则
           ruleId = await _rulesRepository.createRule(
             name: ruleName,
             type: 'reward',
-            points: 1, // 默认单次积分，实际由游戏逻辑决定总分
-            icon: 'school', // 默认图标
+            points: 1, 
+            icon: 'school', 
           );
         }
       } catch (e) {
         logger.error('IdiomGameProvider', '获取或创建规则失败: $e');
-        // 即使失败也继续记录积分，只是没有关联规则ID
       }
 
       await _pointsRepository.addRecord(
         childId: _childId,
-        points: breakdown.totalStars,
+        points: starsToAward,
         type: 'earned',
         ruleId: ruleId,
         ruleName: ruleName,
-        note: '${isWin ? "获胜" : "挑战"}，接龙${state.chain.length}个成语',
+        note: '${isWin ? "获胜" : "挑战"}，接龙${state.chain.length}个成语 (上限拦截: ${limitReached ? "是" : "否"})',
       );
-      logger.info('IdiomGameProvider', '添加积分: ${breakdown.totalStars} 星星');
     }
 
     // 如果玩家获胜，清除失败记录
@@ -477,8 +509,9 @@ class IdiomGameNotifier extends StateNotifier<IdiomGameState> {
 
     state = state.copyWith(
       status: GameStatus.gameOver,
-      starsEarned: breakdown.totalStars,
+      starsEarned: starsToAward,
       scoreBreakdown: breakdown,
+      isPointsLimitReached: limitReached,
     );
   }
 
@@ -491,6 +524,6 @@ final idiomGameProvider = StateNotifierProvider.autoDispose.family<IdiomGameNoti
     final gameService = ref.watch(idiomGameServiceProvider);
     final pointsRepository = ref.watch(pointRecordsRepositoryProvider);
     final rulesRepository = ref.watch(rulesRepositoryProvider);
-    return IdiomGameNotifier(gameService, pointsRepository, rulesRepository, childId);
+    return IdiomGameNotifier(gameService, pointsRepository, rulesRepository, childId, ref);
   },
 );

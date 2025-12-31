@@ -46,9 +46,17 @@ class PuzzleResultDialog extends StatelessWidget {
                   _buildStatItem("答对题目", "$correctCount / $totalCount", isBold: true),
                   const Divider(height: 24, thickness: 1),
                   _buildStatItem("正确率", "$accuracy%"),
-                  if (!state.isReviewMode)
-                    _buildStatItem("获得奖励", "${state.currentStars} ⭐", color: const Color(0xFFFFB020))
-                  else
+                  if (!state.isReviewMode) ...[
+                    _buildStatItem("获得奖励", "${state.currentStars} ⭐", color: const Color(0xFFFFB020)),
+                    if (state.isPointsLimitReached)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          "今日已达上限",
+                          style: TextStyle(fontSize: 12, color: Colors.red[300], fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                  ] else
                     _buildStatItem("复习模式", "不计积分"),
                   if (!state.isReviewMode) ...[
                     const Divider(height: 24, thickness: 2),

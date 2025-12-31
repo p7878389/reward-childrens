@@ -12,6 +12,7 @@ import 'package:children_rewards/features/idiom_game/presentation/screens/meanin
 import 'package:children_rewards/features/idiom_game/presentation/screens/mistake_book_screen.dart';
 import 'package:children_rewards/features/idiom_game/presentation/providers/mistake_book_provider.dart';
 import 'package:children_rewards/features/idiom_game/presentation/utils/idiom_resource_guard.dart';
+import 'package:children_rewards/features/settings/presentation/screens/game_config_center_screen.dart';
 
 class GameHallScreen extends ConsumerWidget {
   final int childId;
@@ -141,6 +142,19 @@ class GameHallScreen extends ConsumerWidget {
                                     ),
                                   ],
                                 ),
+                              ),
+
+                              // Settings Button
+                              IconButton(
+                                icon: const Icon(Icons.settings_suggest_rounded, color: AppColors.textSecondary),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => GameConfigCenterScreen(childId: currentChild.id),
+                                    ),
+                                  );
+                                },
                               ),
                             ],
                           ),

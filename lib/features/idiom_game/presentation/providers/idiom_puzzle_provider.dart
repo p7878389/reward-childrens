@@ -7,6 +7,7 @@ import 'package:children_rewards/features/idiom_game/domain/entities/idiom_game_
 import 'package:children_rewards/features/points/data/point_records_repository.dart';
 import 'package:children_rewards/features/rule/domain/repositories/i_rules_repository.dart';
 import 'package:children_rewards/features/idiom_game/data/dao/idiom_game_settings_dao.dart';
+import 'package:children_rewards/features/settings/presentation/screens/game_config/daily_limit_config_screen.dart';
 
 // ---------------- States ----------------
 
@@ -36,6 +37,7 @@ class IdiomPuzzleState {
   final String? errorMessage;
   final String? currentInput; 
   final int? selectedOptionIndex; 
+  final bool isPointsLimitReached; // New flag
 
   final Idiom? idiomToShowDetails;
 
@@ -53,6 +55,7 @@ class IdiomPuzzleState {
     this.errorMessage,
     this.currentInput,
     this.selectedOptionIndex,
+    this.isPointsLimitReached = false,
     this.idiomToShowDetails,
   });
 
@@ -70,6 +73,7 @@ class IdiomPuzzleState {
     String? errorMessage,
     ValueGetter<String?>? currentInput,
     ValueGetter<int?>? selectedOptionIndex,
+    bool? isPointsLimitReached,
     ValueGetter<Idiom?>? idiomToShowDetails,
   }) {
     return IdiomPuzzleState(
@@ -86,6 +90,7 @@ class IdiomPuzzleState {
       errorMessage: errorMessage ?? this.errorMessage,
       currentInput: currentInput != null ? currentInput() : this.currentInput,
       selectedOptionIndex: selectedOptionIndex != null ? selectedOptionIndex() : this.selectedOptionIndex,
+      isPointsLimitReached: isPointsLimitReached ?? this.isPointsLimitReached,
       idiomToShowDetails: idiomToShowDetails != null ? idiomToShowDetails() : this.idiomToShowDetails,
     );
   }
@@ -107,6 +112,7 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
   final IRulesRepository _rulesRepository;
   final IdiomGameSettingsDao _settingsDao;
   final int _childId;
+  final Ref _ref; // Inject Ref
   
   Timer? _timer;
   DateTime? _questionStartTime;
@@ -116,7 +122,8 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
     this._pointsRepository, 
     this._rulesRepository, 
     this._settingsDao,
-    this._childId
+    this._childId,
+    this._ref,
   ) : super(const IdiomPuzzleState());
 
   @override
@@ -367,17 +374,38 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
     }
 
     final finalStars = _service.calculateStars(
-      correctCount: correctCount, 
-      totalCount: totalCount, 
-      hintsUsed: 0, 
+      correctCount: correctCount,
+      totalCount: totalCount,
+      hintsUsed: 0,
       skippedCount: skippedCount,
-      avgTimeSeconds: totalCount > 0 ? (totalTime / totalCount).round() : 0, 
+      avgTimeSeconds: totalCount > 0 ? (totalTime / totalCount).round() : 0,
       grade: grade
     );
 
+    // Check daily limit and apply partial rewards if near limit (before updating UI)
+    int starsToAward = finalStars;
+    bool limitReached = false;
+    if (!state.isReviewMode) {
+      final todayStars = await _pointsRepository.getDailyPoints(_childId, DateTime.now());
+      final limit = _ref.read(dailyLimitProvider);
+
+      if (todayStars >= limit) {
+        starsToAward = 0;
+        limitReached = true;
+      } else {
+        final remaining = limit - todayStars;
+        if (finalStars > remaining) {
+          starsToAward = remaining;
+          limitReached = true;
+        }
+      }
+    }
+
+    // Update UI state once with final values (avoid flicker)
     state = state.copyWith(
       status: PuzzleGameStatus.finished,
-      currentStars: finalStars, // Sync correctly calculated stars to state
+      currentStars: starsToAward,
+      isPointsLimitReached: limitReached,
     );
 
     if (!state.isReviewMode) {
@@ -387,16 +415,16 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
         grade: grade,
         correctCount: correctCount,
         totalCount: totalCount,
-        starsEarned: finalStars,
+        starsEarned: finalStars, // Record original earned stars for stats
         timeTakenSeconds: totalTime,
       );
     }
 
-    if (finalStars > 0 && !state.isReviewMode) {
+    if (starsToAward > 0 && !state.isReviewMode) {
       int? ruleId;
       final String modeName = state.isCompletionMode ? "成语补全" : "看意猜词";
       const ruleName = "成语专项训练";
-      
+
       try {
         final existingRule = await _rulesRepository.getRuleByName(ruleName);
         if (existingRule != null) {
@@ -415,11 +443,11 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
 
       await _pointsRepository.addRecord(
         childId: _childId,
-        points: finalStars,
+        points: starsToAward,
         type: 'earned',
         ruleId: ruleId,
         ruleName: ruleName,
-        note: '$modeName训练，答对$correctCount/$totalCount题 (跳过$skippedCount题)',
+        note: '$modeName训练，答对$correctCount/$totalCount题 (上限拦截: ${limitReached ? "是" : "否"})',
       );
     }
   }

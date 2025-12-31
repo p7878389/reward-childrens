@@ -9,7 +9,6 @@ import 'package:children_rewards/features/idiom_game/presentation/providers/idio
 import 'package:children_rewards/features/idiom_game/presentation/widgets/puzzle_game_widgets.dart';
 import 'package:children_rewards/features/idiom_game/presentation/widgets/puzzle_result_dialog.dart';
 import 'package:children_rewards/features/idiom_game/presentation/widgets/idiom_detail_dialog.dart';
-import 'package:children_rewards/features/idiom_game/presentation/screens/puzzle_settings_screen.dart';
 
 class CompletionGameScreen extends ConsumerStatefulWidget {
   final int grade;
@@ -210,19 +209,8 @@ class _CompletionGameScreenState extends ConsumerState<CompletionGameScreen> wit
           title: widget.isReviewMode ? "错题复习" : "准备挑战",
           actions: [
             if (!widget.isReviewMode)
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: IconButton(
-                  icon: const Icon(Icons.settings_rounded, color: AppColors.textSecondary),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => PuzzleSettingsScreen(childId: widget.childId),
-                      ),
-                    );
-                  },
-                ),
-              ),
+              // Settings button removed as per requirements (centralized config)
+              const SizedBox.shrink(),
           ],
         ),
         Expanded(
@@ -421,6 +409,7 @@ class _CompletionGameScreenState extends ConsumerState<CompletionGameScreen> wit
 
   Widget _buildIdiomDisplay(CompletionPuzzle puzzle, IdiomPuzzleState state) {
     final word = puzzle.idiom.word;
+    final pinyins = puzzle.idiom.pinyin.split(' '); 
     final hiddenIndices = puzzle.hiddenIndices;
     final isRoundFinished = state.status == PuzzleGameStatus.roundResult;
 
@@ -429,9 +418,11 @@ class _CompletionGameScreenState extends ConsumerState<CompletionGameScreen> wit
       children: List.generate(word.length, (index) {
         final isHidden = hiddenIndices.contains(index);
         String charToShow = word[index];
+        String? pinyinToShow = (index < pinyins.length) ? pinyins[index] : null;
 
         if (isHidden && !isRoundFinished) {
            charToShow = _userInputs[index] ?? ''; 
+           if (charToShow.isEmpty) pinyinToShow = null;
         }
 
         Color? overrideColor;
@@ -447,6 +438,7 @@ class _CompletionGameScreenState extends ConsumerState<CompletionGameScreen> wit
 
         return IdiomCharBox(
           char: charToShow,
+          pinyin: pinyinToShow,
           isHidden: isHidden,
           isFilled: isHidden && _userInputs.containsKey(index),
           isHighlighted: !isRoundFinished && isHidden && _getFirstEmptyIndex(hiddenIndices) == index,

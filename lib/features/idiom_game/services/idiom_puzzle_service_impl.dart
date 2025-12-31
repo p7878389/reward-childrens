@@ -6,6 +6,7 @@ import 'package:children_rewards/features/idiom_game/domain/entities/idiom_puzzl
 import 'package:children_rewards/features/idiom_game/data/dao/idiom_engagement_dao.dart';
 import 'package:children_rewards/features/idiom_game/data/dao/idiom_puzzle_records_dao.dart';
 import 'package:children_rewards/features/idiom_game/domain/services/idiom_puzzle_service.dart';
+import 'package:children_rewards/features/idiom_game/utils/pinyin_utils.dart';
 
 class IdiomPuzzleServiceImpl implements IdiomPuzzleService {
   final IdiomDao _idiomDao;
@@ -77,10 +78,19 @@ class IdiomPuzzleServiceImpl implements IdiomPuzzleService {
       }
     }
 
-    final correctChars = hiddenIndices.map((i) => word[i]).toList();
-    final distractorChars = _generateDistractorChars(8 - correctChars.length, correctChars);
+    final correctOptions = hiddenIndices.map((i) {
+      final char = word[i];
+      final pinyins = idiom.pinyin.split(' ');
+      final pinyin = (i < pinyins.length) ? pinyins[i] : '';
+      return WordBankOption(char: char, pinyin: pinyin);
+    }).toList();
+
+    final distractorChars = _generateDistractorChars(8 - correctOptions.length, correctOptions.map((e) => e.char).toList());
+    final distractorOptions = distractorChars.map((char) {
+      return WordBankOption(char: char, pinyin: PinyinUtils.toPinyinWithTone(char));
+    }).toList();
     
-    final wordBank = [...correctChars, ...distractorChars];
+    final wordBank = [...correctOptions, ...distractorOptions];
     wordBank.shuffle(_random);
 
     return CompletionPuzzle(
@@ -163,7 +173,7 @@ class IdiomPuzzleServiceImpl implements IdiomPuzzleService {
       puzzles.add(MeaningPuzzle(
         correctIdiom: _toDomain(target),
         explanation: target.explanation ?? '暂无释义',
-        options: options.map((e) => e.word).toList(),
+        options: options.map((e) => IdiomOption(word: e.word, pinyin: e.pinyin)).toList(),
         correctIndex: options.indexOf(target),
       ));
     }

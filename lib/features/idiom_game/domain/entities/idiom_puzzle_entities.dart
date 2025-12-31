@@ -7,12 +7,28 @@ enum IdiomGameMode {
   meaning,    // 看意思猜成语
 }
 
+/// 选字选项 (含拼音)
+class WordBankOption {
+  final String char;
+  final String pinyin;
+
+  WordBankOption({required this.char, required this.pinyin});
+}
+
+/// 成语选项 (含拼音)
+class IdiomOption {
+  final String word;
+  final String pinyin;
+
+  IdiomOption({required this.word, required this.pinyin});
+}
+
 /// 成语补全题目
 class CompletionPuzzle {
   final Idiom idiom;
   final String maskedWord;       // "一__当__"
   final List<int> hiddenIndices; // [1, 3]
-  final List<String> wordBank;   // 备选字库 (正确字 + 干扰字)，用于选字模式
+  final List<WordBankOption> wordBank; // 备选字库 (正确字 + 干扰字)，含拼音
 
   CompletionPuzzle({
     required this.idiom,
@@ -26,7 +42,7 @@ class CompletionPuzzle {
 class MeaningPuzzle {
   final Idiom correctIdiom;
   final String explanation;
-  final List<String> options;    // 4个选项
+  final List<IdiomOption> options; // 4个选项，含拼音
   final int correctIndex;        // 正确答案索引
 
   MeaningPuzzle({

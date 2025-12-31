@@ -1,4 +1,5 @@
 import 'package:children_rewards/features/children/presentation/screens/add_child_screen.dart';
+import 'package:children_rewards/features/idiom_game/presentation/utils/idiom_resource_guard.dart';
 import 'package:children_rewards/shared/widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,8 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/features/idiom_game/presentation/screens/idiom_game_screen.dart';
-import 'package:children_rewards/features/idiom_game/presentation/utils/idiom_resource_guard.dart';
-import 'package:children_rewards/features/idiom_game/presentation/screens/game_settings_screen.dart';
 import 'package:children_rewards/features/idiom_game/providers/idiom_game_providers.dart';
 import 'package:children_rewards/features/children/providers/children_providers.dart';
 import 'package:children_rewards/core/database/app_database.dart';
@@ -312,40 +311,7 @@ class GradeSelectionScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(width: 12),
-          // 设置按钮
-          GestureDetector(
-            onTap: () async {
-              final result = await Navigator.push<bool>(
-                context,
-                MaterialPageRoute(builder: (_) => GameSettingsScreen(childId: currentChild.id)),
-              );
-              if (result == true) {
-                ref.invalidate(idiomGradeProgressProvider(currentChild.id));
-              }
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              decoration: BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.tune_rounded, size: 16, color: AppColors.textSecondary),
-                  SizedBox(width: 6),
-                  Text(
-                    "设置",
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // Settings button removed as per requirements (centralized config)
         ],
       ),
     );

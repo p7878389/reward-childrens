@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:children_rewards/features/idiom_game/domain/entities/idiom_puzzle_entities.dart';
 
 // ---------------- Colors & Dimens ----------------
 // Mimicking existing app style
@@ -107,15 +108,17 @@ class GameHeaderBar extends StatelessWidget {
 
 class IdiomCharBox extends StatelessWidget {
   final String char;
+  final String? pinyin; // Add pinyin
   final bool isHidden;
-  final bool isFilled; // 是否已被填入
-  final bool isHighlighted; // 当前焦点
-  final Color? textColor; // 覆盖颜色
+  final bool isFilled; 
+  final bool isHighlighted;
+  final Color? textColor; 
   final VoidCallback? onTap;
 
   const IdiomCharBox({
     super.key,
     required this.char,
+    this.pinyin,
     required this.isHidden,
     this.isFilled = false,
     this.isHighlighted = false,
@@ -125,13 +128,11 @@ class IdiomCharBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Show char if: NOT hidden, OR (hidden AND filled)
-    
     return GestureDetector(
-      onTap: isHidden ? onTap : null, // Only hidden boxes are interactive
+      onTap: isHidden ? onTap : null, 
       child: Container(
         width: 64,
-        height: 64,
+        height: 84, // Increased height for pinyin
         margin: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -148,17 +149,37 @@ class IdiomCharBox extends StatelessWidget {
             )
           ]
         ),
-        child: Center(
-          child: isHidden && !isFilled
-              ? Container(width: 32, height: 2, color: kPrimaryColor) // Empty slot indicator
-              : Text(
-                  char,
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: textColor ?? (isHidden ? kPrimaryColor : Colors.black87), // Filled text is colored
-                  ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Pinyin
+            if (!isHidden || isFilled)
+              Text(
+                pinyin ?? '', 
+                style: TextStyle(
+                  fontSize: 14, 
+                  fontWeight: FontWeight.w900, // Bold
+                  color: textColor ?? (isHidden ? kPrimaryColor : Colors.grey[600]),
+                  letterSpacing: 1,
                 ),
+              )
+            else
+              const SizedBox(height: 18), // Spacer for hidden
+
+            const SizedBox(height: 2),
+
+            // Character
+            isHidden && !isFilled
+                ? Container(width: 32, height: 2, color: kPrimaryColor, margin: const EdgeInsets.only(top: 10)) 
+                : Text(
+                    char,
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: textColor ?? (isHidden ? kPrimaryColor : Colors.black87), 
+                    ),
+                  ),
+          ],
         ),
       ),
     );
@@ -168,9 +189,9 @@ class IdiomCharBox extends StatelessWidget {
 // ---------------- Word Bank Grid ----------------
 
 class WordBankGrid extends StatelessWidget {
-  final List<String> words;
+  final List<WordBankOption> words;
   final Function(String, int) onWordSelected;
-  final Set<int> usedIndices; // 已使用的索引
+  final Set<int> usedIndices; 
 
   const WordBankGrid({
     super.key,
@@ -188,15 +209,15 @@ class WordBankGrid extends StatelessWidget {
         crossAxisCount: 4,
         mainAxisSpacing: 12,
         crossAxisSpacing: 12,
-        childAspectRatio: 1.0,
+        childAspectRatio: 0.75, // Adjusted for pinyin
       ),
       itemCount: words.length,
       itemBuilder: (context, index) {
-        final word = words[index];
+        final option = words[index];
         final isUsed = usedIndices.contains(index);
 
         return InkWell(
-          onTap: isUsed ? null : () => onWordSelected(word, index),
+          onTap: isUsed ? null : () => onWordSelected(option.char, index),
           borderRadius: BorderRadius.circular(12),
           child: Container(
             decoration: BoxDecoration(
@@ -211,15 +232,27 @@ class WordBankGrid extends StatelessWidget {
                 )
               ]
             ),
-            child: Center(
-              child: Text(
-                word,
-                style: TextStyle(
-                  fontSize: 24,
-                  color: isUsed ? Colors.grey[400] : Colors.black87,
-                  fontWeight: FontWeight.bold,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  option.pinyin,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w900,
+                    color: isUsed ? Colors.grey[300] : Colors.grey[600],
+                  ),
                 ),
-              ),
+                const SizedBox(height: 2),
+                Text(
+                  option.char,
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: isUsed ? Colors.grey[400] : Colors.black87,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
           ),
         );
@@ -232,14 +265,16 @@ class WordBankGrid extends StatelessWidget {
 
 class OptionButton extends StatelessWidget {
   final String text;
+  final String? pinyin; // Add pinyin
   final bool isSelected;
-  final bool isCorrect; // Only relevant if showResult is true
+  final bool isCorrect; 
   final bool showResult;
   final VoidCallback onTap;
 
   const OptionButton({
     super.key,
     required this.text,
+    this.pinyin,
     required this.isSelected,
     this.isCorrect = false,
     this.showResult = false,
@@ -249,22 +284,35 @@ class OptionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color bgColor = Colors.white;
-    Color textColor = Colors.black87;
     Color borderColor = Colors.grey[200]!;
+    // Base text colors
+    Color charColor = Colors.black87;
+    Color pinyinColor = Colors.grey[600]!;
 
     if (showResult) {
       if (isCorrect) {
         bgColor = kCorrectColor.withValues(alpha: 0.1);
         borderColor = kCorrectColor;
-        textColor = kCorrectColor;
+        charColor = kCorrectColor;
+        pinyinColor = kCorrectColor.withValues(alpha: 0.8);
       } else if (isSelected && !isCorrect) {
         bgColor = kWrongColor.withValues(alpha: 0.1);
         borderColor = kWrongColor;
-        textColor = kWrongColor;
+        charColor = kWrongColor;
+        pinyinColor = kWrongColor.withValues(alpha: 0.8);
       }
     } else if (isSelected) {
       bgColor = kPrimaryColor.withValues(alpha: 0.1);
       borderColor = kPrimaryColor;
+    }
+
+    // Split text and pinyin for alignment
+    final chars = text.characters.toList();
+    List<String> pinyins = [];
+    if (pinyin != null) {
+      // Assuming pinyin is space-separated. If not, this logic might need adjustment based on data format.
+      // Current data format seems to be space separated pinyin string.
+      pinyins = pinyin!.split(' ');
     }
 
     return Padding(
@@ -273,7 +321,7 @@ class OptionButton extends StatelessWidget {
         onTap: showResult ? null : onTap,
         borderRadius: BorderRadius.circular(16),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
           decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(16),
@@ -282,13 +330,38 @@ class OptionButton extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: Text(
-                  text,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: textColor,
-                  ),
+                child: Wrap( // Use Wrap to handle long idioms gracefully
+                  spacing: 8.0, // Space between char blocks
+                  runSpacing: 4.0,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: List.generate(chars.length, (index) {
+                    final char = chars[index];
+                    final py = (index < pinyins.length) ? pinyins[index] : '';
+                    
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (py.isNotEmpty)
+                          Text(
+                            py,
+                            style: TextStyle(
+                              fontSize: 12, // Pinyin size
+                              fontWeight: FontWeight.w700,
+                              color: pinyinColor,
+                            ),
+                          ),
+                        if (py.isNotEmpty) const SizedBox(height: 2),
+                        Text(
+                          char,
+                          style: TextStyle(
+                            fontSize: 22, // Char size
+                            fontWeight: FontWeight.bold,
+                            color: charColor,
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
                 ),
               ),
               if (showResult && isCorrect)

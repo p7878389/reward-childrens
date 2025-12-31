@@ -99,6 +99,23 @@ class PointRecordsRepository implements IPointRecordsRepository {
     };
   }
 
+  /// 获取指定日期（默认当天）获得的总积分
+  Future<int> getDailyPoints(int childId, DateTime date) async {
+    final start = DateTime(date.year, date.month, date.day);
+    final end = start.add(const Duration(days: 1));
+    
+    final pointsSum = _db.pointRecords.points.sum();
+    final query = _db.selectOnly(_db.pointRecords)
+      ..addColumns([pointsSum])
+      ..where(_db.pointRecords.childId.equals(childId))
+      ..where(_db.pointRecords.type.equals('earned'))
+      ..where(_db.pointRecords.createdAt.isBiggerOrEqualValue(start))
+      ..where(_db.pointRecords.createdAt.isSmallerThanValue(end));
+      
+    final result = await query.map((row) => row.read(pointsSum)).getSingle();
+    return result ?? 0;
+  }
+
   @override
   Future<void> addRecord({
     required int childId,

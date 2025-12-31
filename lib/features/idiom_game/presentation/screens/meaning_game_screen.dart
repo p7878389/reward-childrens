@@ -88,6 +88,13 @@ class _MeaningGameScreenState extends ConsumerState<MeaningGameScreen> with Tick
           accentColor: Colors.orange,
           autoClose: true,
           badgeText: "知识回顾",
+          onClose: () {
+            // 如果是最后一题的详情弹窗关闭，手动触发游戏结束
+            final state = ref.read(idiomPuzzleProvider(widget.childId));
+            if (state.currentQuestionIndex >= state.totalQuestions - 1) {
+               ref.read(idiomPuzzleProvider(widget.childId).notifier).finishGame();
+            }
+          },
         );
         ref.read(idiomPuzzleProvider(widget.childId).notifier).clearIdiomDetails();
       }
@@ -129,7 +136,7 @@ class _MeaningGameScreenState extends ConsumerState<MeaningGameScreen> with Tick
           )
         );
       case PuzzleGameStatus.finished:
-        return const SizedBox();
+        return _buildReadyState();
       case PuzzleGameStatus.playing:
       case PuzzleGameStatus.roundResult:
         final puzzle = state.currentPuzzle as MeaningPuzzle?;
@@ -369,7 +376,7 @@ class _MeaningGameScreenState extends ConsumerState<MeaningGameScreen> with Tick
                                     fontSize: 22,
                                     fontWeight: FontWeight.w800,
                                     color: AppColors.textMain,
-                                    height: 1.7,
+                                    height: 1.6,
                                     letterSpacing: 0.5,
                                   ),
                                 ),
@@ -391,7 +398,8 @@ class _MeaningGameScreenState extends ConsumerState<MeaningGameScreen> with Tick
                       children: List.generate(puzzle.options.length, (index) {
                         final option = puzzle.options[index];
                         return OptionButton(
-                          text: option,
+                          text: option.word,
+                          pinyin: option.pinyin,
                           isSelected: state.selectedOptionIndex == index,
                           isCorrect: index == puzzle.correctIndex,
                           showResult: isRoundFinished,

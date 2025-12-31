@@ -78,9 +78,19 @@ class GameResultDialog extends StatelessWidget {
                         "总计获得",
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: AppColors.textMain),
                       ),
-                      Text(
-                        "${gameState.starsEarned} ⭐",
-                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: Color(0xFFFFB020)),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            "${gameState.starsEarned} ⭐",
+                            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: Color(0xFFFFB020)),
+                          ),
+                          if (gameState.isPointsLimitReached)
+                            Text(
+                              "今日已达上限",
+                              style: TextStyle(fontSize: 10, color: Colors.red[300], fontWeight: FontWeight.bold),
+                            ),
+                        ],
                       ),
                     ],
                   ),
