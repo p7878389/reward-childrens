@@ -15,6 +15,7 @@ import 'package:children_rewards/features/idiom_game/presentation/widgets/voice_
 import 'package:children_rewards/features/idiom_game/presentation/widgets/idiom_edit_dialog.dart';
 import 'package:children_rewards/features/idiom_game/providers/idiom_game_providers.dart';
 import 'package:children_rewards/core/logging/app_logger.dart';
+import 'package:children_rewards/core/constants/system_config.dart';
 import 'package:path_provider/path_provider.dart';
 
 
@@ -84,7 +85,7 @@ class _IdiomGameScreenState extends ConsumerState<IdiomGameScreen> with TickerPr
       setState(() => _loadingStep = "正在载入本地模型...");
       final ttsService = ref.read(ttsServiceProvider);
       final appDir = await getApplicationDocumentsDirectory();
-      final modelPath = '${appDir.path}/vosk-model-small-cn-0.22';
+      final modelPath = '${appDir.path}/$kVoskModelDirName';
 
       await speechService.initialize(modelPath);
       await ttsService.initialize();

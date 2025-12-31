@@ -3051,6 +3051,305 @@ class AppContentsCompanion extends UpdateCompanion<AppContent> {
   }
 }
 
+class $AppSettingsTable extends AppSettings
+    with TableInfo<$AppSettingsTable, AppSetting> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AppSettingsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _keyMeta = const VerificationMeta('key');
+  @override
+  late final GeneratedColumn<String> key = GeneratedColumn<String>(
+      'key', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+  static const VerificationMeta _valueMeta = const VerificationMeta('value');
+  @override
+  late final GeneratedColumn<String> value = GeneratedColumn<String>(
+      'value', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _updatedAtMeta =
+      const VerificationMeta('updatedAt');
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+      'updated_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [id, key, value, createdAt, updatedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'app_settings';
+  @override
+  VerificationContext validateIntegrity(Insertable<AppSetting> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('key')) {
+      context.handle(
+          _keyMeta, key.isAcceptableOrUnknown(data['key']!, _keyMeta));
+    } else if (isInserting) {
+      context.missing(_keyMeta);
+    }
+    if (data.containsKey('value')) {
+      context.handle(
+          _valueMeta, value.isAcceptableOrUnknown(data['value']!, _valueMeta));
+    } else if (isInserting) {
+      context.missing(_valueMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(_updatedAtMeta,
+          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  AppSetting map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AppSetting(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      key: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}key'])!,
+      value: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}value'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+      updatedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}updated_at']),
+    );
+  }
+
+  @override
+  $AppSettingsTable createAlias(String alias) {
+    return $AppSettingsTable(attachedDatabase, alias);
+  }
+}
+
+class AppSetting extends DataClass implements Insertable<AppSetting> {
+  final int id;
+  final String key;
+  final String value;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  const AppSetting(
+      {required this.id,
+      required this.key,
+      required this.value,
+      required this.createdAt,
+      this.updatedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['key'] = Variable<String>(key);
+    map['value'] = Variable<String>(value);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    if (!nullToAbsent || updatedAt != null) {
+      map['updated_at'] = Variable<DateTime>(updatedAt);
+    }
+    return map;
+  }
+
+  AppSettingsCompanion toCompanion(bool nullToAbsent) {
+    return AppSettingsCompanion(
+      id: Value(id),
+      key: Value(key),
+      value: Value(value),
+      createdAt: Value(createdAt),
+      updatedAt: updatedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(updatedAt),
+    );
+  }
+
+  factory AppSetting.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AppSetting(
+      id: serializer.fromJson<int>(json['id']),
+      key: serializer.fromJson<String>(json['key']),
+      value: serializer.fromJson<String>(json['value']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime?>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'key': serializer.toJson<String>(key),
+      'value': serializer.toJson<String>(value),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime?>(updatedAt),
+    };
+  }
+
+  AppSetting copyWith(
+          {int? id,
+          String? key,
+          String? value,
+          DateTime? createdAt,
+          Value<DateTime?> updatedAt = const Value.absent()}) =>
+      AppSetting(
+        id: id ?? this.id,
+        key: key ?? this.key,
+        value: value ?? this.value,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt.present ? updatedAt.value : this.updatedAt,
+      );
+  AppSetting copyWithCompanion(AppSettingsCompanion data) {
+    return AppSetting(
+      id: data.id.present ? data.id.value : this.id,
+      key: data.key.present ? data.key.value : this.key,
+      value: data.value.present ? data.value.value : this.value,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AppSetting(')
+          ..write('id: $id, ')
+          ..write('key: $key, ')
+          ..write('value: $value, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, key, value, createdAt, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AppSetting &&
+          other.id == this.id &&
+          other.key == this.key &&
+          other.value == this.value &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
+  final Value<int> id;
+  final Value<String> key;
+  final Value<String> value;
+  final Value<DateTime> createdAt;
+  final Value<DateTime?> updatedAt;
+  const AppSettingsCompanion({
+    this.id = const Value.absent(),
+    this.key = const Value.absent(),
+    this.value = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  AppSettingsCompanion.insert({
+    this.id = const Value.absent(),
+    required String key,
+    required String value,
+    required DateTime createdAt,
+    this.updatedAt = const Value.absent(),
+  })  : key = Value(key),
+        value = Value(value),
+        createdAt = Value(createdAt);
+  static Insertable<AppSetting> custom({
+    Expression<int>? id,
+    Expression<String>? key,
+    Expression<String>? value,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (key != null) 'key': key,
+      if (value != null) 'value': value,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    });
+  }
+
+  AppSettingsCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? key,
+      Value<String>? value,
+      Value<DateTime>? createdAt,
+      Value<DateTime?>? updatedAt}) {
+    return AppSettingsCompanion(
+      id: id ?? this.id,
+      key: key ?? this.key,
+      value: value ?? this.value,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (key.present) {
+      map['key'] = Variable<String>(key.value);
+    }
+    if (value.present) {
+      map['value'] = Variable<String>(value.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AppSettingsCompanion(')
+          ..write('id: $id, ')
+          ..write('key: $key, ')
+          ..write('value: $value, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $AppLogsTable extends AppLogs with TableInfo<$AppLogsTable, AppLog> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -9525,6 +9824,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ExchangesTable exchanges = $ExchangesTable(this);
   late final $PointRecordsTable pointRecords = $PointRecordsTable(this);
   late final $AppContentsTable appContents = $AppContentsTable(this);
+  late final $AppSettingsTable appSettings = $AppSettingsTable(this);
   late final $AppLogsTable appLogs = $AppLogsTable(this);
   late final $BadgesTable badges = $BadgesTable(this);
   late final $BadgeAcquisitionsTable badgeAcquisitions =
@@ -9581,6 +9881,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         exchanges,
         pointRecords,
         appContents,
+        appSettings,
         appLogs,
         badges,
         badgeAcquisitions,
@@ -9641,7 +9942,7 @@ final class $$ChildrenTableReferences
 
   $$RulesTableProcessedTableManager get rulesRefs {
     final manager = $$RulesTableTableManager($_db, $_db.rules)
-        .filter((f) => f.childId.id($_item.id));
+        .filter((f) => f.childId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_rulesRefsTable($_db));
     return ProcessedTableManager(
@@ -9656,7 +9957,7 @@ final class $$ChildrenTableReferences
 
   $$ExchangesTableProcessedTableManager get exchangesRefs {
     final manager = $$ExchangesTableTableManager($_db, $_db.exchanges)
-        .filter((f) => f.childId.id($_item.id));
+        .filter((f) => f.childId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_exchangesRefsTable($_db));
     return ProcessedTableManager(
@@ -9671,7 +9972,7 @@ final class $$ChildrenTableReferences
 
   $$PointRecordsTableProcessedTableManager get pointRecordsRefs {
     final manager = $$PointRecordsTableTableManager($_db, $_db.pointRecords)
-        .filter((f) => f.childId.id($_item.id));
+        .filter((f) => f.childId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_pointRecordsRefsTable($_db));
     return ProcessedTableManager(
@@ -9687,7 +9988,7 @@ final class $$ChildrenTableReferences
   $$BadgeAcquisitionsTableProcessedTableManager get badgeAcquisitionsRefs {
     final manager =
         $$BadgeAcquisitionsTableTableManager($_db, $_db.badgeAcquisitions)
-            .filter((f) => f.childId.id($_item.id));
+            .filter((f) => f.childId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_badgeAcquisitionsRefsTable($_db));
@@ -9703,7 +10004,7 @@ final class $$ChildrenTableReferences
 
   $$CheckinRecordsTableProcessedTableManager get checkinRecordsRefs {
     final manager = $$CheckinRecordsTableTableManager($_db, $_db.checkinRecords)
-        .filter((f) => f.childId.id($_item.id));
+        .filter((f) => f.childId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_checkinRecordsRefsTable($_db));
     return ProcessedTableManager(
@@ -9719,7 +10020,7 @@ final class $$ChildrenTableReferences
   $$IdiomGameSettingsTableProcessedTableManager get idiomGameSettingsRefs {
     final manager =
         $$IdiomGameSettingsTableTableManager($_db, $_db.idiomGameSettings)
-            .filter((f) => f.childId.id($_item.id));
+            .filter((f) => f.childId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_idiomGameSettingsRefsTable($_db));
@@ -9736,7 +10037,7 @@ final class $$ChildrenTableReferences
   $$IdiomGameRecordsTableProcessedTableManager get idiomGameRecordsRefs {
     final manager =
         $$IdiomGameRecordsTableTableManager($_db, $_db.idiomGameRecords)
-            .filter((f) => f.childId.id($_item.id));
+            .filter((f) => f.childId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_idiomGameRecordsRefsTable($_db));
@@ -9754,7 +10055,7 @@ final class $$ChildrenTableReferences
   $$IdiomGradeProgressTableProcessedTableManager get idiomGradeProgressRefs {
     final manager =
         $$IdiomGradeProgressTableTableManager($_db, $_db.idiomGradeProgress)
-            .filter((f) => f.childId.id($_item.id));
+            .filter((f) => f.childId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_idiomGradeProgressRefsTable($_db));
@@ -9772,7 +10073,7 @@ final class $$ChildrenTableReferences
   $$IdiomFailureRecordsTableProcessedTableManager get idiomFailureRecordsRefs {
     final manager =
         $$IdiomFailureRecordsTableTableManager($_db, $_db.idiomFailureRecords)
-            .filter((f) => f.childId.id($_item.id));
+            .filter((f) => f.childId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_idiomFailureRecordsRefsTable($_db));
@@ -9789,7 +10090,7 @@ final class $$ChildrenTableReferences
   $$IdiomPuzzleRecordsTableProcessedTableManager get idiomPuzzleRecordsRefs {
     final manager =
         $$IdiomPuzzleRecordsTableTableManager($_db, $_db.idiomPuzzleRecords)
-            .filter((f) => f.childId.id($_item.id));
+            .filter((f) => f.childId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_idiomPuzzleRecordsRefsTable($_db));
@@ -9808,7 +10109,7 @@ final class $$ChildrenTableReferences
       get idiomEngagementRecordsRefs {
     final manager = $$IdiomEngagementRecordsTableTableManager(
             $_db, $_db.idiomEngagementRecords)
-        .filter((f) => f.childId.id($_item.id));
+        .filter((f) => f.childId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_idiomEngagementRecordsRefsTable($_db));
@@ -10512,7 +10813,8 @@ class $$ChildrenTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (rulesRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChildrenData, $ChildrenTable,
+                            Rule>(
                         currentTable: table,
                         referencedTable:
                             $$ChildrenTableReferences._rulesRefsTable(db),
@@ -10523,7 +10825,8 @@ class $$ChildrenTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.childId == item.id),
                         typedResults: items),
                   if (exchangesRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChildrenData, $ChildrenTable,
+                            Exchange>(
                         currentTable: table,
                         referencedTable:
                             $$ChildrenTableReferences._exchangesRefsTable(db),
@@ -10535,7 +10838,8 @@ class $$ChildrenTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.childId == item.id),
                         typedResults: items),
                   if (pointRecordsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChildrenData, $ChildrenTable,
+                            PointRecord>(
                         currentTable: table,
                         referencedTable: $$ChildrenTableReferences
                             ._pointRecordsRefsTable(db),
@@ -10547,7 +10851,8 @@ class $$ChildrenTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.childId == item.id),
                         typedResults: items),
                   if (badgeAcquisitionsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChildrenData, $ChildrenTable,
+                            BadgeAcquisition>(
                         currentTable: table,
                         referencedTable: $$ChildrenTableReferences
                             ._badgeAcquisitionsRefsTable(db),
@@ -10559,7 +10864,8 @@ class $$ChildrenTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.childId == item.id),
                         typedResults: items),
                   if (checkinRecordsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChildrenData, $ChildrenTable,
+                            CheckinRecord>(
                         currentTable: table,
                         referencedTable: $$ChildrenTableReferences
                             ._checkinRecordsRefsTable(db),
@@ -10571,7 +10877,8 @@ class $$ChildrenTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.childId == item.id),
                         typedResults: items),
                   if (idiomGameSettingsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChildrenData, $ChildrenTable,
+                            IdiomGameSetting>(
                         currentTable: table,
                         referencedTable: $$ChildrenTableReferences
                             ._idiomGameSettingsRefsTable(db),
@@ -10583,7 +10890,8 @@ class $$ChildrenTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.childId == item.id),
                         typedResults: items),
                   if (idiomGameRecordsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChildrenData, $ChildrenTable,
+                            IdiomGameRecord>(
                         currentTable: table,
                         referencedTable: $$ChildrenTableReferences
                             ._idiomGameRecordsRefsTable(db),
@@ -10595,7 +10903,8 @@ class $$ChildrenTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.childId == item.id),
                         typedResults: items),
                   if (idiomGradeProgressRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChildrenData, $ChildrenTable,
+                            IdiomGradeProgressData>(
                         currentTable: table,
                         referencedTable: $$ChildrenTableReferences
                             ._idiomGradeProgressRefsTable(db),
@@ -10607,7 +10916,8 @@ class $$ChildrenTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.childId == item.id),
                         typedResults: items),
                   if (idiomFailureRecordsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChildrenData, $ChildrenTable,
+                            IdiomFailureRecord>(
                         currentTable: table,
                         referencedTable: $$ChildrenTableReferences
                             ._idiomFailureRecordsRefsTable(db),
@@ -10619,7 +10929,8 @@ class $$ChildrenTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.childId == item.id),
                         typedResults: items),
                   if (idiomPuzzleRecordsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChildrenData, $ChildrenTable,
+                            IdiomPuzzleRecord>(
                         currentTable: table,
                         referencedTable: $$ChildrenTableReferences
                             ._idiomPuzzleRecordsRefsTable(db),
@@ -10631,7 +10942,8 @@ class $$ChildrenTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.childId == item.id),
                         typedResults: items),
                   if (idiomEngagementRecordsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<ChildrenData, $ChildrenTable,
+                            IdiomEngagementRecord>(
                         currentTable: table,
                         referencedTable: $$ChildrenTableReferences
                             ._idiomEngagementRecordsRefsTable(db),
@@ -10709,9 +11021,10 @@ final class $$RulesTableReferences
       .createAlias($_aliasNameGenerator(db.rules.childId, db.children.id));
 
   $$ChildrenTableProcessedTableManager? get childId {
-    if ($_item.childId == null) return null;
+    final $_column = $_itemColumn<int>('child_id');
+    if ($_column == null) return null;
     final manager = $$ChildrenTableTableManager($_db, $_db.children)
-        .filter((f) => f.id($_item.childId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_childIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10725,7 +11038,7 @@ final class $$RulesTableReferences
 
   $$PointRecordsTableProcessedTableManager get pointRecordsRefs {
     final manager = $$PointRecordsTableTableManager($_db, $_db.pointRecords)
-        .filter((f) => f.ruleId.id($_item.id));
+        .filter((f) => f.ruleId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_pointRecordsRefsTable($_db));
     return ProcessedTableManager(
@@ -11077,7 +11390,7 @@ class $$RulesTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (pointRecordsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Rule, $RulesTable, PointRecord>(
                         currentTable: table,
                         referencedTable:
                             $$RulesTableReferences._pointRecordsRefsTable(db),
@@ -11146,7 +11459,7 @@ final class $$RewardsTableReferences
 
   $$ExchangesTableProcessedTableManager get exchangesRefs {
     final manager = $$ExchangesTableTableManager($_db, $_db.exchanges)
-        .filter((f) => f.rewardId.id($_item.id));
+        .filter((f) => f.rewardId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_exchangesRefsTable($_db));
     return ProcessedTableManager(
@@ -11411,7 +11724,7 @@ class $$RewardsTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (exchangesRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Reward, $RewardsTable, Exchange>(
                         currentTable: table,
                         referencedTable:
                             $$RewardsTableReferences._exchangesRefsTable(db),
@@ -11471,10 +11784,11 @@ final class $$ExchangesTableReferences
   static $ChildrenTable _childIdTable(_$AppDatabase db) => db.children
       .createAlias($_aliasNameGenerator(db.exchanges.childId, db.children.id));
 
-  $$ChildrenTableProcessedTableManager? get childId {
-    if ($_item.childId == null) return null;
+  $$ChildrenTableProcessedTableManager get childId {
+    final $_column = $_itemColumn<int>('child_id')!;
+
     final manager = $$ChildrenTableTableManager($_db, $_db.children)
-        .filter((f) => f.id($_item.childId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_childIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11484,10 +11798,11 @@ final class $$ExchangesTableReferences
   static $RewardsTable _rewardIdTable(_$AppDatabase db) => db.rewards
       .createAlias($_aliasNameGenerator(db.exchanges.rewardId, db.rewards.id));
 
-  $$RewardsTableProcessedTableManager? get rewardId {
-    if ($_item.rewardId == null) return null;
+  $$RewardsTableProcessedTableManager get rewardId {
+    final $_column = $_itemColumn<int>('reward_id')!;
+
     final manager = $$RewardsTableTableManager($_db, $_db.rewards)
-        .filter((f) => f.id($_item.rewardId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_rewardIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11502,7 +11817,7 @@ final class $$ExchangesTableReferences
 
   $$PointRecordsTableProcessedTableManager get pointRecordsRefs {
     final manager = $$PointRecordsTableTableManager($_db, $_db.pointRecords)
-        .filter((f) => f.exchangeId.id($_item.id));
+        .filter((f) => f.exchangeId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_pointRecordsRefsTable($_db));
     return ProcessedTableManager(
@@ -11884,7 +12199,8 @@ class $$ExchangesTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (pointRecordsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Exchange, $ExchangesTable,
+                            PointRecord>(
                         currentTable: table,
                         referencedTable: $$ExchangesTableReferences
                             ._pointRecordsRefsTable(db),
@@ -11952,10 +12268,11 @@ final class $$PointRecordsTableReferences
       db.children.createAlias(
           $_aliasNameGenerator(db.pointRecords.childId, db.children.id));
 
-  $$ChildrenTableProcessedTableManager? get childId {
-    if ($_item.childId == null) return null;
+  $$ChildrenTableProcessedTableManager get childId {
+    final $_column = $_itemColumn<int>('child_id')!;
+
     final manager = $$ChildrenTableTableManager($_db, $_db.children)
-        .filter((f) => f.id($_item.childId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_childIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11966,9 +12283,10 @@ final class $$PointRecordsTableReferences
       .createAlias($_aliasNameGenerator(db.pointRecords.ruleId, db.rules.id));
 
   $$RulesTableProcessedTableManager? get ruleId {
-    if ($_item.ruleId == null) return null;
+    final $_column = $_itemColumn<int>('rule_id');
+    if ($_column == null) return null;
     final manager = $$RulesTableTableManager($_db, $_db.rules)
-        .filter((f) => f.id($_item.ruleId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_ruleIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11980,9 +12298,10 @@ final class $$PointRecordsTableReferences
           $_aliasNameGenerator(db.pointRecords.exchangeId, db.exchanges.id));
 
   $$ExchangesTableProcessedTableManager? get exchangeId {
-    if ($_item.exchangeId == null) return null;
+    final $_column = $_itemColumn<int>('exchange_id');
+    if ($_column == null) return null;
     final manager = $$ExchangesTableTableManager($_db, $_db.exchanges)
-        .filter((f) => f.id($_item.exchangeId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_exchangeIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -12644,6 +12963,167 @@ typedef $$AppContentsTableProcessedTableManager = ProcessedTableManager<
     (AppContent, BaseReferences<_$AppDatabase, $AppContentsTable, AppContent>),
     AppContent,
     PrefetchHooks Function()>;
+typedef $$AppSettingsTableCreateCompanionBuilder = AppSettingsCompanion
+    Function({
+  Value<int> id,
+  required String key,
+  required String value,
+  required DateTime createdAt,
+  Value<DateTime?> updatedAt,
+});
+typedef $$AppSettingsTableUpdateCompanionBuilder = AppSettingsCompanion
+    Function({
+  Value<int> id,
+  Value<String> key,
+  Value<String> value,
+  Value<DateTime> createdAt,
+  Value<DateTime?> updatedAt,
+});
+
+class $$AppSettingsTableFilterComposer
+    extends Composer<_$AppDatabase, $AppSettingsTable> {
+  $$AppSettingsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get key => $composableBuilder(
+      column: $table.key, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get value => $composableBuilder(
+      column: $table.value, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$AppSettingsTableOrderingComposer
+    extends Composer<_$AppDatabase, $AppSettingsTable> {
+  $$AppSettingsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get key => $composableBuilder(
+      column: $table.key, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get value => $composableBuilder(
+      column: $table.value, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$AppSettingsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AppSettingsTable> {
+  $$AppSettingsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get key =>
+      $composableBuilder(column: $table.key, builder: (column) => column);
+
+  GeneratedColumn<String> get value =>
+      $composableBuilder(column: $table.value, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+}
+
+class $$AppSettingsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $AppSettingsTable,
+    AppSetting,
+    $$AppSettingsTableFilterComposer,
+    $$AppSettingsTableOrderingComposer,
+    $$AppSettingsTableAnnotationComposer,
+    $$AppSettingsTableCreateCompanionBuilder,
+    $$AppSettingsTableUpdateCompanionBuilder,
+    (AppSetting, BaseReferences<_$AppDatabase, $AppSettingsTable, AppSetting>),
+    AppSetting,
+    PrefetchHooks Function()> {
+  $$AppSettingsTableTableManager(_$AppDatabase db, $AppSettingsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AppSettingsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AppSettingsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AppSettingsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> key = const Value.absent(),
+            Value<String> value = const Value.absent(),
+            Value<DateTime> createdAt = const Value.absent(),
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              AppSettingsCompanion(
+            id: id,
+            key: key,
+            value: value,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String key,
+            required String value,
+            required DateTime createdAt,
+            Value<DateTime?> updatedAt = const Value.absent(),
+          }) =>
+              AppSettingsCompanion.insert(
+            id: id,
+            key: key,
+            value: value,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$AppSettingsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $AppSettingsTable,
+    AppSetting,
+    $$AppSettingsTableFilterComposer,
+    $$AppSettingsTableOrderingComposer,
+    $$AppSettingsTableAnnotationComposer,
+    $$AppSettingsTableCreateCompanionBuilder,
+    $$AppSettingsTableUpdateCompanionBuilder,
+    (AppSetting, BaseReferences<_$AppDatabase, $AppSettingsTable, AppSetting>),
+    AppSetting,
+    PrefetchHooks Function()>;
 typedef $$AppLogsTableCreateCompanionBuilder = AppLogsCompanion Function({
   Value<int> id,
   required String level,
@@ -12881,7 +13361,7 @@ final class $$BadgesTableReferences
   $$BadgeAcquisitionsTableProcessedTableManager get badgeAcquisitionsRefs {
     final manager =
         $$BadgeAcquisitionsTableTableManager($_db, $_db.badgeAcquisitions)
-            .filter((f) => f.badgeId.id($_item.id));
+            .filter((f) => f.badgeId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_badgeAcquisitionsRefsTable($_db));
@@ -13205,7 +13685,8 @@ class $$BadgesTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (badgeAcquisitionsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Badge, $BadgesTable,
+                            BadgeAcquisition>(
                         currentTable: table,
                         referencedTable: $$BadgesTableReferences
                             ._badgeAcquisitionsRefsTable(db),
@@ -13273,10 +13754,11 @@ final class $$BadgeAcquisitionsTableReferences extends BaseReferences<
       db.children.createAlias(
           $_aliasNameGenerator(db.badgeAcquisitions.childId, db.children.id));
 
-  $$ChildrenTableProcessedTableManager? get childId {
-    if ($_item.childId == null) return null;
+  $$ChildrenTableProcessedTableManager get childId {
+    final $_column = $_itemColumn<int>('child_id')!;
+
     final manager = $$ChildrenTableTableManager($_db, $_db.children)
-        .filter((f) => f.id($_item.childId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_childIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13286,10 +13768,11 @@ final class $$BadgeAcquisitionsTableReferences extends BaseReferences<
   static $BadgesTable _badgeIdTable(_$AppDatabase db) => db.badges.createAlias(
       $_aliasNameGenerator(db.badgeAcquisitions.badgeId, db.badges.id));
 
-  $$BadgesTableProcessedTableManager? get badgeId {
-    if ($_item.badgeId == null) return null;
+  $$BadgesTableProcessedTableManager get badgeId {
+    final $_column = $_itemColumn<int>('badge_id')!;
+
     final manager = $$BadgesTableTableManager($_db, $_db.badges)
-        .filter((f) => f.id($_item.badgeId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_badgeIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13705,10 +14188,11 @@ final class $$CheckinRecordsTableReferences
       db.children.createAlias(
           $_aliasNameGenerator(db.checkinRecords.childId, db.children.id));
 
-  $$ChildrenTableProcessedTableManager? get childId {
-    if ($_item.childId == null) return null;
+  $$ChildrenTableProcessedTableManager get childId {
+    final $_column = $_itemColumn<int>('child_id')!;
+
     final manager = $$ChildrenTableTableManager($_db, $_db.children)
-        .filter((f) => f.id($_item.childId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_childIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14030,7 +14514,7 @@ final class $$IdiomsTableReferences
       get idiomEngagementRecordsRefs {
     final manager = $$IdiomEngagementRecordsTableTableManager(
             $_db, $_db.idiomEngagementRecords)
-        .filter((f) => f.idiomId.id($_item.id));
+        .filter((f) => f.idiomId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache =
         $_typedResult.readTableOrNull(_idiomEngagementRecordsRefsTable($_db));
@@ -14384,7 +14868,8 @@ class $$IdiomsTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (idiomEngagementRecordsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Idiom, $IdiomsTable,
+                            IdiomEngagementRecord>(
                         currentTable: table,
                         referencedTable: $$IdiomsTableReferences
                             ._idiomEngagementRecordsRefsTable(db),
@@ -14452,10 +14937,11 @@ final class $$IdiomGameSettingsTableReferences extends BaseReferences<
       db.children.createAlias(
           $_aliasNameGenerator(db.idiomGameSettings.childId, db.children.id));
 
-  $$ChildrenTableProcessedTableManager? get childId {
-    if ($_item.childId == null) return null;
+  $$ChildrenTableProcessedTableManager get childId {
+    final $_column = $_itemColumn<int>('child_id')!;
+
     final manager = $$ChildrenTableTableManager($_db, $_db.children)
-        .filter((f) => f.id($_item.childId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_childIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14837,10 +15323,11 @@ final class $$IdiomGameRecordsTableReferences extends BaseReferences<
       db.children.createAlias(
           $_aliasNameGenerator(db.idiomGameRecords.childId, db.children.id));
 
-  $$ChildrenTableProcessedTableManager? get childId {
-    if ($_item.childId == null) return null;
+  $$ChildrenTableProcessedTableManager get childId {
+    final $_column = $_itemColumn<int>('child_id')!;
+
     final manager = $$ChildrenTableTableManager($_db, $_db.children)
-        .filter((f) => f.id($_item.childId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_childIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -15308,10 +15795,11 @@ final class $$IdiomGradeProgressTableReferences extends BaseReferences<
       db.children.createAlias(
           $_aliasNameGenerator(db.idiomGradeProgress.childId, db.children.id));
 
-  $$ChildrenTableProcessedTableManager? get childId {
-    if ($_item.childId == null) return null;
+  $$ChildrenTableProcessedTableManager get childId {
+    final $_column = $_itemColumn<int>('child_id')!;
+
     final manager = $$ChildrenTableTableManager($_db, $_db.children)
-        .filter((f) => f.id($_item.childId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_childIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -15668,10 +16156,11 @@ final class $$IdiomFailureRecordsTableReferences extends BaseReferences<
       db.children.createAlias(
           $_aliasNameGenerator(db.idiomFailureRecords.childId, db.children.id));
 
-  $$ChildrenTableProcessedTableManager? get childId {
-    if ($_item.childId == null) return null;
+  $$ChildrenTableProcessedTableManager get childId {
+    final $_column = $_itemColumn<int>('child_id')!;
+
     final manager = $$ChildrenTableTableManager($_db, $_db.children)
-        .filter((f) => f.id($_item.childId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_childIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -16008,10 +16497,11 @@ final class $$IdiomPuzzleRecordsTableReferences extends BaseReferences<
       db.children.createAlias(
           $_aliasNameGenerator(db.idiomPuzzleRecords.childId, db.children.id));
 
-  $$ChildrenTableProcessedTableManager? get childId {
-    if ($_item.childId == null) return null;
+  $$ChildrenTableProcessedTableManager get childId {
+    final $_column = $_itemColumn<int>('child_id')!;
+
     final manager = $$ChildrenTableTableManager($_db, $_db.children)
-        .filter((f) => f.id($_item.childId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_childIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -16371,10 +16861,11 @@ final class $$IdiomEngagementRecordsTableReferences extends BaseReferences<
       db.children.createAlias($_aliasNameGenerator(
           db.idiomEngagementRecords.childId, db.children.id));
 
-  $$ChildrenTableProcessedTableManager? get childId {
-    if ($_item.childId == null) return null;
+  $$ChildrenTableProcessedTableManager get childId {
+    final $_column = $_itemColumn<int>('child_id')!;
+
     final manager = $$ChildrenTableTableManager($_db, $_db.children)
-        .filter((f) => f.id($_item.childId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_childIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -16384,10 +16875,11 @@ final class $$IdiomEngagementRecordsTableReferences extends BaseReferences<
   static $IdiomsTable _idiomIdTable(_$AppDatabase db) => db.idioms.createAlias(
       $_aliasNameGenerator(db.idiomEngagementRecords.idiomId, db.idioms.id));
 
-  $$IdiomsTableProcessedTableManager? get idiomId {
-    if ($_item.idiomId == null) return null;
+  $$IdiomsTableProcessedTableManager get idiomId {
+    final $_column = $_itemColumn<int>('idiom_id')!;
+
     final manager = $$IdiomsTableTableManager($_db, $_db.idioms)
-        .filter((f) => f.id($_item.idiomId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_idiomIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -16784,6 +17276,8 @@ class $AppDatabaseManager {
       $$PointRecordsTableTableManager(_db, _db.pointRecords);
   $$AppContentsTableTableManager get appContents =>
       $$AppContentsTableTableManager(_db, _db.appContents);
+  $$AppSettingsTableTableManager get appSettings =>
+      $$AppSettingsTableTableManager(_db, _db.appSettings);
   $$AppLogsTableTableManager get appLogs =>
       $$AppLogsTableTableManager(_db, _db.appLogs);
   $$BadgesTableTableManager get badges =>

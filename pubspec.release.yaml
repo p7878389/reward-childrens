@@ -72,15 +72,8 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
-    - assets/
-    - assets/database/
-    - assets/idiom_game/models/
-    - assets/idiom_game/models/vosk-model-small-cn-0.22/
-    - assets/idiom_game/models/vosk-model-small-cn-0.22/am/
-    - assets/idiom_game/models/vosk-model-small-cn-0.22/conf/
-    - assets/idiom_game/models/vosk-model-small-cn-0.22/graph/
-    - assets/idiom_game/models/vosk-model-small-cn-0.22/graph/phones/
-    - assets/idiom_game/models/vosk-model-small-cn-0.22/ivector/
+    - assets/app_icon.png
+    - assets/app_icon.svg
     - assets/initial_data/
     - assets/initial_data/rule_images/
     - shorebird.yaml

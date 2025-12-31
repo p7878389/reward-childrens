@@ -67,7 +67,8 @@ final idiomGradeProgressProvider = FutureProvider.family<List<IdiomGradeProgress
 });
 
 final resourceDownloadServiceProvider = Provider<ResourceDownloadService>((ref) {
-  final service = ResourceDownloadService();
+  final importer = ref.watch(idiomDataImporterProvider);
+  final service = ResourceDownloadService(importer);
   ref.onDispose(() => service.dispose());
   return service;
 });

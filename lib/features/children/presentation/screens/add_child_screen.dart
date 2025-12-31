@@ -20,6 +20,7 @@ class AddChildScreen extends ConsumerStatefulWidget {
 
 class _AddChildScreenState extends ConsumerState<AddChildScreen> {
   final _nameController = TextEditingController();
+  final _nameFocusNode = FocusNode();
   String _gender = 'boy';
   DateTime? _birthday;
   String _avatarData = 'builtin:0';
@@ -28,6 +29,7 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
   @override
   void dispose() {
     _nameController.dispose();
+    _nameFocusNode.dispose();
     super.dispose();
   }
 
@@ -59,6 +61,7 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
                   const SizedBox(height: 8),
                   CustomInputField(
                     controller: _nameController,
+                    focusNode: _nameFocusNode,
                     icon: Icons.person_rounded,
                     hintText: l10n.childName,
                     onChanged: (v) => setState(() {}),
@@ -79,8 +82,10 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
                   const SizedBox(height: 8),
                   GestureDetector(
                     onTap: () {
-                      final currentFocus = FocusScope.of(context);
-                      currentFocus.unfocus();
+                      // 彻底移除焦点并关闭键盘
+                      _nameFocusNode.unfocus();
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      
                       _showScrollableDatePicker(
                         context,
                         initialDate: _birthday,
@@ -211,23 +216,17 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
     required ValueChanged<DateTime> onDateSelected,
     required AppLocalizations l10n,
   }) {
-    DateTime selectedDate = initialDate ?? DateTime(2018, 1, 1);
-    final now = DateTime.now();
+    DateTime selectedDate = initialDate ?? DateTime(DateTime.now().year - 5, 1, 1);
     const minYear = 2000;
-    final maxYear = now.year;
+    final maxYear = DateTime.now().year;
 
     int daysInMonth(int year, int month) {
       return DateTime(year, month + 1, 0).day;
     }
 
-    // 在 builder 外部初始化控制器
-    final int initialMonthIndex = 1200 + (selectedDate.month - 1);
-    final int daysCount = daysInMonth(selectedDate.year, selectedDate.month);
-    final int initialDayIndex = (daysCount * 50) + (selectedDate.day - 1);
-
     final yearController = FixedExtentScrollController(initialItem: selectedDate.year - minYear);
-    final monthController = FixedExtentScrollController(initialItem: initialMonthIndex);
-    final dayController = FixedExtentScrollController(initialItem: initialDayIndex);
+    final monthController = FixedExtentScrollController(initialItem: selectedDate.month - 1);
+    final dayController = FixedExtentScrollController(initialItem: selectedDate.day - 1);
 
     showModalBottomSheet(
       context: context,
@@ -238,7 +237,6 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setModalState) {
-
             return SizedBox(
               height: 280,
               child: Column(
@@ -256,21 +254,13 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
                         CupertinoButton(
                           padding: EdgeInsets.zero,
                           child: Text(l10n.cancel, style: const TextStyle(color: AppColors.textSecondary, fontSize: 16)),
-                          onPressed: () {
-                            yearController.dispose();
-                            monthController.dispose();
-                            dayController.dispose();
-                            Navigator.pop(context);
-                          },
+                          onPressed: () => Navigator.pop(context),
                         ),
                         CupertinoButton(
                           padding: EdgeInsets.zero,
                           child: Text(l10n.confirm, style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 16)),
                           onPressed: () {
                             onDateSelected(selectedDate);
-                            yearController.dispose();
-                            monthController.dispose();
-                            dayController.dispose();
                             Navigator.pop(context);
                           },
                         ),
@@ -281,72 +271,67 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
                   Expanded(
                     child: Row(
                       children: [
-                        // Year (Linear)
+                        // Year
                         Expanded(
-                          child: CupertinoPicker.builder(
+                          child: CupertinoPicker(
                             scrollController: yearController,
                             itemExtent: 44,
-                            useMagnifier: true,
-                            magnification: 1.2,
-                            selectionOverlay: const CupertinoPickerDefaultSelectionOverlay(capStartEdge: false, capEndEdge: false),
                             onSelectedItemChanged: (index) {
                               final newYear = minYear + index;
                               final maxDays = daysInMonth(newYear, selectedDate.month);
-                              final newDay = selectedDate.day > maxDays ? maxDays : selectedDate.day;
+                              int newDay = selectedDate.day;
+                              if (newDay > maxDays) {
+                                newDay = maxDays;
+                                dayController.jumpToItem(newDay - 1);
+                              }
                               setModalState(() {
                                 selectedDate = DateTime(newYear, selectedDate.month, newDay);
                               });
                             },
-                            itemBuilder: (context, index) {
-                              if (index < 0 || index > maxYear - minYear) return null;
+                            children: List.generate(maxYear - minYear + 1, (index) {
                               return Center(child: Text('${minYear + index}', style: const TextStyle(fontSize: 20, color: AppColors.textMain)));
-                            },
-                            childCount: maxYear - minYear + 1,
+                            }),
                           ),
                         ),
-                        // Month (Looping)
+                        // Month
                         Expanded(
-                          child: CupertinoPicker.builder(
+                          child: CupertinoPicker(
                             scrollController: monthController,
                             itemExtent: 44,
-                            useMagnifier: true,
-                            magnification: 1.2,
-                            selectionOverlay: const CupertinoPickerDefaultSelectionOverlay(capStartEdge: false, capEndEdge: false),
+                            looping: true,
                             onSelectedItemChanged: (index) {
-                              final newMonth = (index % 12) + 1;
+                              final newMonth = index + 1;
                               final maxDays = daysInMonth(selectedDate.year, newMonth);
-                              final newDay = selectedDate.day > maxDays ? maxDays : selectedDate.day;
+                              int newDay = selectedDate.day;
+                              if (newDay > maxDays) {
+                                newDay = maxDays;
+                                dayController.jumpToItem(newDay - 1);
+                              }
                               setModalState(() {
                                 selectedDate = DateTime(selectedDate.year, newMonth, newDay);
                               });
                             },
-                            itemBuilder: (context, index) {
-                              return Center(child: Text('${(index % 12) + 1}', style: const TextStyle(fontSize: 20, color: AppColors.textMain)));
-                            },
-                            // Infinite scrolling simulation
+                            children: List.generate(12, (index) {
+                              return Center(child: Text('${index + 1}', style: const TextStyle(fontSize: 20, color: AppColors.textMain)));
+                            }),
                           ),
                         ),
-                        // Day (Looping)
+                        // Day
                         Expanded(
                           child: CupertinoPicker.builder(
-                            key: ValueKey('${selectedDate.year}-${selectedDate.month}'),
+                            key: ValueKey('days-${selectedDate.year}-${selectedDate.month}'),
                             scrollController: dayController,
                             itemExtent: 44,
-                            useMagnifier: true,
-                            magnification: 1.2,
-                            selectionOverlay: const CupertinoPickerDefaultSelectionOverlay(capStartEdge: false, capEndEdge: false),
                             onSelectedItemChanged: (index) {
-                              final maxDays = daysInMonth(selectedDate.year, selectedDate.month);
-                              final newDay = (index % maxDays) + 1;
                               setModalState(() {
-                                selectedDate = DateTime(selectedDate.year, selectedDate.month, newDay);
+                                selectedDate = DateTime(selectedDate.year, selectedDate.month, index + 1);
                               });
                             },
                             itemBuilder: (context, index) {
                               final maxDays = daysInMonth(selectedDate.year, selectedDate.month);
-                              return Center(child: Text('${(index % maxDays) + 1}', style: const TextStyle(fontSize: 20, color: AppColors.textMain)));
+                              if (index < 0 || index >= maxDays) return null;
+                              return Center(child: Text('${index + 1}', style: const TextStyle(fontSize: 20, color: AppColors.textMain)));
                             },
-                            // Infinite scrolling simulation
                           ),
                         ),
                       ],
@@ -359,6 +344,10 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
           },
         );
       },
-    );
+    ).then((_) {
+      yearController.dispose();
+      monthController.dispose();
+      dayController.dispose();
+    });
   }
 }

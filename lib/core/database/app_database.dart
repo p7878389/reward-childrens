@@ -13,6 +13,7 @@ part 'app_database.g.dart';
   Rewards,
   Exchanges,
   AppContents,
+  AppSettings,
   AppLogs,
   Badges,
   BadgeAcquisitions,
@@ -36,7 +37,7 @@ class AppDatabase extends _$AppDatabase {
   late final SeedDataService _seedService = SeedDataService(this);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 1;
 
   @override
   MigrationStrategy get migration {
@@ -45,13 +46,7 @@ class AppDatabase extends _$AppDatabase {
         await m.createAll();
         await _seedService.seedAll();
       },
-      onUpgrade: (Migrator m, int from, int to) async {
-        if (from < 2) {
-          await m.addColumn(idiomEngagementRecords, idiomEngagementRecords.lastWrongAt);
-          await m.addColumn(idiomEngagementRecords, idiomEngagementRecords.masteryLevel);
-          await m.addColumn(idiomEngagementRecords, idiomEngagementRecords.consecutiveCorrect);
-        }
-      },
+      onUpgrade: (Migrator m, int from, int to) async {},
     );
   }
 
@@ -69,6 +64,22 @@ class AppDatabase extends _$AppDatabase {
   /// 根据 key 获取应用内容
   Future<AppContent?> getAppContent(String key) async {
     return (select(appContents)..where((t) => t.key.equals(key))).getSingleOrNull();
+  }
+
+  Future<bool> isFirstLaunchDone() async {
+    final existing = await (select(appSettings)..where((t) => t.key.equals('first_launch_done'))).getSingleOrNull();
+    return existing != null;
+  }
+
+  Future<bool> markFirstLaunchIfNeeded() async {
+    final existing = await (select(appSettings)..where((t) => t.key.equals('first_launch_done'))).getSingleOrNull();
+    if (existing != null) return false;
+    await into(appSettings).insert(AppSettingsCompanion.insert(
+      key: 'first_launch_done',
+      value: '1',
+      createdAt: DateTime.now(),
+    ));
+    return true;
   }
 
   // ==================== 日志相关方法（委托给 LogDao）====================

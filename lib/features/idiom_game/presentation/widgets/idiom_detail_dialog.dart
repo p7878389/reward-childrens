@@ -24,6 +24,7 @@ class IdiomDetailDialog extends StatelessWidget {
     Color accentColor = Colors.amber,
     bool autoClose = false,
     String? badgeText,
+    VoidCallback? onClose,
   }) {
     return showDialog(
       context: context,
@@ -34,7 +35,9 @@ class IdiomDetailDialog extends StatelessWidget {
         autoClose: autoClose,
         badgeText: badgeText,
       ),
-    );
+    ).then((_) {
+      if (onClose != null) onClose();
+    });
   }
 
   @override

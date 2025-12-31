@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:children_rewards/features/idiom_game/presentation/screens/completion_game_screen.dart';
+import 'package:children_rewards/features/idiom_game/presentation/utils/idiom_resource_guard.dart';
 
 // Reuse constants
 const kPrimaryColor = Color(0xFFFFC107);
 const kBackgroundColor = Color(0xFFF7F6F2);
 
-class PuzzleModeSelectionScreen extends StatelessWidget {
+class PuzzleModeSelectionScreen extends ConsumerWidget {
   final int childId;
   const PuzzleModeSelectionScreen({super.key, required this.childId});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: kBackgroundColor,
       appBar: AppBar(
@@ -29,8 +31,12 @@ class PuzzleModeSelectionScreen extends StatelessWidget {
             subtitle: '填字补全成语，考验词汇量',
             icon: Icons.edit_note_rounded,
             color: Colors.blueAccent,
-            onTap: () {
-              // Navigate
+            onTap: () async {
+              final ready = await IdiomResourceGuard.ensureIdiomDb(
+                context: context,
+                ref: ref,
+              );
+              if (!ready || !context.mounted) return;
               Navigator.push(
                 context, 
                 MaterialPageRoute(

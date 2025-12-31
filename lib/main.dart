@@ -14,6 +14,7 @@ import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/app/navigation/main_wrapper.dart';
 import 'package:children_rewards/core/providers/locale_provider.dart';
 import 'package:children_rewards/shared/providers/database_provider.dart';
+import 'package:children_rewards/shared/providers/app_launch_provider.dart';
 
 void main() {
   // 在同一个 Zone 中初始化和运行应用
@@ -39,15 +40,9 @@ void main() {
 
       // 初始化日志服务（依赖 FileStorageService）
       Logger.init();
-      logInfo('App starting...', tag: 'Main');
-      logInfo('FileStorageService initialized', tag: 'Main');
+      
 
-      // 执行存储迁移（后台执行，不阻塞启动）
-      StorageMigrationService.migrateIfNeeded().then((_) {
-        logInfo('Storage migration check completed', tag: 'Main');
-      }).catchError((e) {
-        logError('Storage migration failed', tag: 'Main', error: e);
-      });
+      // 存储迁移改为首次启动后执行
     },
   );
 }
@@ -95,6 +90,7 @@ class _ChildrenRewardsAppState extends ConsumerState<ChildrenRewardsApp> {
   void initState() {
     super.initState();
     _checkFirstLaunch();
+    _checkFirstLaunchFromDb();
     // 首帧后预热关键资源，降低首次打开卡顿
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
@@ -109,9 +105,22 @@ class _ChildrenRewardsAppState extends ConsumerState<ChildrenRewardsApp> {
         AppLogger.instance.init(db);
         // 禁止 AppLogger 输出到控制台，避免与 LoggerService 重复
         AppLogger.instance.enableConsoleOutput = false;
-        logInfo('Database logger initialized', tag: 'Main');
+        
       });
     });
+  }
+
+  Future<void> _checkFirstLaunchFromDb() async {
+    final db = ref.read(databaseProvider);
+    final isFirstLaunch = await db.markFirstLaunchIfNeeded();
+    if (!mounted) return;
+    ref.read(appLaunchStateProvider.notifier).state = isFirstLaunch;
+
+    if (isFirstLaunch) {
+      StorageMigrationService.migrateIfNeeded().catchError((e) {
+        logError('Storage migration failed', tag: 'Main', error: e);
+      });
+    }
   }
 
   @override

@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:isolate';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:children_rewards/core/services/file_storage_service.dart';
-import 'package:children_rewards/core/services/logger_service.dart';
 
 /// 存储迁移服务
 class StorageMigrationService {
@@ -21,7 +20,7 @@ class StorageMigrationService {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.getBool(_migrationKey) == true) return;
 
-    logInfo('开始存储迁移...', tag: 'StorageMigration');
+    
 
     final args = <String, Object>{
       'basePath': FileStorageService.basePath,
@@ -31,27 +30,10 @@ class StorageMigrationService {
           .toList(),
     };
 
-    final result = await Isolate.run(() => _migrateSync(args));
-    final migrated = (result['migrated'] as List).cast<String>();
-    final failed = (result['failed'] as List).cast<String>();
-    final timings = (result['timings'] as List).cast<Map>();
-    final totalMs = result['totalMs'] as int;
-
-    for (final item in migrated) {
-      logInfo('迁移目录 $item 完成，已删除旧目录', tag: 'StorageMigration');
-    }
-    for (final item in failed) {
-      logError('迁移目录 $item 失败', tag: 'StorageMigration');
-    }
-    for (final timing in timings) {
-      final label = timing['label'] as String;
-      final ms = timing['ms'] as int;
-      logInfo('迁移耗时 $label: ${ms}ms', tag: 'StorageMigration');
-    }
-    logInfo('迁移总耗时 ${totalMs}ms', tag: 'StorageMigration');
+    await Isolate.run(() => _migrateSync(args));
+    // 迁移日志已移除
 
     await prefs.setBool(_migrationKey, true);
-    logInfo('存储迁移完成', tag: 'StorageMigration');
   }
 
   /// 后台迁移执行（Isolate 中运行）

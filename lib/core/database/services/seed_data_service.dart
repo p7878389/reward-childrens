@@ -17,7 +17,6 @@ class SeedDataService {
     await seedSystemRules();
     await seedAppContents();
     await seedSystemBadges();
-    await seedIdiomData();
   }
 
   /// 初始化系统徽章
@@ -116,33 +115,7 @@ class SeedDataService {
 
   /// 初始化成语数据
   Future<void> seedIdiomData() async {
-    final countQuery = _db.selectOnly(_db.idioms)..addColumns([_db.idioms.id.count()]);
-    final result = await countQuery.getSingle();
-    final count = result.read(_db.idioms.id.count()) ?? 0;
-
-    if (count > 0) return;
-
-    try {
-      final sqlContent = await rootBundle.loadString('assets/idiom_game/data/idioms.sql');
-      final statements = sqlContent.split(';\n').map((s) => s.trim()).where((s) => s.isNotEmpty && !s.startsWith('--'));
-
-      const batchSize = 500;
-      var stmtList = statements.toList();
-      for (var i = 0; i < stmtList.length; i += batchSize) {
-        final end = (i + batchSize < stmtList.length) ? i + batchSize : stmtList.length;
-        final batchStmts = stmtList.sublist(i, end);
-
-        await _db.batch((b) {
-          for (final stmt in batchStmts) {
-            if (stmt.isNotEmpty) {
-              b.customStatement(stmt);
-            }
-          }
-        });
-      }
-    } catch (e) {
-      // 成语数据导入失败，不影响应用启动
-    }
+    // 成语数据改为预编译数据库按需下载，不在启动时导入
   }
 
   /// 初始化应用内容

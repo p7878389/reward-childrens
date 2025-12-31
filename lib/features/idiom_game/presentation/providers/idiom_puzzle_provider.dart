@@ -323,8 +323,16 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
     if (state.currentQuestionIndex < state.totalQuestions - 1) {
       _nextQuestion();
     } else {
-      _finishGame();
+      if (idiomToShow == null) {
+        // 如果没有弹窗，直接结束
+        _finishGame();
+      }
+      // 如果有弹窗，等弹窗关闭后再在 UI 层调用 finishGame
     }
+  }
+
+  void finishGame() {
+    _finishGame();
   }
 
   void _nextQuestion() {

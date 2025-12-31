@@ -3,6 +3,7 @@ import 'package:children_rewards/core/theme/app_colors.dart';
 
 class CustomInputField extends StatelessWidget {
   final TextEditingController controller;
+  final FocusNode? focusNode;
   final IconData icon;
   final String hintText;
   final TextInputType keyboardType;
@@ -13,6 +14,7 @@ class CustomInputField extends StatelessWidget {
   const CustomInputField({
     super.key,
     required this.controller,
+    this.focusNode,
     required this.icon,
     required this.hintText,
     this.keyboardType = TextInputType.text,
@@ -36,6 +38,7 @@ class CustomInputField extends StatelessWidget {
           height: maxLines > 1 ? null : 56, // Fixed height for single line
           child: TextField(
             controller: controller,
+            focusNode: focusNode,
             keyboardType: keyboardType,
             maxLines: maxLines,
             onChanged: onChanged,

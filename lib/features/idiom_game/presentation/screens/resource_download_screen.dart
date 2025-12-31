@@ -16,7 +16,6 @@ class ResourceDownloadScreen extends ConsumerWidget {
     // For now, let's use a placeholder
     final status = {
       ResourceType.voskModel: const DownloadProgress(type: ResourceType.voskModel, status: DownloadStatus.idle),
-      ResourceType.idiomDb: const DownloadProgress(type: ResourceType.idiomDb, status: DownloadStatus.idle),
     };
 
     return Scaffold(
@@ -36,16 +35,6 @@ class ResourceDownloadScreen extends ConsumerWidget {
                     subtitle: "~45 MB",
                     icon: Icons.mic_rounded,
                     progress: status[ResourceType.voskModel]!,
-                  ),
-                  const SizedBox(height: 16),
-                  _buildResourceCard(
-                    context,
-                    ref,
-                    type: ResourceType.idiomDb,
-                    title: "成语数据库",
-                    subtitle: "~3 MB",
-                    icon: Icons.menu_book_rounded,
-                    progress: status[ResourceType.idiomDb]!,
                   ),
                 ],
               ),

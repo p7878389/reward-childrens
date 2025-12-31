@@ -83,21 +83,9 @@ class _CompletionGameScreenState extends ConsumerState<CompletionGameScreen> wit
       }
     });
     
-    ref.listen(idiomPuzzleProvider(widget.childId).select((s) => s.idiomToShowDetails), (previous, next) {
-      if (next != null) {
-        IdiomDetailDialog.show(
-          context, 
-          idiom: next,
-          accentColor: kPrimaryColor,
-          autoClose: true,
-          badgeText: widget.isReviewMode ? "重点巩固" : "新知识",
-        );
-        ref.read(idiomPuzzleProvider(widget.childId).notifier).clearIdiomDetails();
-      }
-    });
-
     ref.listen(idiomPuzzleProvider(widget.childId).select((s) => s.status), (previous, next) {
       if (next == PuzzleGameStatus.finished) {
+        // 游戏真正结束，显示结果弹窗
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -113,6 +101,26 @@ class _CompletionGameScreenState extends ConsumerState<CompletionGameScreen> wit
             },
           ),
         );
+      }
+    });
+
+    ref.listen(idiomPuzzleProvider(widget.childId).select((s) => s.idiomToShowDetails), (previous, next) {
+      if (next != null) {
+        IdiomDetailDialog.show(
+          context, 
+          idiom: next,
+          accentColor: kPrimaryColor,
+          autoClose: true,
+          badgeText: widget.isReviewMode ? "重点巩固" : "新知识",
+          onClose: () {
+            // 如果是最后一题的详情弹窗关闭，手动触发游戏结束
+            final state = ref.read(idiomPuzzleProvider(widget.childId));
+            if (state.currentQuestionIndex >= state.totalQuestions - 1) {
+               ref.read(idiomPuzzleProvider(widget.childId).notifier).finishGame();
+            }
+          },
+        );
+        ref.read(idiomPuzzleProvider(widget.childId).notifier).clearIdiomDetails();
       }
     });
 

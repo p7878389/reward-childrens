@@ -7,9 +7,10 @@ import 'package:share_plus/share_plus.dart';
 import 'package:intl/intl.dart';
 import 'package:children_rewards/core/database/app_database.dart';
 import 'package:children_rewards/core/services/file_storage_service.dart';
+import 'package:children_rewards/core/constants/system_config.dart';
 
 class DatabaseBackupService {
-  static const String _dbName = 'children_rewards.db';
+  static const String _dbName = kDatabaseFileName;
   final AppDatabase? _db;
 
   DatabaseBackupService([this._db]);

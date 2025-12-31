@@ -1,16 +1,19 @@
-import 'dart:convert';
+import 'dart:io';
 import 'package:drift/drift.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:children_rewards/core/database/app_database.dart';
-import 'package:characters/characters.dart';
 import 'package:children_rewards/core/logging/app_logger.dart';
 
-/// 成语数据导入器 - 从 assets 导入成语数据到数据库
+/// 成语数据导入器 - 从外部数据库导入成语数据
 class IdiomDataImporter {
   static const String _tag = 'IdiomDataImporter';
   final AppDatabase _db;
+  Object? _lastError;
+  StackTrace? _lastStackTrace;
 
   IdiomDataImporter(this._db);
+
+  Object? get lastError => _lastError;
+  StackTrace? get lastStackTrace => _lastStackTrace;
 
   /// 检查并导入成语数据（如果数据库为空）
   Future<bool> importIfNeeded() async {
@@ -19,30 +22,78 @@ class IdiomDataImporter {
     final count = result.read(_db.idioms.id.count()) ?? 0;
 
     logger.info(_tag, 'importIfNeeded: 当前成语数量=$count');
-
-    if (count > 0) return true;
-
-    return await importFromAssets();
+    return count > 0;
   }
 
-  /// 强制重新导入成语数据（先清空再导入）
-  Future<bool> forceReimport() async {
-    logger.info(_tag, 'forceReimport: 开始强制重新导入...');
-
-    try {
-      // 清空现有数据
-      await _db.delete(_db.idioms).go();
-      logger.info(_tag, 'forceReimport: 已清空旧数据');
-
-      // 重新导入
-      final success = await importFromAssets();
-      logger.info(_tag, 'forceReimport: 导入${success ? "成功" : "失败"}');
-
-      return success;
-    } catch (e) {
-      logger.error(_tag, 'forceReimport: 异常 $e');
+  /// 从外部预编译数据库文件导入成语数据
+  /// 使用 ATTACH DATABASE 策略进行高效合并
+  Future<bool> importFromExternalDb(String dbPath) async {
+    final file = File(dbPath);
+    if (!await file.exists()) {
+      _lastError = '文件不存在';
+      _lastStackTrace = null;
+      logger.error(_tag, 'importFromExternalDb: 文件不存在 $dbPath');
       return false;
     }
+
+    logger.info(_tag, 'importFromExternalDb: 开始从 $dbPath 导入数据...');
+    try {
+      _lastError = null;
+      _lastStackTrace = null;
+      // 1. 清空当前成语表 (假设我们要全量更新成语库)
+      // 注意：这会删除用户可能自定义添加的成语（如果有的话）。
+      // 如果需要保留用户数据，策略需要调整（如 INSERT OR IGNORE）。
+      // 这里假设 prebuilt.db 是权威数据源。
+      await _db.delete(_db.idioms).go();
+      logger.info(_tag, '已清空旧成语数据');
+
+      // 2. 使用 CustomStatement 执行 ATTACH 和 INSERT
+      // Drift 的 executor 允许执行原始 SQL
+      await _db.customStatement("ATTACH DATABASE '$dbPath' AS external_db");
+      
+      try {
+        final localColumns = await _getIdiomColumns();
+        final externalColumns = await _getIdiomColumns(schema: 'external_db');
+        final commonColumns = localColumns.where(externalColumns.contains).toList();
+
+        if (commonColumns.isEmpty) {
+          throw Exception('成语表结构不兼容，无法导入');
+        }
+
+        final columnList = commonColumns.join(', ');
+        await _db.customStatement("""
+          INSERT INTO idioms ($columnList)
+          SELECT $columnList
+          FROM external_db.idioms
+        """);
+        
+        logger.info(_tag, '数据导入成功');
+      } finally {
+        // 无论成功失败，都要 detach
+        await _db.customStatement("DETACH DATABASE external_db");
+      }
+
+      final count = await getIdiomCount();
+      logger.info(_tag, '导入完成，当前成语总数: $count');
+      return true;
+
+    } catch (e, stack) {
+      _lastError = e;
+      _lastStackTrace = stack;
+      logger.error(_tag, '导入失败: $e', stack);
+      return false;
+    }
+  }
+
+  Future<List<String>> _getIdiomColumns({String? schema}) async {
+    final pragmaSql = schema == null
+        ? 'PRAGMA table_info(idioms)'
+        : 'PRAGMA $schema.table_info(idioms)';
+    final rows = await _db.customSelect(pragmaSql).get();
+    return rows
+        .map((row) => row.data['name'])
+        .whereType<String>()
+        .toList();
   }
 
   /// 获取当前成语数量
@@ -52,65 +103,13 @@ class IdiomDataImporter {
     return result.read(_db.idioms.id.count()) ?? 0;
   }
 
-  /// 从 assets 导入成语数据
+  /// 占位兼容旧代码
   Future<bool> importFromAssets() async {
-    try {
-      logger.info(_tag, 'importFromAssets: 开始导入...');
-
-      final jsonStr = await rootBundle.loadString('assets/idiom_game/data/idiom_processed.json');
-      final List<dynamic> data = jsonDecode(jsonStr);
-
-      if (data.isEmpty) {
-        logger.warning(_tag, 'importFromAssets: JSON数据为空');
-        return false;
-      }
-
-      logger.info(_tag, 'importFromAssets: 准备导入 ${data.length} 条成语');
-
-      const batchSize = 500;
-      for (var i = 0; i < data.length; i += batchSize) {
-        final end = (i + batchSize < data.length) ? i + batchSize : data.length;
-        final batchData = data.sublist(i, end);
-
-        await _db.batch((batch) {
-          batch.insertAll(
-            _db.idioms,
-            batchData.map((item) {
-              final word = item['word'] as String;
-              final pinyin = item['pinyin'] as String? ?? '';
-
-              // 解析带声调的首字拼音和尾字拼音
-              final pinyinParts = pinyin.split(' ');
-              final firstPinyin = pinyinParts.isNotEmpty ? pinyinParts.first : '';
-              final lastPinyin = pinyinParts.isNotEmpty ? pinyinParts.last : '';
-
-              return IdiomsCompanion.insert(
-                word: word,
-                pinyin: pinyin,
-                firstPinyinNoTone: item['firstPinyinNoTone'] ?? '',
-                lastPinyinNoTone: item['lastPinyinNoTone'] ?? '',
-                firstPinyin: Value(firstPinyin),
-                lastPinyin: Value(lastPinyin),
-                firstChar: item['firstChar'] ?? word.characters.first,
-                lastChar: item['lastChar'] ?? word.characters.last,
-                explanation: Value(item['explanation']),
-                source: Value(item['source']),
-                example: Value(item['example']),
-                gradeLevel: Value(item['gradeLevel'] ?? 1),
-                frequency: Value(item['frequency'] ?? 50),
-                createdAt: DateTime.now(),
-              );
-            }),
-            mode: InsertMode.insertOrIgnore,
-          );
-        });
-      }
-
-      logger.info(_tag, 'importFromAssets: 导入完成');
-      return true;
-    } catch (e) {
-      logger.error(_tag, 'importFromAssets: 异常 $e');
+    logger.warning(_tag, 'importFromAssets: 已禁用');
+    return false;
+  }
+  
+  Future<bool> forceReimport() async {
       return false;
-    }
   }
 }

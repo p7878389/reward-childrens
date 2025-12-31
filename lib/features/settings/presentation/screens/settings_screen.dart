@@ -11,6 +11,7 @@ import 'package:children_rewards/features/settings/presentation/screens/logs_scr
 import 'package:children_rewards/features/rewards/presentation/screens/rewards_manage_screen.dart';
 import 'package:children_rewards/features/rule/presentation/screens/rules_manage_screen.dart';
 import 'package:children_rewards/features/badges/presentation/screens/badge_manage_screen.dart';
+import 'package:children_rewards/features/settings/presentation/screens/resource_download_screen.dart';
 import 'package:children_rewards/core/services/database_backup_service.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -97,6 +98,16 @@ class SettingsScreen extends ConsumerWidget {
                 icon: Icons.cloud_download_rounded,
                 title: '数据恢复 (导入)',
                 onTap: () => _importData(context, ref),
+              ),
+              _buildSettingTile(
+                icon: Icons.download_for_offline_rounded,
+                title: '资源下载',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ResourceDownloadScreen()),
+                  );
+                },
               ),
               _buildSettingTile(
                 icon: Icons.article_outlined,

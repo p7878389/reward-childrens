@@ -85,6 +85,15 @@ class AppContents extends Table {
   DateTimeColumn get updatedAt => dateTime().nullable()();
 }
 
+/// 应用设置表（存储启动标记等）
+class AppSettings extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get key => text().unique()(); // 设置标识：first_launch_done 等
+  TextColumn get value => text()(); // 设置值
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime().nullable()();
+}
+
 /// 应用日志表
 class AppLogs extends Table {
   IntColumn get id => integer().autoIncrement()();

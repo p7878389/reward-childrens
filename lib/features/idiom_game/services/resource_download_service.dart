@@ -6,22 +6,23 @@ import 'package:archive/archive_io.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:children_rewards/features/idiom_game/domain/entities/resource_entities.dart';
 import 'package:children_rewards/core/logging/app_logger.dart';
+import 'package:children_rewards/core/constants/system_config.dart';
+import 'package:children_rewards/features/idiom_game/services/idiom_data_importer.dart';
 
 class ResourceConfig {
   static const resources = {
     ResourceType.voskModel: ResourceInfo(
       name: 'Vosk Model (Small CN)',
       version: '0.22',
-      url: 'https://alphacephei.com/vosk/models/vosk-model-small-cn-0.22.zip',
+      url: kVoskModelZipUrl,
       sizeBytes: 45000000, // Approx 45MB
       md5: 'placeholder_md5',
     ),
     ResourceType.idiomDb: ResourceInfo(
-      name: 'Idiom Database',
-      version: '1.0',
-      // url: 'https://raw.githubusercontent.com/crazywhalecc/static/gh-pages/idiom/idiom.json',
-      url: 'https://raw.githubusercontent.com/mapull/chinese-dictionary/refs/heads/main/idiom/idiom.json',
-      sizeBytes: 3000000, // Approx 3MB
+      name: 'Prebuilt Database',
+      version: '25.12.31',
+      url: kPrebuiltDatabaseUrl,
+      sizeBytes: 20000000,
       md5: 'placeholder_md5',
     ),
   };
@@ -49,10 +50,11 @@ class ResourceDownloadService {
   static const String _tag = 'ResourceDownloadService';
   final _statusController = StreamController<Map<ResourceType, DownloadProgress>>.broadcast();
   final Map<ResourceType, DownloadProgress> _currentStatus = {};
+  final IdiomDataImporter _importer;
 
   Stream<Map<ResourceType, DownloadProgress>> get statusStream => _statusController.stream;
 
-  ResourceDownloadService() {
+  ResourceDownloadService(this._importer) {
     // Initialize status
     for (var type in ResourceType.values) {
       _currentStatus[type] = DownloadProgress.idle(type);
@@ -80,11 +82,35 @@ class ResourceDownloadService {
 
       // 2. 尝试从 Assets 导入（优先）
       if (type == ResourceType.voskModel) {
-        final success = await _copyVoskModelFromAssets(appDir.path);
-        if (success) {
-          _updateStatus(type, DownloadStatus.completed, message: "Ready");
-          return;
+        if (kUseBundledResources) {
+          final success = await _copyVoskModelFromAssets(appDir.path);
+          if (success) {
+            _updateStatus(type, DownloadStatus.completed, message: "Ready");
+            return;
+          }
         }
+      }
+
+      if (type == ResourceType.idiomDb) {
+        final tempPath = await _getTempDbPath();
+        if (kUseBundledResources) {
+          final success = await _importPrebuiltDbFromAssets(tempPath);
+          if (success) {
+            _updateStatus(type, DownloadStatus.completed, message: "Ready");
+            return;
+          }
+        }
+
+        await _downloadFile(config.url, tempPath, (progress) {
+          _updateStatus(type, DownloadStatus.downloading, progress: progress);
+        });
+        final success = await _importPrebuiltDbFromFile(tempPath);
+        if (!success) {
+          logger.error(_tag, '导入预编译数据库失败', _importer.lastStackTrace);
+          throw Exception('Import from database failed');
+        }
+        _updateStatus(type, DownloadStatus.completed, message: "Success");
+        return;
       }
 
       // 3. 如果 Assets 导入失败，执行下载
@@ -115,14 +141,14 @@ class ResourceDownloadService {
     try {
       _updateStatus(ResourceType.voskModel, DownloadStatus.downloading, message: "Copying from assets...");
 
-      final modelDir = Directory('$destDir/vosk-model-small-cn-0.22');
+      final modelDir = Directory('$destDir/$kVoskModelDirName');
       if (!modelDir.existsSync()) {
         modelDir.createSync(recursive: true);
       }
 
       // 复制所有模型文件
       for (final filePath in ResourceConfig.voskModelFiles) {
-        final assetPath = 'assets/idiom_game/models/vosk-model-small-cn-0.22/$filePath';
+        final assetPath = '$kVoskModelAssetBasePath/$filePath';
         final destPath = '${modelDir.path}/$filePath';
 
         // 确保目标目录存在
@@ -140,6 +166,43 @@ class ResourceDownloadService {
       logger.warning(_tag, "Failed to copy Vosk model from assets: $e");
       return false;
     }
+  }
+
+  Future<String> _getTempDbPath() async {
+    final appDir = await getApplicationDocumentsDirectory();
+    return '${appDir.path}/temp_idiom_prebuilt.db';
+  }
+
+  Future<bool> _importPrebuiltDbFromAssets(String tempPath) async {
+    try {
+      _updateStatus(ResourceType.idiomDb, DownloadStatus.downloading, message: "Copying from assets...");
+      final file = File(tempPath);
+      await file.parent.create(recursive: true);
+      final data = await rootBundle.load(kPrebuiltDatabaseAssetPath);
+      await file.writeAsBytes(data.buffer.asUint8List());
+      final success = await _importPrebuiltDbFromFile(tempPath);
+      if (success) {
+        logger.info(_tag, "Prebuilt database imported from assets successfully");
+      }
+      return success;
+    } catch (e) {
+      logger.warning(_tag, "Failed to import prebuilt database from assets: $e");
+      return false;
+    }
+  }
+
+  Future<bool> _importPrebuiltDbFromFile(String tempPath) async {
+    final tempFile = File(tempPath);
+    if (!await tempFile.exists()) {
+      return false;
+    }
+    final success = await _importer.importFromExternalDb(tempPath);
+    try {
+      if (await tempFile.exists()) {
+        await tempFile.delete();
+      }
+    } catch (_) {}
+    return success;
   }
 
   Future<void> _downloadFile(String url, String savePath, Function(double) onProgress) async {
@@ -207,10 +270,11 @@ class ResourceDownloadService {
     final appDir = await getApplicationDocumentsDirectory();
     if (type == ResourceType.voskModel) {
       // 检查关键模型文件是否存在（而非仅检查目录）
-      final modelFile = File('${appDir.path}/vosk-model-small-cn-0.22/am/final.mdl');
+      final modelFile = File('${appDir.path}/$kVoskModelDirName/am/final.mdl');
       return modelFile.exists();
     } else {
-      return File('${appDir.path}/idiom.json').exists();
+      final count = await _importer.getIdiomCount();
+      return count > 0;
     }
   }
 }

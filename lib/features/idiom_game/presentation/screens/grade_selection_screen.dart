@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:children_rewards/l10n/app_localizations.dart';
 import 'package:children_rewards/core/theme/app_colors.dart';
 import 'package:children_rewards/features/idiom_game/presentation/screens/idiom_game_screen.dart';
+import 'package:children_rewards/features/idiom_game/presentation/utils/idiom_resource_guard.dart';
 import 'package:children_rewards/features/idiom_game/presentation/screens/game_settings_screen.dart';
 import 'package:children_rewards/features/idiom_game/providers/idiom_game_providers.dart';
 import 'package:children_rewards/features/children/providers/children_providers.dart';
@@ -168,7 +169,12 @@ class GradeSelectionScreen extends ConsumerWidget {
                               isCurrent: isCurrent,
                               stars: stars,
                               onTap: isUnlocked
-                                  ? () {
+                                  ? () async {
+                                      final ready = await IdiomResourceGuard.ensureIdiomDbAndSpeechModel(
+                                        context: context,
+                                        ref: ref,
+                                      );
+                                      if (!ready || !context.mounted) return;
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(

@@ -5,6 +5,7 @@ import 'package:children_rewards/features/idiom_game/presentation/widgets/puzzle
 import 'package:children_rewards/features/idiom_game/presentation/widgets/idiom_detail_dialog.dart';
 import 'package:children_rewards/features/idiom_game/data/dao/idiom_engagement_dao.dart';
 import 'package:children_rewards/shared/widgets/common_widgets.dart';
+import 'package:children_rewards/features/idiom_game/presentation/utils/idiom_resource_guard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -327,7 +328,12 @@ class _MistakeBookScreenState extends ConsumerState<MistakeBookScreen> {
     );
   }
 
-  void _startReview(BuildContext context) {
+  void _startReview(BuildContext context) async {
+    final ready = await IdiomResourceGuard.ensureIdiomDb(
+      context: context,
+      ref: ref,
+    );
+    if (!ready || !context.mounted) return;
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => CompletionGameScreen(

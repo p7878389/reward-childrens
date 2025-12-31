@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:children_rewards/features/idiom_game/presentation/screens/meaning_game_screen.dart';
 import 'package:children_rewards/features/idiom_game/presentation/screens/mistake_book_screen.dart';
 import 'package:children_rewards/features/idiom_game/presentation/providers/mistake_book_provider.dart';
+import 'package:children_rewards/features/idiom_game/presentation/utils/idiom_resource_guard.dart';
 
 class GameHallScreen extends ConsumerWidget {
   final int childId;
@@ -200,7 +201,12 @@ class GameHallScreen extends ConsumerWidget {
                                 subtitle: l10n.completeMissingCharacters,
                                 icon: Icons.edit_note_rounded,
                                 color: const Color(0xFF0EA5E9),
-                                onTap: () {
+                                onTap: () async {
+                                  final ready = await IdiomResourceGuard.ensureIdiomDb(
+                                    context: context,
+                                    ref: ref,
+                                  );
+                                  if (!ready || !context.mounted) return;
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -216,7 +222,12 @@ class GameHallScreen extends ConsumerWidget {
                                 subtitle: l10n.guessIdiomFromMeaning,
                                 icon: Icons.psychology_rounded,
                                 color: const Color(0xFFF59E0B),
-                                onTap: () {
+                                onTap: () async {
+                                  final ready = await IdiomResourceGuard.ensureIdiomDb(
+                                    context: context,
+                                    ref: ref,
+                                  );
+                                  if (!ready || !context.mounted) return;
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
