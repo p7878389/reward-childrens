@@ -56,7 +56,7 @@ class _GameConfigCenterScreenState extends ConsumerState<GameConfigCenterScreen>
   Widget _buildContent() {
     switch (_selectedTab) {
       case 'common':
-        return const DailyLimitConfigScreen();
+        return DailyLimitConfigScreen(childId: widget.childId);
       case 'chain':
         return GameSettingsScreen(childId: widget.childId, isEmbedded: true);
       case 'completion':

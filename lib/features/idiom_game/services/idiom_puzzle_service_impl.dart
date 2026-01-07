@@ -39,13 +39,25 @@ class IdiomPuzzleServiceImpl implements IdiomPuzzleService {
       final remainingCount = count - targetIds.length;
       if (remainingCount > 0) {
         final allIds = await _idiomDao.getIdiomIdsByGrade(grade);
-        allIds.shuffle(_random);
         
-        final newIds = allIds
-            .where((id) => !targetIds.contains(id))
-            .take(remainingCount)
-            .toList();
-        targetIds.addAll(newIds);
+        // Exclude engaged items to find "truly new" items
+        final engagedIds = await _engagementDao.getAllEngagedIdiomIds(childId);
+        final engagedSet = engagedIds.toSet();
+        
+        final trulyNewIds = allIds.where((id) => !engagedSet.contains(id)).toList();
+        trulyNewIds.shuffle(_random);
+        
+        final selectedNewIds = trulyNewIds.take(remainingCount).toList();
+        
+        // If not enough new items, fill with "seen" items (that are not in current review list)
+        if (selectedNewIds.length < remainingCount) {
+          final needed = remainingCount - selectedNewIds.length;
+          final seenAvailable = allIds.where((id) => engagedSet.contains(id) && !targetIds.contains(id)).toList();
+          seenAvailable.shuffle(_random);
+          selectedNewIds.addAll(seenAvailable.take(needed));
+        }
+        
+        targetIds.addAll(selectedNewIds);
       }
     }
 
@@ -117,54 +129,70 @@ class IdiomPuzzleServiceImpl implements IdiomPuzzleService {
     int? childId,
     bool isReviewMode = false,
   }) async {
-    List<db.Idiom> targets = [];
+    List<int> targetIds = [];
     
     // 1. Fetch review items if childId is provided
     if (childId != null) {
       final int reviewLimit = isReviewMode ? count : (count * 0.3).ceil();
       final reviewIds = await _engagementDao.getReviewQueue(childId, limit: reviewLimit);
-      
-      if (reviewIds.isNotEmpty) {
-        final reviewIdioms = await _idiomDao.getIdiomsByIds(reviewIds);
-        // Only keep those with explanations
-        targets.addAll(reviewIdioms.where((i) => i.explanation != null));
-      }
+      targetIds.addAll(reviewIds);
     }
     
     // 2. Fill with new items
     if (!isReviewMode) {
-       final remainingCount = count - targets.length;
+       final remainingCount = count - targetIds.length;
        if (remainingCount > 0) {
-          final candidates = await _idiomDao.getIdiomsWithExplanation(grade, count * 3);
-          candidates.shuffle(_random);
+          final allIds = await _idiomDao.getIdiomIdsWithExplanationByGrade(grade);
           
-          final newItems = candidates
-              .where((c) => !targets.any((t) => t.id == c.id))
-              .take(remainingCount)
-              .toList();
-          targets.addAll(newItems);
+          Set<int> engagedSet = {};
+          if (childId != null) {
+            final engagedIds = await _engagementDao.getAllEngagedIdiomIds(childId);
+            engagedSet = engagedIds.toSet();
+          }
+          
+          final trulyNewIds = allIds.where((id) => !engagedSet.contains(id) && !targetIds.contains(id)).toList();
+          trulyNewIds.shuffle(_random);
+          
+          final selectedNewIds = trulyNewIds.take(remainingCount).toList();
+          
+          if (selectedNewIds.length < remainingCount) {
+             final needed = remainingCount - selectedNewIds.length;
+             final seenAvailable = allIds.where((id) => engagedSet.contains(id) && !targetIds.contains(id)).toList();
+             seenAvailable.shuffle(_random);
+             selectedNewIds.addAll(seenAvailable.take(needed));
+          }
+          
+          targetIds.addAll(selectedNewIds);
        }
     }
 
+    if (targetIds.isEmpty) return [];
+
+    // Load objects and filter valid ones
+    final driftIdioms = await _idiomDao.getIdiomsByIds(targetIds);
+    final targets = driftIdioms.where((i) => i.explanation != null && i.explanation!.length > 5).toList();
+    
     if (targets.isEmpty) return [];
 
     targets.shuffle(_random);
     
+    // Distractor Pool
+    // To ensure variety, we fetch a larger pool of idioms with explanations
+    final distractorPoolIds = await _idiomDao.getIdiomIdsWithExplanationByGrade(grade);
+    distractorPoolIds.shuffle(_random);
+    final distractorIds = distractorPoolIds.take(count * optionCount).toList();
+    final distractorIdioms = await _idiomDao.getIdiomsByIds(distractorIds);
+    
     final puzzles = <MeaningPuzzle>[];
     
-    // We need a pool for distractors.
-    // For efficiency, we can use the same `candidates` list if we fetched it, 
-    // or fetch a batch of random idioms.
-    final distractorPool = await _idiomDao.getIdiomsWithExplanation(grade, count * 5); // Fetch enough
-    
     for (final target in targets) {
-      final pool = distractorPool.where((i) => i.id != target.id).toList();
+      final pool = distractorIdioms.where((i) => i.id != target.id).toList();
       pool.shuffle(_random);
       final distractors = pool.take(optionCount - 1).toList();
       
-      // Ensure we have enough options, otherwise might need to fetch more or relax constraints
+      // If pool is too small (should rarely happen if database is healthy), fill with duplicates or fewer options
       if (distractors.length < optionCount - 1) {
-         // Fallback: just use what we have
+         // Fallback: This case is edge, but we proceed with fewer options if needed
       }
 
       final options = [target, ...distractors];
@@ -214,25 +242,42 @@ class IdiomPuzzleServiceImpl implements IdiomPuzzleService {
     if (totalCount == 0) return 0;
     
     final double accuracy = correctCount / totalCount;
-    int stars = 0;
+    int baseStars = 0;
 
-    // Rule 1: Perfect Score (3 Stars)
-    // 100% Accuracy AND No Skips AND Minimal Hints (optional, but requested logic focused on skips)
-    if (correctCount == totalCount && skippedCount == 0) {
-      stars = 3;
-    } 
-    // Rule 2: Mastery (2 Stars)
-    // > 80% Accuracy AND < 2 Skips
-    else if (accuracy >= 0.8 && skippedCount < 2) {
-      stars = 2;
-    }
-    // Rule 3: Pass (1 Star)
-    // > 60% Accuracy
-    else if (accuracy >= 0.6) {
-      stars = 1;
+    // Base Stars (Based on Accuracy)
+    if (accuracy >= 1.0) {
+      baseStars = 3;
+    } else if (accuracy >= 0.8) {
+      baseStars = 2;
+    } else if (accuracy >= 0.6) {
+      baseStars = 1;
     }
 
-    return stars;
+    // Grade Multiplier
+    double multiplier = 1.0;
+    if (grade >= 7) {
+      multiplier = 2.0;
+    } else if (grade >= 5) {
+      multiplier = 1.5;
+    } else if (grade >= 3) {
+      multiplier = 1.2;
+    }
+
+    // Speed Bonus
+    int speedBonus = 0;
+    if (avgTimeSeconds < 5) {
+      speedBonus = 1;
+    }
+
+    // Hint Penalty
+    // Assuming hintsUsed is passed correctly (currently 0 from provider, but logic is here)
+    double hintPenalty = hintsUsed * 0.5;
+
+    // Final Calculation
+    // Formula: (Base * Multiplier) + Speed - Penalty
+    double total = (baseStars * multiplier) + speedBonus - hintPenalty;
+    
+    return max(0, total.round());
   }
 
   @override

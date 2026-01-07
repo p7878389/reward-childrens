@@ -21,6 +21,11 @@ enum PuzzleGameStatus {
   error,
 }
 
+enum IdiomShowReason {
+  wrong,        // 答错/跳过
+  newKnowledge, // 新知识 (第一次遇到)
+}
+
 class IdiomPuzzleState {
   final PuzzleGameStatus status;
   final IdiomGameMode mode;
@@ -28,7 +33,8 @@ class IdiomPuzzleState {
   final int totalQuestions;
   final List<dynamic> puzzles; // CompletionPuzzle or MeaningPuzzle
   final List<PuzzleResult> results;
-  final int currentStars; // 本局累计星星
+  final int currentStars; // 本局累计星星 (经过每日上限处理后的实际奖励)
+  final int earnedStars; // 本局实际获得的星星 (未受每日上限影响，用于展示评价)
   final bool isReviewMode; // 复习模式不计积分
   
   final int timeLeft;
@@ -40,6 +46,7 @@ class IdiomPuzzleState {
   final bool isPointsLimitReached; // New flag
 
   final Idiom? idiomToShowDetails;
+  final IdiomShowReason? idiomShowReason;
 
   const IdiomPuzzleState({
     this.status = PuzzleGameStatus.ready,
@@ -49,6 +56,7 @@ class IdiomPuzzleState {
     this.puzzles = const [],
     this.results = const [],
     this.currentStars = 0,
+    this.earnedStars = 0,
     this.isReviewMode = false,
     this.timeLeft = 60,
     this.maxDuration = 60,
@@ -57,6 +65,7 @@ class IdiomPuzzleState {
     this.selectedOptionIndex,
     this.isPointsLimitReached = false,
     this.idiomToShowDetails,
+    this.idiomShowReason,
   });
 
   IdiomPuzzleState copyWith({
@@ -67,6 +76,7 @@ class IdiomPuzzleState {
     List<dynamic>? puzzles,
     List<PuzzleResult>? results,
     int? currentStars,
+    int? earnedStars,
     bool? isReviewMode,
     int? timeLeft,
     int? maxDuration,
@@ -75,6 +85,7 @@ class IdiomPuzzleState {
     ValueGetter<int?>? selectedOptionIndex,
     bool? isPointsLimitReached,
     ValueGetter<Idiom?>? idiomToShowDetails,
+    ValueGetter<IdiomShowReason?>? idiomShowReason,
   }) {
     return IdiomPuzzleState(
       status: status ?? this.status,
@@ -84,6 +95,7 @@ class IdiomPuzzleState {
       puzzles: puzzles ?? this.puzzles,
       results: results ?? this.results,
       currentStars: currentStars ?? this.currentStars,
+      earnedStars: earnedStars ?? this.earnedStars,
       isReviewMode: isReviewMode ?? this.isReviewMode,
       timeLeft: timeLeft ?? this.timeLeft,
       maxDuration: maxDuration ?? this.maxDuration,
@@ -92,6 +104,7 @@ class IdiomPuzzleState {
       selectedOptionIndex: selectedOptionIndex != null ? selectedOptionIndex() : this.selectedOptionIndex,
       isPointsLimitReached: isPointsLimitReached ?? this.isPointsLimitReached,
       idiomToShowDetails: idiomToShowDetails != null ? idiomToShowDetails() : this.idiomToShowDetails,
+      idiomShowReason: idiomShowReason != null ? idiomShowReason() : this.idiomShowReason,
     );
   }
   
@@ -302,8 +315,21 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
     if (!mounted) return;
 
     Idiom? idiomToShow;
-    if (!result.isCorrect || encounterCount == 0 || result.isSkipped) {
+    IdiomShowReason? showReason;
+
+    if (!result.isCorrect || result.isSkipped) {
+      showReason = IdiomShowReason.wrong;
       final puzzle = state.currentPuzzle;
+      if (puzzle != null) {
+        if (state.isCompletionMode) {
+          idiomToShow = (puzzle as CompletionPuzzle).idiom;
+        } else {
+          idiomToShow = (puzzle as MeaningPuzzle).correctIdiom;
+        }
+      }
+    } else if (encounterCount == 0) {
+      showReason = IdiomShowReason.newKnowledge;
+       final puzzle = state.currentPuzzle;
       if (puzzle != null) {
         if (state.isCompletionMode) {
           idiomToShow = (puzzle as CompletionPuzzle).idiom;
@@ -318,6 +344,7 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
       results: newResults,
       currentStars: stars,
       idiomToShowDetails: () => idiomToShow,
+      idiomShowReason: () => showReason,
     );
 
     int delayMs = 1500;
@@ -350,13 +377,14 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
       currentInput: () => '',
       selectedOptionIndex: () => null,
       idiomToShowDetails: () => null,
+      idiomShowReason: () => null,
     );
     _questionStartTime = DateTime.now();
     _startTimer();
   }
 
   Future<void> _finishGame() async {
-    state = state.copyWith(status: PuzzleGameStatus.finished);
+    // state = state.copyWith(status: PuzzleGameStatus.finished); // Removed to avoid UI flicker with intermediate values
     
     final correctCount = state.results.where((r) => r.isCorrect).length;
     final skippedCount = state.results.where((r) => r.isSkipped).length;
@@ -387,7 +415,7 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
     bool limitReached = false;
     if (!state.isReviewMode) {
       final todayStars = await _pointsRepository.getDailyPoints(_childId, DateTime.now());
-      final limit = _ref.read(dailyLimitProvider);
+      final limit = _ref.read(dailyLimitProvider(_childId));
 
       if (todayStars >= limit) {
         starsToAward = 0;
@@ -405,6 +433,7 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
     state = state.copyWith(
       status: PuzzleGameStatus.finished,
       currentStars: starsToAward,
+      earnedStars: finalStars,
       isPointsLimitReached: limitReached,
     );
 
@@ -453,6 +482,9 @@ class IdiomPuzzleNotifier extends StateNotifier<IdiomPuzzleState> {
   }
 
   void clearIdiomDetails() {
-    state = state.copyWith(idiomToShowDetails: () => null);
+    state = state.copyWith(
+      idiomToShowDetails: () => null,
+      idiomShowReason: () => null,
+    );
   }
 }

@@ -105,16 +105,29 @@ class _CompletionGameScreenState extends ConsumerState<CompletionGameScreen> wit
 
     ref.listen(idiomPuzzleProvider(widget.childId).select((s) => s.idiomToShowDetails), (previous, next) {
       if (next != null) {
+        final state = ref.read(idiomPuzzleProvider(widget.childId));
+        final reason = state.idiomShowReason;
+        
+        String badgeText = "新知识";
+        Color accentColor = kPrimaryColor; // Amber/Gold default for new knowledge
+
+        if (widget.isReviewMode) {
+          badgeText = "重点巩固";
+        } else if (reason == IdiomShowReason.wrong) {
+          badgeText = "答案解析";
+          accentColor = kWrongColor; // Red for wrong answers
+        }
+
         IdiomDetailDialog.show(
           context, 
           idiom: next,
-          accentColor: kPrimaryColor,
+          accentColor: accentColor,
           autoClose: true,
-          badgeText: widget.isReviewMode ? "重点巩固" : "新知识",
+          badgeText: badgeText,
           onClose: () {
             // 如果是最后一题的详情弹窗关闭，手动触发游戏结束
-            final state = ref.read(idiomPuzzleProvider(widget.childId));
-            if (state.currentQuestionIndex >= state.totalQuestions - 1) {
+            final currentState = ref.read(idiomPuzzleProvider(widget.childId));
+            if (currentState.currentQuestionIndex >= currentState.totalQuestions - 1) {
                ref.read(idiomPuzzleProvider(widget.childId).notifier).finishGame();
             }
           },

@@ -82,16 +82,30 @@ class _MeaningGameScreenState extends ConsumerState<MeaningGameScreen> with Tick
     // Listen for idiom details popup
     ref.listen(idiomPuzzleProvider(widget.childId).select((s) => s.idiomToShowDetails), (previous, next) {
       if (next != null) {
+        final state = ref.read(idiomPuzzleProvider(widget.childId));
+        final reason = state.idiomShowReason;
+        
+        String badgeText = "知识回顾";
+        Color accentColor = Colors.orange;
+
+        if (reason == IdiomShowReason.wrong) {
+          badgeText = "答案解析";
+          accentColor = kWrongColor;
+        } else if (reason == IdiomShowReason.newKnowledge) {
+          badgeText = "新知识";
+          accentColor = kPrimaryColor;
+        }
+
         IdiomDetailDialog.show(
           context, 
           idiom: next,
-          accentColor: Colors.orange,
+          accentColor: accentColor,
           autoClose: true,
-          badgeText: "知识回顾",
+          badgeText: badgeText,
           onClose: () {
             // 如果是最后一题的详情弹窗关闭，手动触发游戏结束
-            final state = ref.read(idiomPuzzleProvider(widget.childId));
-            if (state.currentQuestionIndex >= state.totalQuestions - 1) {
+            final currentState = ref.read(idiomPuzzleProvider(widget.childId));
+            if (currentState.currentQuestionIndex >= currentState.totalQuestions - 1) {
                ref.read(idiomPuzzleProvider(widget.childId).notifier).finishGame();
             }
           },

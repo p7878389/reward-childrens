@@ -6,16 +6,18 @@ import 'package:children_rewards/shared/widgets/custom_input_field.dart';
 import 'package:children_rewards/shared/widgets/app_dialogs.dart';
 
 // Provider for Daily Limit
-final dailyLimitProvider = StateNotifierProvider<DailyLimitNotifier, int>((ref) {
-  return DailyLimitNotifier();
+final dailyLimitProvider = StateNotifierProvider.family<DailyLimitNotifier, int, int>((ref, childId) {
+  return DailyLimitNotifier(childId);
 });
 
 class DailyLimitNotifier extends StateNotifier<int> {
-  DailyLimitNotifier() : super(20) {
+  final int childId;
+  
+  DailyLimitNotifier(this.childId) : super(20) {
     _load();
   }
 
-  static const _key = 'daily_star_limit';
+  String get _key => 'daily_star_limit_$childId';
 
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
@@ -30,7 +32,8 @@ class DailyLimitNotifier extends StateNotifier<int> {
 }
 
 class DailyLimitConfigScreen extends ConsumerStatefulWidget {
-  const DailyLimitConfigScreen({super.key});
+  final int childId;
+  const DailyLimitConfigScreen({super.key, required this.childId});
 
   @override
   ConsumerState<DailyLimitConfigScreen> createState() => _DailyLimitConfigScreenState();
@@ -42,7 +45,7 @@ class _DailyLimitConfigScreenState extends ConsumerState<DailyLimitConfigScreen>
   @override
   void initState() {
     super.initState();
-    final initialLimit = ref.read(dailyLimitProvider);
+    final initialLimit = ref.read(dailyLimitProvider(widget.childId));
     _controller = TextEditingController(text: initialLimit.toString());
   }
 
@@ -126,7 +129,7 @@ class _DailyLimitConfigScreenState extends ConsumerState<DailyLimitConfigScreen>
                 child: ElevatedButton(
                   onPressed: () async {
                     final val = int.tryParse(_controller.text) ?? 20;
-                    await ref.read(dailyLimitProvider.notifier).setLimit(val);
+                    await ref.read(dailyLimitProvider(widget.childId).notifier).setLimit(val);
                     if (mounted) {
                       // ignore: use_build_context_synchronously
                       await AppDialogs.showSuccess(context, '配置已保存');

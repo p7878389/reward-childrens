@@ -455,7 +455,7 @@ class IdiomGameNotifier extends StateNotifier<IdiomGameState> {
     if (starsToAward > 0) {
       // Daily Limit Check
       final todayStars = await _pointsRepository.getDailyPoints(_childId, DateTime.now());
-      final limit = _ref.read(dailyLimitProvider);
+      final limit = _ref.read(dailyLimitProvider(_childId));
       
       if (todayStars >= limit) {
         starsToAward = 0;

@@ -194,8 +194,34 @@ class IdiomEngagementDao extends DatabaseAccessor<AppDatabase> with _$IdiomEngag
     }).toList();
   }
 
-  /// 获取指定数量的失败过的成语ID (旧接口保留兼容)
-  Future<List<int>> getFailedIdiomIds(int childId, {int limit = 5}) async {
-    return getReviewQueue(childId, limit: limit);
+    /// 获取指定数量的失败过的成语ID (旧接口保留兼容)
+
+    Future<List<int>> getFailedIdiomIds(int childId, {int limit = 5}) async {
+
+      return getReviewQueue(childId, limit: limit);
+
+    }
+
+  
+
+    /// 获取所有已互动过的成语 ID
+
+    Future<List<int>> getAllEngagedIdiomIds(int childId) async {
+
+      final query = selectOnly(idiomEngagementRecords)
+
+        ..addColumns([idiomEngagementRecords.idiomId])
+
+        ..where(idiomEngagementRecords.childId.equals(childId));
+
+      
+
+      final result = await query.map((row) => row.read(idiomEngagementRecords.idiomId)!).get();
+
+      return result;
+
+    }
+
   }
-}
+
+  

@@ -63,10 +63,7 @@ class PuzzleResultDialog extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(3, (index) {
-                        bool isEarned = false;
-                        if (index == 0 && accuracy >= 60) isEarned = true;
-                        if (index == 1 && accuracy >= 80) isEarned = true;
-                        if (index == 2 && accuracy >= 100) isEarned = true;
+                        bool isEarned = state.earnedStars > index;
                         
                         return Icon(
                           Icons.star_rounded,

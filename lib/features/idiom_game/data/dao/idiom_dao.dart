@@ -275,6 +275,19 @@ class IdiomDao {
     return result.map((row) => row.read(_db.idioms.id)!).toList();
   }
 
+  /// 获取某年级所有带释义的成语 ID
+  Future<List<int>> getIdiomIdsWithExplanationByGrade(int grade) async {
+    final query = _db.selectOnly(_db.idioms)
+      ..addColumns([_db.idioms.id])
+      ..where(_db.idioms.gradeLevel.equals(grade))
+      ..where(_db.idioms.explanation.isNotNull())
+      ..where(_db.idioms.explanation.length.isBiggerThanValue(5))
+      ..where(_db.idioms.isDeleted.equals(false));
+
+    final result = await query.get();
+    return result.map((row) => row.read(_db.idioms.id)!).toList();
+  }
+
   /// 批量获取成语
   Future<List<Idiom>> getIdiomsByIds(List<int> ids) async {
     if (ids.isEmpty) return [];
